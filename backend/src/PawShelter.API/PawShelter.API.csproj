@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PawShelter.Application\PawShelter.Application.csproj" />
+    <ProjectReference Include="..\PawShelter.Domain\PawShelter.Domain.csproj" />
+    <ProjectReference Include="..\PawShelter.Infrastructure\PawShelter.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
