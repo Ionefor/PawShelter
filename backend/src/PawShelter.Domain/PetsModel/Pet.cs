@@ -1,9 +1,11 @@
-﻿using PawShelter.Domain.Shared;
+﻿using PawShelter.Domain.Enums;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.Pets
 {
     public class Pet
     {
+        private readonly List<Requisites> _requisites = [];
         public Guid Id { get; private set; }
         public string Name { get; private set; } = null!;
         public string Description { get; private set; } = null!;
@@ -19,13 +21,7 @@ namespace PawShelter.Domain.Pets
         public bool IsVaccinated { get; private set; }
         public DateTime Birthday { get; private set; }
         public DateTime PublicationDate { get; private set; }
-        public IReadOnlyList<Requisites> Requisites { get; private set; } = [];
-        public PetStatus Status { get; private set; }
-        public enum PetStatus
-        {
-            NeedsHelp,
-            LookingHome,
-            FoundHome
-        }
+        public IReadOnlyList<Requisites> Requisites  => _requisites;
+        public PetStatus Status { get; private set; }    
     }
 }
