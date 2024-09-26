@@ -1,0 +1,6 @@
+@PawShelter.API_HostAddress = http://localhost:5051
+
+GET {{PawShelter.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
