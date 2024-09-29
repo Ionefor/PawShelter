@@ -1,30 +1,28 @@
 ﻿using PawShelter.Domain.Enums;
 using PawShelter.Domain.PetsModel;
 using PawShelter.Domain.Shared;
+using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Domain.Pets
 {
-    public class Pet
+    public class Pet : Entity<PetId>
     {
-        private readonly List<Requisites> _requisites = [];
-        private readonly List<PetPhoto> _photos = [];
-        public Guid Id { get; private set; }
-        public string Name { get; private set; } = null!;
-        public string Description { get; private set; } = null!;
-        public string Species { get; private set; } = null!;
-        public string Breed { get; private set; } = null!;
-        public string Color { get; private set; } = null!;
+        private Pet(PetId id) : base(id) { }
+        public Name Name { get; private set; } = null!;
+        public Description Description { get; private set; } = null!;
+        public string Species { get; private set; } = null!;//
+        public string Breed { get; private set; } = null!;//
+        public Color Color { get; private set; }
         public string HealthInfo { get; private set; } = null!;
-        public string AddressLocated { get; private set; } = null!;
-        public string NumberOfOwner { get; private set; } = null!;
-        public double Height { get; private set; }
-        public double Width { get; private set; }
+        public Address Address { get; private set; } = default!;
+        public PhoneNumber PhoneNumber { get; private set; } = null!;
+        public PetCharacteristics PetCharacteristics { get; private set; }
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
-        public DateTime Birthday { get; private set; }
-        public DateTime PublicationDate { get; private set; }
-        public IReadOnlyList<Requisites> Requisites  => _requisites;
-        public IReadOnlyList<PetPhoto> Photos => _photos;
-        public PetStatus Status { get; private set; }    
+        public Birthday Birthday { get; private set; }
+        public DateTime PublicationDate { get; private set; } = default!;
+        public Photos? Photos { get; private set; }
+        public Requisites? Requisites { get; private set; }
+        public PetStatus Status { get; private set; }  
     }
 }

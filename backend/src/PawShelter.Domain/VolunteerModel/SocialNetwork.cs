@@ -1,8 +1,23 @@
-﻿namespace PawShelter.Domain.VolunteerModel
+﻿using PawShelter.Domain.Shared;
+
+namespace PawShelter.Domain.VolunteerModel
 {
-    public class SocialNetwork
+    public record SocialNetwork
     {
-        public string Name { get; private set; } = null!;
-        public string Link { get; private set; } = null!;
+        private SocialNetwork() { }
+        private SocialNetwork(string name, string link)
+        {
+            Name = name;
+            Link = link;
+        }
+        public string Name { get; }
+        public string Link { get; }
+        public Result<SocialNetwork> Create(string name, string link)
+        {
+            if (string.IsNullOrWhiteSpace(link) || string.IsNullOrWhiteSpace(name))
+                return "Invalid info";
+
+            return new SocialNetwork(name, link);
+        }
     }
 }
