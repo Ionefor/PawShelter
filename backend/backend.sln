@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawShelter.Application", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawShelter.Domain", "src\PawShelter.Domain\PawShelter.Domain.csproj", "{EA3E1F49-9118-4577-9EF0-D540001089E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PawShelter.API", "src\PawShelter.API\PawShelter.API.csproj", "{E21BA4F8-F229-43B0-839D-BF78E68E63F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawShelter.API", "src\PawShelter.API\PawShelter.API.csproj", "{E21BA4F8-F229-43B0-839D-BF78E68E63F2}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADC08DF5-F7C7-4E69-B673-71677305A0A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E21BA4F8-F229-43B0-839D-BF78E68E63F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E21BA4F8-F229-43B0-839D-BF78E68E63F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E21BA4F8-F229-43B0-839D-BF78E68E63F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
