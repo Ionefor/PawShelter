@@ -2,24 +2,15 @@
 {
     public record Requisite
     {
-        private Requisite()
-        {
-            
-        }
-        private Requisite(string name, string description)
+        private Requisite() { }
+        private Requisite(Name name, Description description)
         {
             Name = name;
             Description = description;
         }
-        public string Name { get; }
-        public string Description { get; }
-
-        public Result<Requisite> Create(string name, string description)
-        {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))            
-                return "Invalid Requisite";
-            
-            return new Requisite(name, description);
-        }
+        public Name Name { get; }
+        public Description Description { get; }
+        public Result<Requisite> Create(Name name, Description description) =>
+            new Requisite(name, description);
     }
 }

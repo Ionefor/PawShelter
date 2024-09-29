@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Domain.Pets;
 using PawShelter.Domain.PetsModel;
+using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Infrastructure.Configurations
 {
@@ -21,17 +22,17 @@ namespace PawShelter.Infrastructure.Configurations
             builder.ComplexProperty(p => p.Name, pn =>
             {
                 pn.Property(n => n.Value).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
-                HasColumnName("name");
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
+                    HasColumnName("name");
             });
 
             builder.ComplexProperty(p => p.Description, pd =>
             {
                 pd.Property(d => d.Value).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH).
-                HasColumnName("description");
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH).
+                    HasColumnName("description");
             });
 
             builder.Property(p => p.Species).
@@ -45,9 +46,9 @@ namespace PawShelter.Infrastructure.Configurations
             builder.ComplexProperty(p => p.Color, pc =>
             {
                 pc.Property(c => c.Value).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
-                HasColumnName("color");
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
+                    HasColumnName("color");
             });
 
             builder.Property(p => p.HealthInfo).
@@ -135,12 +136,18 @@ namespace PawShelter.Infrastructure.Configurations
                 pr.OwnsMany(rs => rs.Values, r =>
                 {
                     r.Property(n => n.Name).
-                        IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                     r.Property(d => d.Description).
-                        IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
+                    HasConversion(
+                        description => description.Value,
+                        value => Description.Create(value).Value).
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
                 });
             });
 

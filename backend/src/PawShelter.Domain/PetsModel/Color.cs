@@ -9,9 +9,7 @@ namespace PawShelter.Domain.PetsModel
         {
             Value = color;
         }
-
         public string Value { get; }
-
         public Result<Color> Create(string color)
         {
             if (string.IsNullOrWhiteSpace(color))

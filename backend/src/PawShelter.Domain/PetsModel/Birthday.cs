@@ -4,10 +4,7 @@ namespace PawShelter.Domain.PetsModel
 {
     public record Birthday
     {
-        private Birthday()
-        {
-            
-        }
+        private Birthday() { }
         private Birthday(DateOnly birthday)
         {
             Value = birthday;

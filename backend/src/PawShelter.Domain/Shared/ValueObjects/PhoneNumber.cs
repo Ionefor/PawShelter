@@ -2,10 +2,7 @@
 {
     public record PhoneNumber
     {
-        private PhoneNumber()
-        {
-            
-        }
+        private PhoneNumber() { }
         public string Value { get; }
         private PhoneNumber(string value) => Value = value;
         public static Result<PhoneNumber> Create(string value)

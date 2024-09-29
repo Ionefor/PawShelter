@@ -4,15 +4,9 @@ namespace PawShelter.Domain.VolunteerModel
 {
     public record Email
     {
-        private Email()
-        {
-            
-        }
-        private Email(string email)
-        {
+        private Email() { }
+        private Email(string email) =>
             Value = email;
-        }
-
         public string Value { get;}
         public Result<Email> Create(string email)
         {
@@ -21,6 +15,5 @@ namespace PawShelter.Domain.VolunteerModel
 
             return new Email(email);
         }
-
     }
 }

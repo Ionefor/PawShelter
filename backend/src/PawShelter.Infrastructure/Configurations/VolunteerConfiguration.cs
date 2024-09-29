@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Domain.PetsModel;
+using PawShelter.Domain.Shared.ValueObjects;
 using PawShelter.Domain.VolunteerModel;
 
 namespace PawShelter.Infrastructure.Configurations
@@ -24,14 +25,23 @@ namespace PawShelter.Infrastructure.Configurations
                 vf.ToJson("full_name");
 
                 vf.Property(vf => vf.FirstName).
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                 vf.Property(vf => vf.MiddleName).
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                 vf.Property(vf => vf.LastName).
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
             });
@@ -47,9 +57,9 @@ namespace PawShelter.Infrastructure.Configurations
             builder.ComplexProperty(v => v.Description, vd =>
             {
                 vd.Property(d => d.Value).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH).
-                HasColumnName("description");
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH).
+                    HasColumnName("description");
             });
 
             builder.ComplexProperty(v => v.PhoneNumber, vn =>
@@ -75,12 +85,18 @@ namespace PawShelter.Infrastructure.Configurations
                 vr.OwnsMany(rs => rs.Values, r =>
                 {
                     r.Property(n => n.Name).
-                        IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                     r.Property(d => d.Description).
-                        IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
+                    HasConversion(
+                        description => description.Value,
+                        value => Description.Create(value).Value).
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
                 });
             });
 
@@ -91,8 +107,11 @@ namespace PawShelter.Infrastructure.Configurations
                 vs.OwnsMany(vs => vs.Values, r =>
                 {
                     r.Property(n => n.Name).
-                        IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                    HasConversion(
+                        name => name.Value,
+                        value => Name.Create(value).Value).
+                    IsRequired().
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                     r.Property(l => l.Link).
                         IsRequired().
@@ -103,7 +122,7 @@ namespace PawShelter.Infrastructure.Configurations
             builder.HasMany(v => v.Pets).
                 WithOne().
                 HasForeignKey("volunteer_id").
-                OnDelete(DeleteBehavior.Cascade);
+                OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

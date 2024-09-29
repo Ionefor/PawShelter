@@ -2,10 +2,7 @@
 {
     public record Description
     {
-        private Description()
-        {
-            
-        }
+        private Description() { }
         public string Value { get; }
         private Description(string value) => Value = value;
         public static Result<Description> Create(string value)

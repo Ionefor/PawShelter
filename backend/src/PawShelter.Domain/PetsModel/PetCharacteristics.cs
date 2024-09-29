@@ -4,10 +4,7 @@ namespace PawShelter.Domain.PetsModel
 {
     public record PetCharacteristics
     {
-        private PetCharacteristics()
-        {
-            
-        }
+        private PetCharacteristics() { }
         private PetCharacteristics(double height, double width)
         {
             Height = height;

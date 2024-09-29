@@ -1,13 +1,15 @@
-﻿using PawShelter.Domain.VolunteerModel;
-
-namespace PawShelter.Domain.PetsModel
+﻿namespace PawShelter.Domain.PetsModel
 {
     public record PetId 
     {
-        private PetId(Guid value) => Value = value;
+        private PetId(Guid value) => 
+            Value = value;
         public Guid Value { get; }
-        public static PetId NewPetId() => new(Guid.NewGuid());
-        public static PetId Empty() => new(Guid.Empty);
-        public static PetId Create(Guid id) => new(id);
+        public static PetId NewPetId() => 
+            new(Guid.NewGuid());
+        public static PetId Empty() => 
+            new(Guid.Empty);
+        public static PetId Create(Guid id) => 
+            new(id);
     }
 }
