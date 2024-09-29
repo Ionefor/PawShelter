@@ -1,5 +1,6 @@
 ﻿using PawShelter.Domain.Enums;
 using PawShelter.Domain.PetsModel;
+using PawShelter.Domain.PetsModel.Ids;
 using PawShelter.Domain.Shared;
 using PawShelter.Domain.Shared.ValueObjects;
 
@@ -10,8 +11,7 @@ namespace PawShelter.Domain.Pets
         private Pet(PetId id) : base(id) { }
         public Name Name { get; private set; } = null!;
         public Description Description { get; private set; } = null!;
-        public string Species { get; private set; } = null!;//
-        public string Breed { get; private set; } = null!;//
+        public SpeciesBreedsId SpeciesBreedsId { get; private set; }
         public Color Color { get; private set; }
         public string HealthInfo { get; private set; } = null!;
         public Address Address { get; private set; } = default!;
