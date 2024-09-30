@@ -5,8 +5,18 @@ namespace PawShelter.Domain.PetsModel
 {
     public class Breed : Entity<BreedId>
     {     
-        private Breed() : base(BreedId.NewPetId()) { }
-        private Breed(BreedId id) : base(id) { }        
+        private Breed(BreedId id, string value) : base(id)
+        {
+            Value = value;
+        }        
         public string Value { get; private set; } = null!;
+
+        public static Result<Breed> Create(BreedId id, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return "Invalid breed name";
+
+            return new Breed(id, value);
+        }
     }
 }
