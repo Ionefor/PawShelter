@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Domain.Pets;
-using PawShelter.Domain.PetsModel;
+using PawShelter.Domain.PetsModel.Ids;
 using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Infrastructure.Configurations
@@ -35,13 +35,19 @@ namespace PawShelter.Infrastructure.Configurations
                     HasColumnName("description");
             });
 
-            builder.Property(p => p.Species).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+            builder.ComplexProperty(p => p.SpeciesBreedsId, psb =>
+            {
+                psb.ComplexProperty(s => s.SpeciesId, id =>
+                {
+                    id.Property(i => i.Value).
+                        IsRequired().
+                        HasColumnName("species");
+                });
 
-            builder.Property(p => p.Breed).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                psb.Property(b => b.BreedId).
+                    IsRequired().
+                    HasColumnName("breed"); ;
+            });
 
             builder.ComplexProperty(p => p.Color, pc =>
             {
