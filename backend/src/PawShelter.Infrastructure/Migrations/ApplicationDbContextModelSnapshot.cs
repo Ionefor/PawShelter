@@ -283,7 +283,52 @@ namespace PawShelter.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
-                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
+                    b.OwnsOne("PawShelter.Domain.Pets.Pet.Photos#PawShelter.Domain.PetsModel.Photos", "Photos", b1 =>
+                        {
+                            b1.Property<Guid>("PetId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("PetId");
+
+                            b1.ToTable("Pets", (string)null);
+
+                            b1.ToJson("pet_photos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PetId")
+                                .HasConstraintName("fk_pets_pets_id");
+
+                            b1.OwnsMany("PawShelter.Domain.Pets.Pet.Photos#PawShelter.Domain.PetsModel.Photos.Values#PawShelter.Domain.PetsModel.PetPhoto", "Values", b2 =>
+                                {
+                                    b2.Property<Guid>("PhotosPetId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<bool>("IsMain")
+                                        .HasColumnType("boolean");
+
+                                    b2.Property<string>("Path")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("PhotosPetId", "Id");
+
+                                    b2.ToTable("Pets", (string)null);
+
+                                    b2.ToJson("pet_photos");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PhotosPetId")
+                                        .HasConstraintName("fk_pets_pets_photos_pet_id");
+                                });
+
+                            b1.Navigation("Values");
+                        });
+
+                    b.OwnsOne("PawShelter.Domain.Pets.Pet.Requisites#PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
                         {
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid");
@@ -291,7 +336,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.HasKey("PetId")
                                 .HasName("pk_pets");
 
-                            b1.ToTable("Pets");
+                            b1.ToTable("Pets", (string)null);
 
                             b1.ToJson("pet_requisites");
 
@@ -299,7 +344,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasForeignKey("PetId")
                                 .HasConstraintName("fk_pets_pets_pet_id");
 
-                            b1.OwnsMany("PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
+                            b1.OwnsMany("PawShelter.Domain.Pets.Pet.Requisites#PawShelter.Domain.Shared.ValueObjects.Requisites.Values#PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
                                 {
                                     b2.Property<Guid>("RequisitesPetId")
                                         .HasColumnType("uuid");
@@ -320,58 +365,13 @@ namespace PawShelter.Infrastructure.Migrations
 
                                     b2.HasKey("RequisitesPetId", "Id");
 
-                                    b2.ToTable("Pets");
+                                    b2.ToTable("Pets", (string)null);
 
                                     b2.ToJson("pet_requisites");
 
                                     b2.WithOwner()
                                         .HasForeignKey("RequisitesPetId")
                                         .HasConstraintName("fk_pets_pets_requisites_pet_id");
-                                });
-
-                            b1.Navigation("Values");
-                        });
-
-                    b.OwnsOne("PawShelter.Domain.PetsModel.Photos", "Photos", b1 =>
-                        {
-                            b1.Property<Guid>("PetId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("PetId");
-
-                            b1.ToTable("Pets");
-
-                            b1.ToJson("pet_photos");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PetId")
-                                .HasConstraintName("fk_pets_pets_id");
-
-                            b1.OwnsMany("PawShelter.Domain.PetsModel.PetPhoto", "Values", b2 =>
-                                {
-                                    b2.Property<Guid>("PhotosPetId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<bool>("IsMain")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<string>("Path")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("PhotosPetId", "Id");
-
-                                    b2.ToTable("Pets");
-
-                                    b2.ToJson("pet_photos");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("PhotosPetId")
-                                        .HasConstraintName("fk_pets_pets_photos_pet_id");
                                 });
 
                             b1.Navigation("Values");
@@ -393,7 +393,7 @@ namespace PawShelter.Infrastructure.Migrations
 
             modelBuilder.Entity("PawShelter.Domain.VolunteerModel.Volunteer", b =>
                 {
-                    b.OwnsOne("PawShelter.Domain.VolunteerModel.FullName", "FullName", b1 =>
+                    b.OwnsOne("PawShelter.Domain.VolunteerModel.Volunteer.FullName#PawShelter.Domain.VolunteerModel.FullName", "FullName", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
                                 .HasColumnType("uuid");
@@ -415,7 +415,7 @@ namespace PawShelter.Infrastructure.Migrations
 
                             b1.HasKey("VolunteerId");
 
-                            b1.ToTable("Volunteers");
+                            b1.ToTable("Volunteers", (string)null);
 
                             b1.ToJson("full_name");
 
@@ -424,62 +424,14 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasConstraintName("fk_volunteers_volunteers_id");
                         });
 
-                    b.OwnsOne("PawShelter.Domain.VolunteerModel.SocialNetworks", "SocialNetworks", b1 =>
+                    b.OwnsOne("PawShelter.Domain.VolunteerModel.Volunteer.Requisites#PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
                                 .HasColumnType("uuid");
 
                             b1.HasKey("VolunteerId");
 
-                            b1.ToTable("Volunteers");
-
-                            b1.ToJson("volunteer_social_networks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PawShelter.Domain.VolunteerModel.SocialNetwork", "Values", b2 =>
-                                {
-                                    b2.Property<Guid>("SocialNetworksVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
-
-                                    b2.HasKey("SocialNetworksVolunteerId", "Id");
-
-                                    b2.ToTable("Volunteers");
-
-                                    b2.ToJson("volunteer_social_networks");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("SocialNetworksVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
-                                });
-
-                            b1.Navigation("Values");
-                        });
-
-                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("Volunteers");
+                            b1.ToTable("Volunteers", (string)null);
 
                             b1.ToJson("volunteer_requisites");
 
@@ -487,7 +439,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasForeignKey("VolunteerId")
                                 .HasConstraintName("fk_volunteers_volunteers_id");
 
-                            b1.OwnsMany("PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
+                            b1.OwnsMany("PawShelter.Domain.VolunteerModel.Volunteer.Requisites#PawShelter.Domain.Shared.ValueObjects.Requisites.Values#PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
                                 {
                                     b2.Property<Guid>("RequisitesVolunteerId")
                                         .HasColumnType("uuid");
@@ -508,13 +460,61 @@ namespace PawShelter.Infrastructure.Migrations
 
                                     b2.HasKey("RequisitesVolunteerId", "Id");
 
-                                    b2.ToTable("Volunteers");
+                                    b2.ToTable("Volunteers", (string)null);
 
                                     b2.ToJson("volunteer_requisites");
 
                                     b2.WithOwner()
                                         .HasForeignKey("RequisitesVolunteerId")
                                         .HasConstraintName("fk_volunteers_volunteers_requisites_volunteer_id");
+                                });
+
+                            b1.Navigation("Values");
+                        });
+
+                    b.OwnsOne("PawShelter.Domain.VolunteerModel.Volunteer.SocialNetworks#PawShelter.Domain.VolunteerModel.SocialNetworks", "SocialNetworks", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("Volunteers", (string)null);
+
+                            b1.ToJson("volunteer_social_networks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PawShelter.Domain.VolunteerModel.Volunteer.SocialNetworks#PawShelter.Domain.VolunteerModel.SocialNetworks.Values#PawShelter.Domain.VolunteerModel.SocialNetwork", "Values", b2 =>
+                                {
+                                    b2.Property<Guid>("SocialNetworksVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Link")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)");
+
+                                    b2.HasKey("SocialNetworksVolunteerId", "Id");
+
+                                    b2.ToTable("Volunteers", (string)null);
+
+                                    b2.ToJson("volunteer_social_networks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SocialNetworksVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
                                 });
 
                             b1.Navigation("Values");

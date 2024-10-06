@@ -1,4 +1,6 @@
-﻿namespace PawShelter.Domain.Shared.ValueObjects
+﻿using CSharpFunctionalExtensions;
+
+namespace PawShelter.Domain.Shared.ValueObjects
 {
     public record Requisite
     {

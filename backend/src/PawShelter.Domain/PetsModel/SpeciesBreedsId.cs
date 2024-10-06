@@ -1,5 +1,5 @@
-﻿using PawShelter.Domain.PetsModel.Ids;
-using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.PetsModel.Ids;
 
 namespace PawShelter.Domain.PetsModel
 {

@@ -1,9 +1,10 @@
-﻿using PawShelter.Domain.PetsModel.Ids;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.PetsModel.Ids;
 using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.PetsModel
 {
-    public class Breed : Entity<BreedId>
+    public class Breed : Shared.Entity<BreedId>
     {     
         private Breed(BreedId id, string value) : base(id)
         {
@@ -11,10 +12,10 @@ namespace PawShelter.Domain.PetsModel
         }        
         public string Value { get; private set; } = null!;
 
-        public static Result<Breed> Create(BreedId id, string value)
+        public static Result<Breed, Error> Create(BreedId id, string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return "Invalid breed name";
+                return Errors.General.ValueIsInvalid("Breed");
 
             return new Breed(id, value);
         }

@@ -1,4 +1,4 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
 using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Domain.VolunteerModel
