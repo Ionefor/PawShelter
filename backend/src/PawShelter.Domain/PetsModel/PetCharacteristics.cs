@@ -23,7 +23,6 @@ namespace PawShelter.Domain.PetsModel
                 return Errors.General.ValueIsInvalid("PetCharacteristics");
             }
                 
-
             return new PetCharacteristics(Height, Width);
         }
     }

@@ -11,7 +11,6 @@ namespace PawShelter.Domain.PetsModel
             Value = value;
         }        
         public string Value { get; private set; } = null!;
-
         public static Result<Breed, Error> Create(BreedId id, string value)
         {
             if (string.IsNullOrWhiteSpace(value))

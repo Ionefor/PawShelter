@@ -14,7 +14,8 @@ namespace PawShelter.Domain.Pets
                 Name name,
                 Description description,          
                 SpeciesBreedsId speciesBreedsId,
-                Color color, string healthInfo,
+                Color color, 
+                HealthInfo healthInfo,
                 Address address,
                 PhoneNumber phoneNumber,
                 PetCharacteristics petCharacteristics,
@@ -47,7 +48,7 @@ namespace PawShelter.Domain.Pets
         public Description Description { get; private set; } = null!;
         public SpeciesBreedsId SpeciesBreedsId { get; private set; }
         public Color Color { get; private set; }
-        public string HealthInfo { get; private set; } = null!;
+        public HealthInfo HealthInfo { get; private set; } = null!;
         public Address Address { get; private set; } = default!;
         public PhoneNumber PhoneNumber { get; private set; } = null!;
         public PetCharacteristics PetCharacteristics { get; private set; }
