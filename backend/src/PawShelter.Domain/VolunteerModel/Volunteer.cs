@@ -9,9 +9,15 @@ namespace PawShelter.Domain.VolunteerModel
     {
         private readonly List<Pet> _pets = [];
         private Volunteer(VolunteerId id) : base(id) { }
-        public Volunteer(VolunteerId id, FullName fullName, Email email,
-            Description description, PhoneNumber phoneNumber, Experience experience,
-            Requisites? requisites, SocialNetworks? socialNetworks) : base(id)
+        public Volunteer(VolunteerId id,
+                FullName fullName,
+                Email email,
+                Description description,
+                PhoneNumber phoneNumber,
+                Experience experience,
+                Requisites? requisites,
+                SocialNetworks? socialNetworks)
+                : base(id)
         {
             FullName = fullName;
             Email = email;

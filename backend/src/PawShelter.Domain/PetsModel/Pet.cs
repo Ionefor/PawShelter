@@ -10,11 +10,22 @@ namespace PawShelter.Domain.Pets
     {
         private Pet(PetId id) : base(id) { }
 
-        public Pet(PetId id, Name name, Description description, 
-            SpeciesBreedsId speciesBreedsId, Color color, string healthInfo,
-            Address address, PhoneNumber phoneNumber, PetCharacteristics petCharacteristics,
-            bool isCastrated, bool isVaccinated, Birthday birthday, DateTime publicationDate,
-            Photos? photos, Requisites? requisites, PetStatus status) : base(id)
+        public Pet(PetId id,
+                Name name,
+                Description description,          
+                SpeciesBreedsId speciesBreedsId,
+                Color color, string healthInfo,
+                Address address,
+                PhoneNumber phoneNumber,
+                PetCharacteristics petCharacteristics,
+                bool isCastrated,
+                bool isVaccinated,
+                Birthday birthday,
+                DateTime publicationDate,
+                Photos? photos,
+                Requisites? requisites,
+                PetStatus status)
+                : base(id)
         {
             Name = name;
             Description = description;
