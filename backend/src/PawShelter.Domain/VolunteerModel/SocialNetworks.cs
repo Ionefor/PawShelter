@@ -1,6 +1,6 @@
 ﻿namespace PawShelter.Domain.VolunteerModel
 {
-    public class SocialNetworks
+    public record SocialNetworks
     {
         private SocialNetworks() { }
         public SocialNetworks(List<SocialNetwork> socialNetworks) => Values = socialNetworks;

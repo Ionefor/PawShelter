@@ -16,7 +16,7 @@ namespace PawShelter.Domain.PetsModel
         public static Result<Species, Error> Create(SpeciesId id, string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return Errors.General.ValueIsInvalid("");
+                return Errors.General.ValueIsInvalid("Species");
 
             return new Species(id, value);
         }
