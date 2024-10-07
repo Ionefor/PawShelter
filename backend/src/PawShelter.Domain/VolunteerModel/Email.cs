@@ -1,18 +1,20 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.VolunteerModel
 {
     public record Email
     {
+        private const int MAX_LENGTH = 30;
         private Email() { }
         private Email(string email) => Value = email;
         public string Value { get;}
-        public Result<Email> Create(string email)
+        public Result<Email, Error> Create(string value)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return "Invalid email";
+            if (string.IsNullOrWhiteSpace(value) || value.Length > MAX_LENGTH)
+                return Errors.General.ValueIsInvalid("Email");
 
-            return new Email(email);
+            return new Email(value);
         }
     }
 }

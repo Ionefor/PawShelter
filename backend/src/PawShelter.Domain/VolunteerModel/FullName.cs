@@ -1,12 +1,11 @@
-﻿using PawShelter.Domain.Shared;
-using PawShelter.Domain.Shared.ValueObjects;
+﻿using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Domain.VolunteerModel
 {
     public record FullName
     {
         private FullName() { }
-        private FullName(Name firstName, Name middleName, Name lastName)
+        public FullName(Name firstName, Name middleName, Name lastName)
         {
             FirstName = firstName;
             MiddleName = middleName;
@@ -15,7 +14,5 @@ namespace PawShelter.Domain.VolunteerModel
         public Name FirstName { get; } 
         public Name MiddleName { get; }
         public Name LastName { get; }
-        public Result<FullName> Create(Name firstName, Name middleName, Name lastName) =>
-            new FullName(firstName, middleName, lastName);
     }
 }

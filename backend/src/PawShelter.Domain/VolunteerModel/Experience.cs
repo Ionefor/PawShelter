@@ -1,4 +1,5 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.VolunteerModel
 {
@@ -7,10 +8,10 @@ namespace PawShelter.Domain.VolunteerModel
         private Experience() { }
         private Experience(int experience) => Value = experience;
         public int Value { get; }
-        public Result<Experience> Create(int experience)
+        public Result<Experience, Error> Create(int experience)
         {
             if (experience < 0 || experience > 100)
-                return "Invalid experience";
+                return Errors.General.ValueIsInvalid("Experience");
 
             return new Experience(experience);
         }
