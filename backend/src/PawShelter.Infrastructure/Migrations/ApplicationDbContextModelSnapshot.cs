@@ -29,12 +29,6 @@ namespace PawShelter.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("HealthInfo")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("health_info");
-
                     b.Property<bool>("IsCastrated")
                         .HasColumnType("boolean")
                         .HasColumnName("is_castrated");
@@ -113,6 +107,16 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasMaxLength(2000)
                                 .HasColumnType("character varying(2000)")
                                 .HasColumnName("description");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "PawShelter.Domain.Pets.Pet.HealthInfo#HealthInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("health_Info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.Pets.Pet.Name#Name", b1 =>

@@ -1,4 +1,5 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.PetsModel
 {
@@ -10,12 +11,12 @@ namespace PawShelter.Domain.PetsModel
             Value = color;
         }
         public string Value { get; }
-        public Result<Color> Create(string color)
+        public static Result<Color, Error> Create(string value)
         {
-            if (string.IsNullOrWhiteSpace(color))
-                return "Invalid color";
+            if (string.IsNullOrWhiteSpace(value))
+                return Errors.General.ValueIsInvalid("Color");
 
-            return new Color(color);
+            return new Color(value);
         }
     }
 }

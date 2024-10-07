@@ -57,9 +57,12 @@ namespace PawShelter.Infrastructure.Configurations
                     HasColumnName("color");
             });
 
-            builder.Property(p => p.HealthInfo).
-                IsRequired().
-                HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
+            builder.ComplexProperty(p => p.HealthInfo, phi =>
+            {
+                phi.Property(hi => hi.Value).
+                    IsRequired().
+                    HasColumnName("health_Info");
+            });
 
             builder.ComplexProperty(p => p.Address, pa =>
             {

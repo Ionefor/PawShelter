@@ -1,4 +1,6 @@
-﻿namespace PawShelter.Domain.Shared.ValueObjects
+﻿using CSharpFunctionalExtensions;
+
+namespace PawShelter.Domain.Shared.ValueObjects
 {
     public class Address
     {
@@ -17,13 +19,13 @@
         public string City { get; }
         public string Street { get; }
         public string HouseNumber { get; }
-        public static Result<Address> Create(string country, string city,
+        public static Result<Address, Error> Create(string country, string city,
             string street, string houseNumber)
         {
             if(string.IsNullOrWhiteSpace(country) || string.IsNullOrWhiteSpace(city) ||
                 string.IsNullOrWhiteSpace(street) || string.IsNullOrWhiteSpace(houseNumber))
             {
-                return "Invalid address";
+                return Errors.General.ValueIsInvalid("Address");
             }
                
             return new Address(country, city, street, houseNumber);

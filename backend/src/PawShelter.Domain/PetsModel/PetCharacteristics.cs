@@ -1,9 +1,12 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.PetsModel
 {
     public record PetCharacteristics
     {
+        private const int MIN_VALUE = 0;
+        private const int MAX_VALUE = 400;
         private PetCharacteristics() { }
         private PetCharacteristics(double height, double width)
         {
@@ -12,12 +15,15 @@ namespace PawShelter.Domain.PetsModel
         }
         public double Height { get; }
         public double Width { get; }
-        public Result<PetCharacteristics> Create(double height, double width)
+        public static Result<PetCharacteristics, Error> Create(double height, double width)
         {
-            if (height <= 0 || height > 400 || width <= 0 || width > 400)
-                return "Invalid characteristics";
-
-            return new PetCharacteristics(Height, Width);
+            if (height <= MIN_VALUE || height > MAX_VALUE ||
+                width <= MIN_VALUE || width > MAX_VALUE)
+            {
+                return Errors.General.ValueIsInvalid("PetCharacteristics");
+            }
+                
+            return new PetCharacteristics(height, width);
         }
     }
 }

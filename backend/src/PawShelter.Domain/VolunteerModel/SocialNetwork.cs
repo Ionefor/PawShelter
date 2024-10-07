@@ -1,4 +1,5 @@
-﻿using PawShelter.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.Shared;
 using PawShelter.Domain.Shared.ValueObjects;
 
 namespace PawShelter.Domain.VolunteerModel
@@ -13,10 +14,10 @@ namespace PawShelter.Domain.VolunteerModel
         }
         public Name Name { get; }
         public string Link { get; }
-        public Result<SocialNetwork> Create(Name name, string link)
+        public static Result<SocialNetwork, Error> Create(Name name, string link)
         {
             if (string.IsNullOrWhiteSpace(link))
-                return "Invalid info";
+                return Errors.General.ValueIsInvalid("link");
 
             return new SocialNetwork(name, link);
         }
