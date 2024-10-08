@@ -2,11 +2,9 @@
 
 namespace PawShelter.Domain.Shared.ValueObjects
 {
-    public class Address
+    public record Address
     {
-        private Address()
-        {
-        }       
+        private Address() { }
         private Address(string country, string city, 
             string street, string houseNumber)
         {
@@ -27,7 +25,7 @@ namespace PawShelter.Domain.Shared.ValueObjects
             {
                 return Errors.General.ValueIsInvalid("Address");
             }
-               
+                
             return new Address(country, city, street, houseNumber);
         }
     }
