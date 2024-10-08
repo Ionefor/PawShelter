@@ -14,7 +14,7 @@ namespace PawShelter.API.Controllers
             [FromBody] CreateVolunteerRequest request,
             CancellationToken cancellationToken)
         {
-            var result = await handler.Handle(request, cancellationToken);
+            var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
             return result.ToResponse();
         }

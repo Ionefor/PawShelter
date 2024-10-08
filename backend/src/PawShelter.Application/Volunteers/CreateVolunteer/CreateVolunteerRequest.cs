@@ -3,4 +3,9 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(FullNameDto fullNameDto,
     string description, string email, string phoneNumber, int experience,
-    List<RequisiteDto>? requisites, List<SocialNetworkDto>? socialNetworks);
+        IEnumerable<RequisiteDto>? requisites, IEnumerable<SocialNetworkDto>? socialNetworks)
+{
+    public CreateVolunteerCommand ToCommand() =>
+        new(fullNameDto,description, email, phoneNumber,
+            experience, requisites, socialNetworks);
+}

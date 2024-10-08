@@ -13,47 +13,44 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
             _volunteerRepository = volunteerRepository;
         }
         public async Task<Result<Guid, Error>> Handle(
-            CreateVolunteerRequest request, CancellationToken cancellationToken = default)
+            CreateVolunteerCommand command, CancellationToken cancellationToken = default)
         {
             var volunteerId = VolunteerId.NewVolonteerId();
 
-            var firstNameResult = Name.Create(request.fullNameDto.firstName);
+            var firstNameResult = Name.Create(command.fullNameDto.firstName);
             if(firstNameResult.IsFailure)
                 return firstNameResult.Error;
 
-            var middleNameResult = Name.Create(request.fullNameDto.middleName);
+            var middleNameResult = Name.Create(command.fullNameDto.middleName);
             if (middleNameResult.IsFailure)
                 return middleNameResult.Error;
 
-            var lastNameResult = Name.Create(request.fullNameDto.lastName);
+            var lastNameResult = Name.Create(command.fullNameDto.lastName);
             if (lastNameResult.IsFailure)
                 return lastNameResult.Error;
 
             var fullName = new FullName(
                 firstNameResult.Value, middleNameResult.Value, lastNameResult.Value);
 
-            var emailResult = Email.Create(request.email);
+            var emailResult = Email.Create(command.email);
             if (emailResult.IsFailure)
                 return emailResult.Error;
 
-            var descriptionResult = Description.Create(request.description);
+            var descriptionResult = Description.Create(command.description);
             if (descriptionResult.IsFailure)
                 return descriptionResult.Error;
 
-            var numberResult = PhoneNumber.Create(request.phoneNumber);
+            var numberResult = PhoneNumber.Create(command.phoneNumber);
             if (numberResult.IsFailure)
                 return numberResult.Error;
 
-            var experienceResult = Experience.Create(request.experience);
+            var experienceResult = Experience.Create(command.experience);
             if (experienceResult.IsFailure)
                 return experienceResult.Error;
-
-            /*
-               Нужно ли проверять в списках что все хорошо? И если нужно, то делать так?
            
-            var requisitesListTemp = new List<Requisite>();
+            var requisiteList = new List<Requisite>();
 
-            foreach (var requisite in request.requisites)
+            foreach (var requisite in command.requisites)
             {
                 var nameResult = Name.Create(requisite.name);
                 if(nameResult.IsFailure)
@@ -65,22 +62,25 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
 
                 var requisiteVo = new Requisite(nameResult.Value, descResult.Value);
 
-                requisitesListTemp.Add(requisiteVo);
+                requisiteList.Add(requisiteVo);
             }
 
-            var requisites = new Requisites(requisitesListTemp);
+            var requisites = new Requisites(requisiteList);
 
-             */
-            var requisitesList = request.requisites.Select(r => 
-                new Requisite(
-                    Name.Create(r.name).Value, Description.Create(r.description).Value)).ToList();
+            var socialNetworkList = new List<SocialNetwork>();
 
-            var requisites = new Requisites(requisitesList);
+            foreach (var social in command.socialNetworks)
+            {
+                var nameResult = Name.Create(social.name);
+                if (nameResult.IsFailure)
+                    return nameResult.Error;
 
-            var socialNetworksList = request.socialNetworks.Select(s =>
-                SocialNetwork.Create(Name.Create(s.name).Value, s.link).Value).ToList();
+                var socialNetworksVo = SocialNetwork.Create(nameResult.Value, social.link);
 
-            var socialNetworks = new SocialNetworks(socialNetworksList);
+                socialNetworkList.Add(socialNetworksVo.Value);
+            }
+
+            var socialNetworks = new SocialNetworks(socialNetworkList);
 
             var volunteer = new Volunteer(
                 volunteerId, fullName, emailResult.Value, descriptionResult.Value, 
