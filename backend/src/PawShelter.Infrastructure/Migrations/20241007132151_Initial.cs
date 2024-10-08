@@ -12,6 +12,18 @@ namespace PawShelter.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Species",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    species = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_species", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Volunteers",
                 columns: table => new
                 {
@@ -30,13 +42,28 @@ namespace PawShelter.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Breeds",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    breeds = table.Column<string>(type: "text", nullable: false),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_breeds", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_breeds_species_species_id",
+                        column: x => x.species_id,
+                        principalTable: "Species",
+                        principalColumn: "id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pets",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    species = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    health_info = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     publication_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -49,10 +76,13 @@ namespace PawShelter.Infrastructure.Migrations
                     birthday = table.Column<DateOnly>(type: "date", nullable: false),
                     color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    health_Info = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     height = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
                     width = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
                     phoneNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    breed = table.Column<Guid>(type: "uuid", nullable: false),
+                    species = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_photos = table.Column<string>(type: "jsonb", nullable: true),
                     pet_requisites = table.Column<string>(type: "jsonb", nullable: true)
                 },
@@ -63,9 +93,13 @@ namespace PawShelter.Infrastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "Volunteers",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_breeds_species_id",
+                table: "Breeds",
+                column: "species_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_pets_volunteer_id",
@@ -77,7 +111,13 @@ namespace PawShelter.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Breeds");
+
+            migrationBuilder.DropTable(
                 name: "Pets");
+
+            migrationBuilder.DropTable(
+                name: "Species");
 
             migrationBuilder.DropTable(
                 name: "Volunteers");

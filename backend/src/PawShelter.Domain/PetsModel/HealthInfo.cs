@@ -14,7 +14,7 @@ namespace PawShelter.Domain.PetsModel
         public string Value { get; }
         public static Result<HealthInfo, Error> Create(string value)
         {
-            if(string.IsNullOrWhiteSpace(value) || value.Length > MAX_LENGTH)
+            if (string.IsNullOrWhiteSpace(value) || value.Length > MAX_LENGTH)
                 return Errors.General.ValueIsInvalid("HealthInfo");
 
             return new HealthInfo(value);

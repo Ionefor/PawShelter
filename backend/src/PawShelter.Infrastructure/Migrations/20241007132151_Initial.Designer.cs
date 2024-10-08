@@ -13,8 +13,8 @@ using PawShelter.Infrastructure;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240929185336_NewConfiguration")]
-    partial class NewConfiguration
+    [Migration("20241007132151_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,6 @@ namespace PawShelter.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<string>("HealthInfo")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("health_info");
 
                     b.Property<bool>("IsCastrated")
                         .HasColumnType("boolean")
@@ -116,6 +110,16 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasMaxLength(2000)
                                 .HasColumnType("character varying(2000)")
                                 .HasColumnName("description");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "PawShelter.Domain.Pets.Pet.HealthInfo#HealthInfo", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("health_Info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.Pets.Pet.Name#Name", b1 =>

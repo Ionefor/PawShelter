@@ -13,7 +13,7 @@ namespace PawShelter.Domain.PetsModel
         }
         public string Path { get; } = null!;
         public bool IsMain { get; }
-        public Result<PetPhoto, Error> Create(string path, bool isMain)
+        public static Result<PetPhoto, Error> Create(string path, bool isMain)
         {
             if (string.IsNullOrWhiteSpace(path))
                 return Errors.General.ValueIsInvalid("Path");

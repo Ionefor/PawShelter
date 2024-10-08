@@ -8,7 +8,7 @@
             Message = message;
             ErrorType = errorType;
         }
-        public string Code { get;  }
+        public string Code { get; }
         public string Message { get; }
         public ErrorType ErrorType { get; }
 
@@ -31,5 +31,5 @@
         NotFound,
         Failure,
         Conflict
-    } 
+    }
 }
