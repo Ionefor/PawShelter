@@ -11,12 +11,12 @@ namespace PawShelter.Domain.PetsModel
             Value = color;
         }
         public string Value { get; }
-        public Result<Color, Error> Create(string color)
+        public static Result<Color, Error> Create(string value)
         {
-            if (string.IsNullOrWhiteSpace(color))
+            if (string.IsNullOrWhiteSpace(value))
                 return Errors.General.ValueIsInvalid("Color");
 
-            return new Color(color);
+            return new Color(value);
         }
     }
 }

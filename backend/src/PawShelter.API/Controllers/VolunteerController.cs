@@ -1,4 +1,3 @@
-﻿using System.Runtime.InteropServices.JavaScript;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PawShelter.API.Extensions;

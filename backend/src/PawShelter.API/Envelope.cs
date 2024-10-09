@@ -3,6 +3,7 @@
 namespace PawShelter.API;
 
 public record ResponseError(string? ErrorCode, string? ErrorMessage, string? InvalidField);
+
 public record Envelope
 {
     private Envelope(object? result, IEnumerable<ResponseError> errors)

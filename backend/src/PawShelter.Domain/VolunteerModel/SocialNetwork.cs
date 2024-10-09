@@ -14,10 +14,10 @@ namespace PawShelter.Domain.VolunteerModel
         }
         public Name Name { get; }
         public string Link { get; }
-        public Result<SocialNetwork, Error> Create(Name name, string link)
+        public static Result<SocialNetwork, Error> Create(Name name, string link)
         {
             if (string.IsNullOrWhiteSpace(link))
-                return Errors.General.ValueIsInvalid("Link");
+                return Errors.General.ValueIsInvalid("link");
 
             return new SocialNetwork(name, link);
         }

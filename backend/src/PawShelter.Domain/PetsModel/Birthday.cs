@@ -12,15 +12,15 @@ namespace PawShelter.Domain.PetsModel
             Value = birthday;
         }
         public DateOnly Value { get; }
-        public Result<Birthday, Error> Create(DateOnly birthday)
+        public static Result<Birthday, Error> Create(DateOnly value)
         {
-            if (birthday.Year < MIN_YEAR_BIRTHDAY || 
-                birthday > DateOnly.FromDateTime(DateTime.Now))
+            if (value.Year < MIN_YEAR_BIRTHDAY ||
+                value > DateOnly.FromDateTime(DateTime.Now))
             {
                 return Errors.General.ValueIsInvalid("Birthday");
             }               
 
-            return new Birthday(Value);
+            return new Birthday(value);
         }
     }
 }

@@ -10,7 +10,7 @@
             Type = type;
             InvalidField = invalidField;
         }
-        public string Code { get;  }
+        public string Code { get; }
         public string Message { get; }
         public ErrorType Type { get; }
         
@@ -59,5 +59,5 @@
         NotFound,
         Failure,
         Conflict
-    } 
+    }
 }

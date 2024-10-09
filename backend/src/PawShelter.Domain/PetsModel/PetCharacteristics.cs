@@ -15,7 +15,7 @@ namespace PawShelter.Domain.PetsModel
         }
         public double Height { get; }
         public double Width { get; }
-        public Result<PetCharacteristics, Error> Create(double height, double width)
+        public static Result<PetCharacteristics, Error> Create(double height, double width)
         {
             if (height <= MIN_VALUE || height > MAX_VALUE ||
                 width <= MIN_VALUE || width > MAX_VALUE)
@@ -23,7 +23,7 @@ namespace PawShelter.Domain.PetsModel
                 return Errors.General.ValueIsInvalid("PetCharacteristics");
             }
                 
-            return new PetCharacteristics(Height, Width);
+            return new PetCharacteristics(height, width);
         }
     }
 }

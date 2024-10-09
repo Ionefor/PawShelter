@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using PawShelter.Application.Extensions;
+
 using PawShelter.Domain.Shared;
 using PawShelter.Domain.Shared.ValueObjects;
 using PawShelter.Domain.VolunteerModel;
@@ -12,12 +13,14 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
+      
         public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
             IValidator<CreateVolunteerCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
             _validator = validator;
         }
+      
         public async Task<Result<Guid, ErrorList>> Handle(
             CreateVolunteerCommand command, 
             CancellationToken cancellationToken = default)
@@ -61,6 +64,7 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
             var volunteer = new Volunteer(
                 volunteerId, fullName, email, description, 
                 number, experience, requisites, socialNetworks);
+
 
             await _volunteerRepository.Add(volunteer, cancellationToken);
 

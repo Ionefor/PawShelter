@@ -61,7 +61,7 @@ namespace PawShelter.Infrastructure.Configurations
             {
                 phi.Property(hi => hi.Value).
                     IsRequired().
-                    HasColumnName("HealthInfo");
+                    HasColumnName("health_Info");
             });
 
             builder.ComplexProperty(p => p.Address, pa =>

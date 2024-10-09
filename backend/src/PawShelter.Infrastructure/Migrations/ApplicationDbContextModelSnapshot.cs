@@ -116,7 +116,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("HealthInfo");
+                                .HasColumnName("health_Info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.Pets.Pet.Name#Name", b1 =>
