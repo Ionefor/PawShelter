@@ -7,16 +7,16 @@ namespace PawShelter.Domain.VolunteerModel
     public record SocialNetwork
     {
         private SocialNetwork() { }
-        private SocialNetwork(Name name, string link)
+        private SocialNetwork(string name, string link)
         {
             Name = name;
             Link = link;
         }
-        public Name Name { get; }
+        public string Name { get; }
         public string Link { get; }
-        public static Result<SocialNetwork, Error> Create(Name name, string link)
+        public static Result<SocialNetwork, Error> Create(string name, string link)
         {
-            if (string.IsNullOrWhiteSpace(link))
+            if (string.IsNullOrWhiteSpace(link) || string.IsNullOrWhiteSpace(name))
                 return Errors.General.ValueIsInvalid("link");
 
             return new SocialNetwork(name, link);

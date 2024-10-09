@@ -27,25 +27,16 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
         {
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
-            if (!validationResult.IsValid)
+            if (!validationResult.IsValid) 
                 return validationResult.ToErrorList();
             
             var volunteerId = VolunteerId.NewVolonteerId();
             
-            var firstNameResult = Name.Create(
-                command.FullNameDto.firstName);
+            var fullName = FullName.Create(
+                command.FullNameDto.firstName,
+                command.FullNameDto.middleName,
+                command.FullNameDto.lastName).Value;
             
-            var middleNameResult = Name.Create(
-                command.FullNameDto.middleName);
-            
-            var lastNameResult = Name.Create(
-                command.FullNameDto.lastName);
-
-            var fullName = new FullName(
-                firstNameResult.Value, 
-                middleNameResult.Value, 
-                lastNameResult.Value);
-
             var email = Email.Create(command.Email).Value;
 
             var description = Description.Create(command.Description).Value;
@@ -55,17 +46,15 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
             var experience = Experience.Create(command.Experience).Value;
             
             var requisites = new Requisites(command.Requisites.Select(r => 
-                new Requisite(Name.Create(r.name).Value,
-                    Description.Create(r.description).Value)).ToList());
-
+                new Requisite(r.name, r.description)).ToList());
+            
             var socialNetworks = new SocialNetworks(command.SocialNetworks.Select(s =>
-                SocialNetwork.Create(Name.Create(s.name).Value, s.link).Value).ToList());
+                SocialNetwork.Create(s.name, s.link).Value).ToList());
             
             var volunteer = new Volunteer(
                 volunteerId, fullName, email, description, 
                 number, experience, requisites, socialNetworks);
-
-
+            
             await _volunteerRepository.Add(volunteer, cancellationToken);
 
             return volunteer.Id.Value;

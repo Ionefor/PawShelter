@@ -145,16 +145,10 @@ namespace PawShelter.Infrastructure.Configurations
                 pr.OwnsMany(rs => rs.Values, r =>
                 {
                     r.Property(n => n.Name).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                     r.Property(d => d.Description).
-                    HasConversion(
-                        description => description.Value,
-                        value => Description.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
                 });

@@ -17,15 +17,11 @@ namespace PawShelter.API.Controllers
             CancellationToken cancellationToken)
         {
             var result = await handler.Handle(request.ToCommand(), cancellationToken);
+
+            if(result.IsFailure)
+                return BadRequest(Envelope.Error(result.Error));
             
-            //Возвращает код 500 с такой ошибкой
-            //CSharpFunctionalExtensions.ResultSuccessException:
-            //You attempted to access the Error property for a successful result.
-            //A successful result has no Error.
-            //Пока не совсем понятно, что с этим сделать
-            //??
-            //return result.ToResponse()
-            return Ok(result);
+            return Created("", Envelope.Ok(result.Value));
         }
     }
 }

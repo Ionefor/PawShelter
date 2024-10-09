@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using FluentValidation;
+﻿using FluentValidation;
 using PawShelter.Application.Dto;
 using PawShelter.Application.Validation;
 using PawShelter.Domain.Shared.ValueObjects;
@@ -12,9 +11,8 @@ public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteer
     public CreateVolunteerCommandValidator()
     {
         RuleFor(c => c.FullNameDto).
-            MustBeValueObject(f => Name.Create(f.firstName)).
-            MustBeValueObject(m => Name.Create(m.middleName)).
-            MustBeValueObject(l => Name.Create(l.lastName));
+            MustBeValueObject(f => 
+                FullName.Create(f.firstName, f.middleName, f.lastName));
         
         RuleFor(c => c.Description).
             MustBeValueObject(Description.Create);
@@ -29,7 +27,11 @@ public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteer
             MustBeValueObject(PhoneNumber.Create);
 
         RuleForEach(c => c.Requisites).
-            MustBeValueObject(r => Name.Create(r.name)).
-            MustBeValueObject(r => Description.Create(r.description));
+            MustBeValueObject(r => 
+                Requisite.Create(r.name, r.description));
+
+        RuleForEach(c => c.SocialNetworks).
+            MustBeValueObject(s => 
+                SocialNetwork.Create(s.name, s.link));
     }
 }

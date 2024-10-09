@@ -37,7 +37,7 @@
         {
             var parts = serialized.Split(SEPARATOR);
 
-            if (parts.Length != 2)
+            if (parts.Length < 3)
             {
                 throw new ArgumentException("Invalid serialized format");
             }
@@ -49,7 +49,6 @@
                 
             return new Error(parts[0], parts[1], type);
         }
-        
         public ErrorList ToErrorList() => new([this]);
     }
 

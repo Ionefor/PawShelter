@@ -13,8 +13,8 @@ using PawShelter.Infrastructure;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241006184238_UpdateConfig")]
-    partial class UpdateConfig
+    [Migration("20241009192943_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,7 +119,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("HealthInfo");
+                                .HasColumnName("health_Info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.Pets.Pet.Name#Name", b1 =>

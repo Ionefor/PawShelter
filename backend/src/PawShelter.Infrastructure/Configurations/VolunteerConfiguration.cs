@@ -25,23 +25,14 @@ namespace PawShelter.Infrastructure.Configurations
                 vf.ToJson("full_name");
 
                 vf.Property(vf => vf.FirstName).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                 vf.Property(vf => vf.MiddleName).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                 vf.Property(vf => vf.LastName).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
             });
@@ -85,16 +76,10 @@ namespace PawShelter.Infrastructure.Configurations
                 vr.OwnsMany(rs => rs.Values, r =>
                 {
                     r.Property(n => n.Name).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
 
                     r.Property(d => d.Description).
-                    HasConversion(
-                        description => description.Value,
-                        value => Description.Create(value).Value).
                     IsRequired().
                     HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
                 });
@@ -106,13 +91,10 @@ namespace PawShelter.Infrastructure.Configurations
 
                 vs.OwnsMany(vs => vs.Values, r =>
                 {
-                    r.Property(n => n.Name).
-                    HasConversion(
-                        name => name.Value,
-                        value => Name.Create(value).Value).
-                    IsRequired().
-                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
-
+                   r.Property(n => n.Name).
+                       IsRequired().
+                       HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                   
                     r.Property(l => l.Link).
                         IsRequired().
                         HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
