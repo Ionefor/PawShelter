@@ -14,13 +14,14 @@ namespace PawShelter.Infrastructure.Configurations
 
             builder.HasKey(b => b.Id);
 
-            builder.Property(p => p.Id).HasConversion(
-                id => id.Value,
-                value => BreedId.Create(value));
+            builder.Property(p => p.Id).
+                HasConversion(
+                    BreedId => BreedId.Value,
+                    value => BreedId.Create(value));
 
             builder.Property(p => p.Value).
                 IsRequired().
-                HasColumnName("breeds");
+                HasColumnName("breed");
         }
     }
 }

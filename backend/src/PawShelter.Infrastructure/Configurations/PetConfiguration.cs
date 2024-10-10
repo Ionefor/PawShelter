@@ -37,16 +37,14 @@ namespace PawShelter.Infrastructure.Configurations
 
             builder.ComplexProperty(p => p.SpeciesBreedsId, psb =>
             {
-                psb.ComplexProperty(s => s.SpeciesId, id =>
-                {
-                    id.Property(i => i.Value).
-                        IsRequired().
-                        HasColumnName("species");
-                });
-
+                psb.Property(p => p.SpeciesId).
+                    HasConversion(
+                        id => id.Value,
+                        value => SpeciesId.Create(value));
+                
                 psb.Property(b => b.BreedId).
                     IsRequired().
-                    HasColumnName("breed"); ;
+                    HasColumnName("breed");
             });
 
             builder.ComplexProperty(p => p.Color, pc =>

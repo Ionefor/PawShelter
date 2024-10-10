@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PawShelter.Domain.Pets;
 using PawShelter.Domain.PetsModel;
 using PawShelter.Domain.VolunteerModel;
 
