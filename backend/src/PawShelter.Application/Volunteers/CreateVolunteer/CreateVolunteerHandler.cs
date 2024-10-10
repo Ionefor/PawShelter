@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PawShelter.Application.Extensions;
 
 using PawShelter.Domain.Shared;
@@ -13,12 +14,15 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
+        private readonly ILogger<CreateVolunteerHandler> _logger;
       
         public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
-            IValidator<CreateVolunteerCommand> validator)
+            IValidator<CreateVolunteerCommand> validator, 
+            ILogger<CreateVolunteerHandler> logger)
         {
             _volunteerRepository = volunteerRepository;
             _validator = validator;
+            _logger = logger;
         }
       
         public async Task<Result<Guid, ErrorList>> Handle(
@@ -56,7 +60,11 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
                 number, experience, requisites, socialNetworks);
             
             await _volunteerRepository.Add(volunteer, cancellationToken);
-
+ 
+            _logger.LogInformation(
+                "Volunteer {firstName} {middleName} created with id: {volunteerId}",
+                fullName.FirstName, fullName.MiddleName, volunteerId.Value);
+            
             return volunteer.Id.Value;
         }
     }
