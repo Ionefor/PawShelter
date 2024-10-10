@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using PawShelter.API.Extensions;
+using PawShelter.API.Middlewares;
 using PawShelter.Application;
 using PawShelter.Infrastructure;
 using Serilog;
@@ -45,6 +46,8 @@ builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
+
+app.UseExeptionMiddleware();
 
 if (app.Environment.IsDevelopment())
 {

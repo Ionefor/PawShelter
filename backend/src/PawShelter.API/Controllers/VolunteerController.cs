@@ -17,7 +17,7 @@ namespace PawShelter.API.Controllers
             CancellationToken cancellationToken)
         {
             var result = await handler.Handle(request.ToCommand(), cancellationToken);
-
+            
             if(result.IsFailure)
                 return BadRequest(Envelope.Error(result.Error));
             
