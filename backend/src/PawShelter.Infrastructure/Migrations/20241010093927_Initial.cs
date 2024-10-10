@@ -46,7 +46,7 @@ namespace PawShelter.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    breeds = table.Column<string>(type: "text", nullable: false),
+                    breed = table.Column<string>(type: "text", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
@@ -82,7 +82,7 @@ namespace PawShelter.Infrastructure.Migrations
                     width = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
                     phoneNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     breed = table.Column<Guid>(type: "uuid", nullable: false),
-                    species = table.Column<Guid>(type: "uuid", nullable: false),
+                    species_breeds_id_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_photos = table.Column<string>(type: "jsonb", nullable: true),
                     pet_requisites = table.Column<string>(type: "jsonb", nullable: true)
                 },

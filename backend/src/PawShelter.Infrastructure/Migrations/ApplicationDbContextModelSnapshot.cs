@@ -164,14 +164,9 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnType("uuid")
                                 .HasColumnName("breed");
 
-                            b1.ComplexProperty<Dictionary<string, object>>("SpeciesId", "PawShelter.Domain.Pets.Pet.SpeciesBreedsId#SpeciesBreedsId.SpeciesId#SpeciesId", b2 =>
-                                {
-                                    b2.IsRequired();
-
-                                    b2.Property<Guid>("Value")
-                                        .HasColumnType("uuid")
-                                        .HasColumnName("species");
-                                });
+                            b1.Property<Guid>("SpeciesId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("species_breeds_id_species_id");
                         });
 
                     b.HasKey("Id")
@@ -192,7 +187,7 @@ namespace PawShelter.Infrastructure.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("breeds");
+                        .HasColumnName("breed");
 
                     b.Property<Guid?>("species_id")
                         .HasColumnType("uuid")

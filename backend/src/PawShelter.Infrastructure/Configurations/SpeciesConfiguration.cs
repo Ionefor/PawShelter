@@ -13,9 +13,10 @@ namespace PawShelter.Infrastructure.Configurations
 
             builder.HasKey(s => s.Id);
 
-            builder.Property(s => s.Id).HasConversion(
-                id => id.Value,
-                value => SpeciesId.Create(value));
+            builder.Property(s => s.Id).
+                HasConversion(
+                    SpeciesId =>  SpeciesId.Value,
+                    value => SpeciesId.Create(value));
 
             builder.Property(s => s.Value).
                 IsRequired().
