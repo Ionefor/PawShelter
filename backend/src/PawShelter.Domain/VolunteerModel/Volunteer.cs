@@ -37,8 +37,7 @@ namespace PawShelter.Domain.VolunteerModel
         public IReadOnlyList<Pet>? Pets => _pets;
         public int CountPetsByStatus(PetStatus status)
         {
-            return _pets.Where(p => 
-                p.Status == status).Count();
+            return _pets.Count(p => p.Status == status);
         }
     }
 }

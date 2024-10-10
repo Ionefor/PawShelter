@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using PawShelter.API.Extensions;
 using PawShelter.Application.Volunteers.CreateVolunteer;
+using PawShelter.Domain.Shared;
 
 namespace PawShelter.API.Controllers
 {
@@ -16,7 +18,10 @@ namespace PawShelter.API.Controllers
         {
             var result = await handler.Handle(request.ToCommand(), cancellationToken);
 
-            return result.ToResponse();
+            if(result.IsFailure)
+                return BadRequest(Envelope.Error(result.Error));
+            
+            return Created("", Envelope.Ok(result.Value));
         }
     }
 }

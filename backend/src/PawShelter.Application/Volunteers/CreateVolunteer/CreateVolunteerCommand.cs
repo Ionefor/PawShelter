@@ -3,11 +3,11 @@
 namespace PawShelter.Application.Volunteers.CreateVolunteer
 {
     public record CreateVolunteerCommand(
-                FullNameDto fullNameDto,
-                string description,
-                string email,
-                string phoneNumber,
-                int experience,
-                IEnumerable<RequisiteDto>? requisites,
-                IEnumerable<SocialNetworkDto>? socialNetworks);
+        FullNameDto FullNameDto,
+        string Description,
+        string Email,
+        string PhoneNumber,
+        int Experience,
+        IEnumerable<RequisiteDto>? Requisites,
+        IEnumerable<SocialNetworkDto>? SocialNetworks);
 }

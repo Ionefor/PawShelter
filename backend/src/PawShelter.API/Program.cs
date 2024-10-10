@@ -1,3 +1,4 @@
+using FluentValidation;
 using PawShelter.Application;
 using PawShelter.Infrastructure;
 
@@ -10,6 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.
     AddInfrastructure().
     AddApplication();
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 // Add services to the container.
 
