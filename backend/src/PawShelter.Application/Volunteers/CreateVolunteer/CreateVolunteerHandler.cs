@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PawShelter.Application.Extensions;
-
+using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer;
+using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
+using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
 using PawShelter.Domain.Shared;
-using PawShelter.Domain.Shared.ValueObjects;
-using PawShelter.Domain.VolunteerModel;
 
 namespace PawShelter.Application.Volunteers.CreateVolunteer
 {
@@ -37,9 +37,9 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
             var volunteerId = VolunteerId.NewVolonteerId();
             
             var fullName = FullName.Create(
-                command.FullNameDto.firstName,
-                command.FullNameDto.middleName,
-                command.FullNameDto.lastName).Value;
+                command.FullNameDto.FirstName,
+                command.FullNameDto.MiddleName,
+                command.FullNameDto.LastName).Value;
             
             var email = Email.Create(command.Email).Value;
 
@@ -50,10 +50,10 @@ namespace PawShelter.Application.Volunteers.CreateVolunteer
             var experience = Experience.Create(command.Experience).Value;
             
             var requisites = new Requisites(command.Requisites.Select(r => 
-                new Requisite(r.name, r.description)).ToList());
+                new Requisite(r.Name, r.Description)).ToList());
             
             var socialNetworks = new SocialNetworks(command.SocialNetworks.Select(s =>
-                SocialNetwork.Create(s.name, s.link).Value).ToList());
+                SocialNetwork.Create(s.Name, s.Link).Value).ToList());
             
             var volunteer = new Volunteer(
                 volunteerId, fullName, email, description, 

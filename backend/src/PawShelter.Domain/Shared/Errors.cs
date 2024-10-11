@@ -21,6 +21,11 @@
                 var label = name is null ? " " : " " + name + " ";
                 return Error.Validation("length.is.invalid", $"invalid{label}length");
             }
+
+            public static Error InternalServer(string message)
+            {
+                return Error.Failure("server.internal", message);
+            }
         }
     }
 }

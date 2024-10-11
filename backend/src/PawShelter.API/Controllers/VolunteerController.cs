@@ -1,8 +1,5 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using PawShelter.API.Extensions;
 using PawShelter.Application.Volunteers.CreateVolunteer;
-using PawShelter.Domain.Shared;
 
 namespace PawShelter.API.Controllers
 {

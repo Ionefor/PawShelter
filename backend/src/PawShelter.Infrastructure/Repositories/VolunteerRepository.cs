@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PawShelter.Application.Volunteers;
+using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.Shared;
-using PawShelter.Domain.VolunteerModel;
 
 namespace PawShelter.Infrastructure.Repositories
 {
