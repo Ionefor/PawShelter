@@ -8,7 +8,7 @@ using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
 using PawShelter.Domain.Shared;
 
-namespace PawShelter.Application.Volunteers.CreateVolunteer
+namespace PawShelter.Application.Volunteers.Create
 {
     public class CreateVolunteerHandler
     {
