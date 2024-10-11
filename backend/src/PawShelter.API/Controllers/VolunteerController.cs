@@ -29,13 +29,11 @@ namespace PawShelter.API.Controllers
         [HttpPut("{id:guid}/main-info")]
         public async Task<ActionResult<Guid>> UpdateMainInfo(
             [FromRoute] Guid id,
-            [FromBody] MainInfoDto dto,
+            [FromBody] UpdateMainInfoRequest request,
             [FromServices] UpdateMainInfoHandler handler,
             CancellationToken cancellationToken)
         {
-            var command = new UpdateMainInfoCommand(id, dto);
-            
-            var result = await handler.Handle(command, cancellationToken);
+            var result = await handler.Handle(request.ToCommand(id), cancellationToken);
             
             if(result.IsFailure)
                 return BadRequest(Envelope.Error(result.Error));
@@ -46,13 +44,11 @@ namespace PawShelter.API.Controllers
         [HttpPut("{id:guid}/requisites")]
         public async Task<ActionResult<Guid>> UpdateRequisites(
             [FromRoute] Guid id,
-            [FromBody] RequisitesDto dto,
+            [FromBody] UpdateRequisitesRequest request,
             [FromServices] UpdateRequisitesHandler handler,
             CancellationToken cancellationToken)
         {
-            var command  = new UpdateRequisitesCommand(id, dto);
-            
-            var result = await handler.Handle(command, cancellationToken);
+            var result = await handler.Handle(request.ToCommand(id), cancellationToken);
             
             if(result.IsFailure)
                 return BadRequest(Envelope.Error(result.Error));
@@ -63,13 +59,11 @@ namespace PawShelter.API.Controllers
         [HttpPut("{id:guid}/socialNetworks")]
         public async Task<ActionResult<Guid>> UpdateSocialNetworks(
             [FromRoute] Guid id,
-            [FromBody] SocialNetworksDto dto,
+            [FromBody] UpdateSocialNetworksRequest request,
             [FromServices] UpdateSocialNetworksHandler handler,
             CancellationToken cancellationToken)
         {
-            var command  = new UpdateSocialNetworksCommand(id, dto);
-            
-            var result = await handler.Handle(command, cancellationToken);
+            var result = await handler.Handle(request.ToCommand(id), cancellationToken);
             
             if(result.IsFailure)
                 return BadRequest(Envelope.Error(result.Error));
