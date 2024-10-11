@@ -3,7 +3,12 @@
     public record SocialNetworks
     {
         private SocialNetworks() { }
-        public SocialNetworks(List<SocialNetwork> socialNetworks) => Values = socialNetworks;
+
+        public SocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
+        {
+            Values = socialNetworks.ToList();
+        }
+           
         public IReadOnlyList<SocialNetwork>? Values { get; }
     }
 }

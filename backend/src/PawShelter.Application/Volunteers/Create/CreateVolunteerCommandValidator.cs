@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using PawShelter.Application.Dto;
 using PawShelter.Application.Validation;
 using PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer;
 using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
 
-namespace PawShelter.Application.Volunteers.CreateVolunteer;
+namespace PawShelter.Application.Volunteers.Create;
 
 public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
 {

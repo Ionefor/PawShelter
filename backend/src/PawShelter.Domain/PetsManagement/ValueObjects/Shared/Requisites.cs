@@ -3,8 +3,8 @@
     public record Requisites
     {
         private Requisites() { }
-        public Requisites(List<Requisite> requisites) =>
-             Values = requisites;
+        public Requisites(IEnumerable<Requisite> requisites) =>
+             Values = requisites.ToList();
         public IReadOnlyList<Requisite>? Values { get; }
     }
 }

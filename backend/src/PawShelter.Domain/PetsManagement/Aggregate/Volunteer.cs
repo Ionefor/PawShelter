@@ -40,6 +40,30 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
         {
             return _pets.Count(p => p.Status == status);
         }
+
+        public void UpdateMainInfo(
+            FullName fullName,
+            Email email,
+            Description description,
+            PhoneNumber phoneNumber,
+            Experience experience)
+        {
+            FullName = fullName;
+            Email = email;
+            Description = description;
+            PhoneNumber = phoneNumber;
+            Experience = experience;
+        }
+
+        public void UpdateRequisites(Requisites requisites)
+        {
+            Requisites = requisites;
+        }
+
+        public void UpdateSocialNetworks(SocialNetworks socialNetworks)
+        {
+            SocialNetworks = socialNetworks;
+        }
     }
 }
 
