@@ -1,3 +1,3 @@
 ﻿namespace PawShelter.Application.Dto;
 
-public record FullNameDto(string firstName, string middleName, string lastName);
+public record FullNameDto(string FirstName, string MiddleName, string LastName);

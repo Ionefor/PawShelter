@@ -1,8 +1,5 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using PawShelter.API.Extensions;
 using PawShelter.Application.Volunteers.CreateVolunteer;
-using PawShelter.Domain.Shared;
 
 namespace PawShelter.API.Controllers
 {
@@ -17,7 +14,7 @@ namespace PawShelter.API.Controllers
             CancellationToken cancellationToken)
         {
             var result = await handler.Handle(request.ToCommand(), cancellationToken);
-
+            
             if(result.IsFailure)
                 return BadRequest(Envelope.Error(result.Error));
             

@@ -1,3 +1,3 @@
 ﻿namespace PawShelter.Application.Dto;
 
-public record RequisiteDto(string name, string description);
+public record RequisiteDto(string Name, string Description);

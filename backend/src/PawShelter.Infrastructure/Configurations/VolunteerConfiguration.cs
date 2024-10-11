@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PawShelter.Domain.PetsModel;
-using PawShelter.Domain.Shared.ValueObjects;
-using PawShelter.Domain.VolunteerModel;
+using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 
 namespace PawShelter.Infrastructure.Configurations
 {
