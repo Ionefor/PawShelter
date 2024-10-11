@@ -1,3 +1,3 @@
 ﻿namespace PawShelter.Application.Dto;
 
-public record SocialNetworkDto(string name, string link);
+public record SocialNetworkDto(string Name, string Link);

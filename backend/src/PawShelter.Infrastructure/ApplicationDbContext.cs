@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PawShelter.Domain.PetsModel;
-using PawShelter.Domain.VolunteerModel;
+using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.SpeciesManagement.Aggregate;
 
 namespace PawShelter.Infrastructure
 {
