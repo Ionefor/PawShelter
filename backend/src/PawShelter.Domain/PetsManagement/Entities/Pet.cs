@@ -6,8 +6,9 @@ using PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
 
 namespace PawShelter.Domain.PetsManagement.Entities
 {
-    public class Pet : Entity<PetId>
+    public class Pet : Entity<PetId>, ISoftDeletable
     {
+        private bool _isDeleted = false;
         private Pet(PetId id) : base(id) { }
 
         public Pet(PetId id,
@@ -24,7 +25,7 @@ namespace PawShelter.Domain.PetsManagement.Entities
                 Birthday birthday,
                 DateTime publicationDate,
                 Photos? photos,
-                Requisites? requisites,
+                Requisites requisites,
                 PetStatus status)
                 : base(id)
         {
@@ -57,7 +58,16 @@ namespace PawShelter.Domain.PetsManagement.Entities
         public Birthday Birthday { get; private set; }
         public DateTime PublicationDate { get; private set; } = default!;
         public Photos? Photos { get; private set; }
-        public Requisites? Requisites { get; private set; }
-        public PetStatus Status { get; private set; }  
+        public Requisites Requisites { get; private set; }
+        public PetStatus Status { get; private set; }
+        public void Delete()
+        {
+            _isDeleted = true;        
+        }
+
+        public void Restore()
+        {
+            _isDeleted = false;
+        }
     }
 }

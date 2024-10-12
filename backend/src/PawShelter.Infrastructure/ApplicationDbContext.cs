@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PawShelter.Domain.PetsManagement.Aggregate;
 using PawShelter.Domain.SpeciesManagement.Aggregate;
+using PawShelter.Infrastructure.Interceptors;
 
 namespace PawShelter.Infrastructure
 {
@@ -17,6 +18,8 @@ namespace PawShelter.Infrastructure
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

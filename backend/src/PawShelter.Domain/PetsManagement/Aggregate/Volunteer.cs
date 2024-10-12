@@ -6,8 +6,9 @@ using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.PetsManagement.Aggregate
 {
-    public class Volunteer : Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
     {
+        private bool _isDeleted = false;
         private readonly List<Pet> _pets = [];
         private Volunteer(VolunteerId id) : base(id) { }
         public Volunteer(VolunteerId id,
@@ -16,8 +17,8 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
                 Description description,
                 PhoneNumber phoneNumber,
                 Experience experience,
-                Requisites? requisites,
-                SocialNetworks? socialNetworks)
+                Requisites requisites,
+                SocialNetworks socialNetworks)
                 : base(id)
         {
             FullName = fullName;
@@ -33,8 +34,8 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
         public Description Description { get; private set; } = null!;
         public PhoneNumber PhoneNumber { get; private set; } = null!;
         public Experience Experience { get; private set; }
-        public Requisites? Requisites { get; private set; }
-        public SocialNetworks? SocialNetworks { get; private set; }    
+        public Requisites Requisites { get; private set; }
+        public SocialNetworks SocialNetworks { get; private set; }    
         public IReadOnlyList<Pet>? Pets => _pets;
         public int CountPetsByStatus(PetStatus status)
         {
@@ -63,6 +64,16 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
         public void UpdateSocialNetworks(SocialNetworks socialNetworks)
         {
             SocialNetworks = socialNetworks;
+        }
+
+        public void Delete()
+        {
+            _isDeleted = true;        
+        }
+
+        public void Restore()
+        {
+            _isDeleted = false;
         }
     }
 }

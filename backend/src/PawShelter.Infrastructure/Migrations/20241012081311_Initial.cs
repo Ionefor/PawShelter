@@ -28,13 +28,14 @@ namespace PawShelter.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     experience = table.Column<int>(type: "integer", maxLength: 100, nullable: false),
                     phoneNumber = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     full_name = table.Column<string>(type: "jsonb", nullable: false),
-                    volunteer_requisites = table.Column<string>(type: "jsonb", nullable: true),
-                    volunteer_social_networks = table.Column<string>(type: "jsonb", nullable: true)
+                    volunteer_requisites = table.Column<string>(type: "jsonb", nullable: false),
+                    volunteer_social_networks = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +57,8 @@ namespace PawShelter.Infrastructure.Migrations
                         name: "fk_breeds_species_species_id",
                         column: x => x.species_id,
                         principalTable: "Species",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,6 +70,7 @@ namespace PawShelter.Infrastructure.Migrations
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     publication_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -84,7 +87,7 @@ namespace PawShelter.Infrastructure.Migrations
                     breed = table.Column<Guid>(type: "uuid", nullable: false),
                     species_breeds_id_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_photos = table.Column<string>(type: "jsonb", nullable: true),
-                    pet_requisites = table.Column<string>(type: "jsonb", nullable: true)
+                    pet_requisites = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,7 +96,8 @@ namespace PawShelter.Infrastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "Volunteers",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
