@@ -12,7 +12,7 @@
 
             public static Error NotFound(Guid? id = null)
             {
-                var forId = id is null ? "" : $"for Id {id}";
+                var forId = id is null ? "" : $" for Id {id}";
                 return Error.NotFound("record.is.invalid", $"record not found{forId}");
             }
 

@@ -154,6 +154,10 @@ namespace PawShelter.Infrastructure.Configurations
 
             builder.Property(p => p.Status).
                 IsRequired();
+            
+            builder.Property<bool>("_isDeleted").
+                UsePropertyAccessMode(PropertyAccessMode.Field).
+                    HasColumnName("is_deleted");
         }
     }
 }

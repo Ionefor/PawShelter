@@ -76,11 +76,13 @@ namespace PawShelter.Infrastructure.Configurations
                 {
                     r.Property(n => n.Name).
                     IsRequired().
-                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                    HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
+                    HasColumnName("requisite_name");
 
                     r.Property(d => d.Description).
                     IsRequired().
-                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
+                    HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH).
+                    HasColumnName("requisite_description");
                 });
             });
 
@@ -92,18 +94,24 @@ namespace PawShelter.Infrastructure.Configurations
                 {
                    r.Property(n => n.Name).
                        IsRequired().
-                       HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                       HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
+                       HasColumnName("socialNetwork_name");
                    
                     r.Property(l => l.Link).
                         IsRequired().
-                        HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                        HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH).
+                        HasColumnName("socialNetwork_link");
                 });
             });
 
             builder.HasMany(v => v.Pets).
                 WithOne().
-                HasForeignKey("volunteer_id").
-                OnDelete(DeleteBehavior.NoAction);
+                    HasForeignKey("volunteer_id").
+                        OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Property<bool>("_isDeleted").
+                UsePropertyAccessMode(PropertyAccessMode.Field).
+                    HasColumnName("is_deleted");
         }
     }
 }
