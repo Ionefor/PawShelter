@@ -15,7 +15,7 @@ namespace PawShelter.Infrastructure.Configurations
 
             builder.Property(s => s.Id).
                 HasConversion(
-                    SpeciesId =>  SpeciesId.Value,
+                    speciesId =>  speciesId.Value,
                     value => SpeciesId.Create(value));
 
             builder.Property(s => s.Value).
@@ -25,7 +25,7 @@ namespace PawShelter.Infrastructure.Configurations
             builder.HasMany(s => s.Breeds).
                 WithOne().
                 HasForeignKey("species_id").
-                OnDelete(DeleteBehavior.NoAction);
+                OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

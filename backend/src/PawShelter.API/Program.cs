@@ -54,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    //await app.ApplyMigrations();
+    await app.ApplyMigrations();
 }
 
 // Configure the HTTP request pipeline.

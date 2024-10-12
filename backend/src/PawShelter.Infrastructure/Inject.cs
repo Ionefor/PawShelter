@@ -9,7 +9,6 @@ namespace PawShelter.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<ApplicationDbContext>();
-
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
 
             return services;

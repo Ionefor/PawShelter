@@ -13,8 +13,8 @@ using PawShelter.Infrastructure;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241010093927_Initial")]
-    partial class Initial
+    [Migration("20241012081856_Initial2")]
+    partial class Initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,66 @@ namespace PawShelter.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PawShelter.Domain.Pets.Pet", b =>
+            modelBuilder.Entity("PawShelter.Domain.PetsManagement.Aggregate.Volunteer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Description", "PawShelter.Domain.PetsManagement.Aggregate.Volunteer.Description#Description", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("character varying(2000)")
+                                .HasColumnName("description");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Email", "PawShelter.Domain.PetsManagement.Aggregate.Volunteer.Email#Email", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("email");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Experience", "PawShelter.Domain.PetsManagement.Aggregate.Volunteer.Experience#Experience", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasMaxLength(100)
+                                .HasColumnType("integer")
+                                .HasColumnName("experience");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.PetsManagement.Aggregate.Volunteer.PhoneNumber#PhoneNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("phoneNumber");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_volunteers");
+
+                    b.ToTable("Volunteers", (string)null);
+                });
+
+            modelBuilder.Entity("PawShelter.Domain.PetsManagement.Entities.Pet", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -48,11 +107,15 @@ namespace PawShelter.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Address", "PawShelter.Domain.Pets.Pet.Address#Address", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Address", "PawShelter.Domain.PetsManagement.Entities.Pet.Address#Address", b1 =>
                         {
                             b1.IsRequired();
 
@@ -81,7 +144,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("street");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Birthday", "PawShelter.Domain.Pets.Pet.Birthday#Birthday", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Birthday", "PawShelter.Domain.PetsManagement.Entities.Pet.Birthday#Birthday", b1 =>
                         {
                             b1.IsRequired();
 
@@ -90,7 +153,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("birthday");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Color", "PawShelter.Domain.Pets.Pet.Color#Color", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Color", "PawShelter.Domain.PetsManagement.Entities.Pet.Color#Color", b1 =>
                         {
                             b1.IsRequired();
 
@@ -101,7 +164,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("color");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Description", "PawShelter.Domain.Pets.Pet.Description#Description", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Description", "PawShelter.Domain.PetsManagement.Entities.Pet.Description#Description", b1 =>
                         {
                             b1.IsRequired();
 
@@ -112,7 +175,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("description");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "PawShelter.Domain.Pets.Pet.HealthInfo#HealthInfo", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("HealthInfo", "PawShelter.Domain.PetsManagement.Entities.Pet.HealthInfo#HealthInfo", b1 =>
                         {
                             b1.IsRequired();
 
@@ -122,7 +185,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("health_Info");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.Pets.Pet.Name#Name", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.PetsManagement.Entities.Pet.Name#Name", b1 =>
                         {
                             b1.IsRequired();
 
@@ -133,7 +196,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("name");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("PetCharacteristics", "PawShelter.Domain.Pets.Pet.PetCharacteristics#PetCharacteristics", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("PetCharacteristics", "PawShelter.Domain.PetsManagement.Entities.Pet.PetCharacteristics#PetCharacteristics", b1 =>
                         {
                             b1.IsRequired();
 
@@ -148,7 +211,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("width");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.Pets.Pet.PhoneNumber#PhoneNumber", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.PetsManagement.Entities.Pet.PhoneNumber#PhoneNumber", b1 =>
                         {
                             b1.IsRequired();
 
@@ -159,7 +222,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("phoneNumber");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("SpeciesBreedsId", "PawShelter.Domain.Pets.Pet.SpeciesBreedsId#SpeciesBreedsId", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("SpeciesBreedsId", "PawShelter.Domain.PetsManagement.Entities.Pet.SpeciesBreedsId#SpeciesBreedsId", b1 =>
                         {
                             b1.IsRequired();
 
@@ -181,7 +244,24 @@ namespace PawShelter.Infrastructure.Migrations
                     b.ToTable("Pets", (string)null);
                 });
 
-            modelBuilder.Entity("PawShelter.Domain.PetsModel.Breed", b =>
+            modelBuilder.Entity("PawShelter.Domain.SpeciesManagement.Aggregate.Species", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("species");
+
+                    b.HasKey("Id")
+                        .HasName("pk_species");
+
+                    b.ToTable("Species", (string)null);
+                });
+
+            modelBuilder.Entity("PawShelter.Domain.SpeciesManagement.Entities.Breed", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -205,87 +285,158 @@ namespace PawShelter.Infrastructure.Migrations
                     b.ToTable("Breeds", (string)null);
                 });
 
-            modelBuilder.Entity("PawShelter.Domain.PetsModel.Species", b =>
+            modelBuilder.Entity("PawShelter.Domain.PetsManagement.Aggregate.Volunteer", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.Shared.Requisites", "Requisites", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("species");
+                            b1.HasKey("VolunteerId");
 
-                    b.HasKey("Id")
-                        .HasName("pk_species");
+                            b1.ToTable("Volunteers");
 
-                    b.ToTable("Species", (string)null);
+                            b1.ToJson("volunteer_requisites");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PawShelter.Domain.PetsManagement.ValueObjects.Shared.Requisite", "Values", b2 =>
+                                {
+                                    b2.Property<Guid>("RequisitesVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Description")
+                                        .IsRequired()
+                                        .HasMaxLength(2000)
+                                        .HasColumnType("character varying(2000)")
+                                        .HasColumnName("requisite_description");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)")
+                                        .HasColumnName("requisite_name");
+
+                                    b2.HasKey("RequisitesVolunteerId", "Id");
+
+                                    b2.ToTable("Volunteers");
+
+                                    b2.ToJson("volunteer_requisites");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RequisitesVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_requisites_volunteer_id");
+                                });
+
+                            b1.Navigation("Values");
+                        });
+
+                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer.FullName", "FullName", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.Property<string>("MiddleName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("Volunteers");
+
+                            b1.ToJson("full_name");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+                        });
+
+                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer.SocialNetworks", "SocialNetworks", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("Volunteers");
+
+                            b1.ToJson("volunteer_social_networks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer.SocialNetwork", "Values", b2 =>
+                                {
+                                    b2.Property<Guid>("SocialNetworksVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("Link")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)")
+                                        .HasColumnName("socialNetwork_link");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)")
+                                        .HasColumnName("socialNetwork_name");
+
+                                    b2.HasKey("SocialNetworksVolunteerId", "Id");
+
+                                    b2.ToTable("Volunteers");
+
+                                    b2.ToJson("volunteer_social_networks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SocialNetworksVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
+                                });
+
+                            b1.Navigation("Values");
+                        });
+
+                    b.Navigation("FullName")
+                        .IsRequired();
+
+                    b.Navigation("Requisites")
+                        .IsRequired();
+
+                    b.Navigation("SocialNetworks")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("PawShelter.Domain.VolunteerModel.Volunteer", b =>
+            modelBuilder.Entity("PawShelter.Domain.PetsManagement.Entities.Pet", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Description", "PawShelter.Domain.VolunteerModel.Volunteer.Description#Description", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(2000)
-                                .HasColumnType("character varying(2000)")
-                                .HasColumnName("description");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Email", "PawShelter.Domain.VolunteerModel.Volunteer.Email#Email", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("email");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("Experience", "PawShelter.Domain.VolunteerModel.Volunteer.Experience#Experience", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<int>("Value")
-                                .HasMaxLength(100)
-                                .HasColumnType("integer")
-                                .HasColumnName("experience");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.VolunteerModel.Volunteer.PhoneNumber#PhoneNumber", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("phoneNumber");
-                        });
-
-                    b.HasKey("Id")
-                        .HasName("pk_volunteers");
-
-                    b.ToTable("Volunteers", (string)null);
-                });
-
-            modelBuilder.Entity("PawShelter.Domain.Pets.Pet", b =>
-                {
-                    b.HasOne("PawShelter.Domain.VolunteerModel.Volunteer", null)
+                    b.HasOne("PawShelter.Domain.PetsManagement.Aggregate.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
-                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
+                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.Shared.Requisites", "Requisites", b1 =>
                         {
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid");
@@ -301,7 +452,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasForeignKey("PetId")
                                 .HasConstraintName("fk_pets_pets_pet_id");
 
-                            b1.OwnsMany("PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
+                            b1.OwnsMany("PawShelter.Domain.PetsManagement.ValueObjects.Shared.Requisite", "Values", b2 =>
                                 {
                                     b2.Property<Guid>("RequisitesPetId")
                                         .HasColumnType("uuid");
@@ -334,7 +485,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.Navigation("Values");
                         });
 
-                    b.OwnsOne("PawShelter.Domain.PetsModel.Photos", "Photos", b1 =>
+                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.ForPet.Photos", "Photos", b1 =>
                         {
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid");
@@ -349,7 +500,7 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasForeignKey("PetId")
                                 .HasConstraintName("fk_pets_pets_id");
 
-                            b1.OwnsMany("PawShelter.Domain.PetsModel.PetPhoto", "Values", b2 =>
+                            b1.OwnsMany("PawShelter.Domain.PetsManagement.ValueObjects.ForPet.PetPhoto", "Values", b2 =>
                                 {
                                     b2.Property<Guid>("PhotosPetId")
                                         .HasColumnType("uuid");
@@ -381,163 +532,27 @@ namespace PawShelter.Infrastructure.Migrations
 
                     b.Navigation("Photos");
 
-                    b.Navigation("Requisites");
+                    b.Navigation("Requisites")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("PawShelter.Domain.PetsModel.Breed", b =>
+            modelBuilder.Entity("PawShelter.Domain.SpeciesManagement.Entities.Breed", b =>
                 {
-                    b.HasOne("PawShelter.Domain.PetsModel.Species", null)
+                    b.HasOne("PawShelter.Domain.SpeciesManagement.Aggregate.Species", null)
                         .WithMany("Breeds")
                         .HasForeignKey("species_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_breeds_species_species_id");
                 });
 
-            modelBuilder.Entity("PawShelter.Domain.VolunteerModel.Volunteer", b =>
-                {
-                    b.OwnsOne("PawShelter.Domain.VolunteerModel.FullName", "FullName", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
-
-                            b1.Property<string>("LastName")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
-
-                            b1.Property<string>("MiddleName")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("Volunteers");
-
-                            b1.ToJson("full_name");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-                        });
-
-                    b.OwnsOne("PawShelter.Domain.VolunteerModel.SocialNetworks", "SocialNetworks", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("Volunteers");
-
-                            b1.ToJson("volunteer_social_networks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PawShelter.Domain.VolunteerModel.SocialNetwork", "Values", b2 =>
-                                {
-                                    b2.Property<Guid>("SocialNetworksVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
-
-                                    b2.HasKey("SocialNetworksVolunteerId", "Id");
-
-                                    b2.ToTable("Volunteers");
-
-                                    b2.ToJson("volunteer_social_networks");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("SocialNetworksVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
-                                });
-
-                            b1.Navigation("Values");
-                        });
-
-                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjects.Requisites", "Requisites", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("Volunteers");
-
-                            b1.ToJson("volunteer_requisites");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PawShelter.Domain.Shared.ValueObjects.Requisite", "Values", b2 =>
-                                {
-                                    b2.Property<Guid>("RequisitesVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Description")
-                                        .IsRequired()
-                                        .HasMaxLength(2000)
-                                        .HasColumnType("character varying(2000)");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
-
-                                    b2.HasKey("RequisitesVolunteerId", "Id");
-
-                                    b2.ToTable("Volunteers");
-
-                                    b2.ToJson("volunteer_requisites");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RequisitesVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_requisites_volunteer_id");
-                                });
-
-                            b1.Navigation("Values");
-                        });
-
-                    b.Navigation("FullName")
-                        .IsRequired();
-
-                    b.Navigation("Requisites");
-
-                    b.Navigation("SocialNetworks");
-                });
-
-            modelBuilder.Entity("PawShelter.Domain.PetsModel.Species", b =>
-                {
-                    b.Navigation("Breeds");
-                });
-
-            modelBuilder.Entity("PawShelter.Domain.VolunteerModel.Volunteer", b =>
+            modelBuilder.Entity("PawShelter.Domain.PetsManagement.Aggregate.Volunteer", b =>
                 {
                     b.Navigation("Pets");
+                });
+
+            modelBuilder.Entity("PawShelter.Domain.SpeciesManagement.Aggregate.Species", b =>
+                {
+                    b.Navigation("Breeds");
                 });
 #pragma warning restore 612, 618
         }
