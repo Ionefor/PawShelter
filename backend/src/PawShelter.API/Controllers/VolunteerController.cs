@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using PawShelter.API.Extensions;
+using PawShelter.Application.Files.Upload;
 using PawShelter.Application.Volunteers.Create;
 using PawShelter.Application.Volunteers.CreateVolunteer;
 using PawShelter.Application.Volunteers.Delete;
@@ -8,9 +10,7 @@ using PawShelter.Application.Volunteers.UpdateSocialNetworks;
 
 namespace PawShelter.API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class VolunteerController : ControllerBase
+    public class VolunteerController : ApplicationController
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
