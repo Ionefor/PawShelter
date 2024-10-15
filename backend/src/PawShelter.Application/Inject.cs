@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using PawShelter.Application.Files.Delete;
+using PawShelter.Application.Files.Get;
+using PawShelter.Application.Files.Upload;
 using PawShelter.Application.Volunteers.Create;
 using PawShelter.Application.Volunteers.Delete;
 using PawShelter.Application.Volunteers.UpdateMainInfo;
@@ -17,6 +20,9 @@ namespace PawShelter.Application
             services.AddScoped<UpdateRequisitesHandler>();
             services.AddScoped<UpdateSocialNetworksHandler>();
             services.AddScoped<DeleteVolunteerHandler>();
+            services.AddScoped<UploadFileHandler>();
+            services.AddScoped<DeleteFileHandler>();
+            services.AddScoped<GetFileHandler>();
             
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             
