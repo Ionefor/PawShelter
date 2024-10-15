@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PawShelter.Application.FileProvider;
+using PawShelter.Application.Species;
 using PawShelter.Application.Volunteers;
 using PawShelter.Infrastructure.Options;
 using PawShelter.Infrastructure.Providers;
@@ -16,6 +17,7 @@ namespace PawShelter.Infrastructure
         {
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+            services.AddScoped<ISpeciesRepository, SpeciesRepository>();
             services.AddMinio(configuration);
            
             return services;
