@@ -14,6 +14,11 @@ namespace PawShelter.Domain.SpeciesManagement.Aggregate
         }
         public string Value { get; private set; } = null!;
         public IReadOnlyList<Breed> Breeds => _breeds;
+
+        public void AddBreed(Breed breed)
+        {
+            _breeds.Add(breed);
+        }
         public static Result<Species, Error> Create(SpeciesId id, string value)
         {
             if (string.IsNullOrWhiteSpace(value))
