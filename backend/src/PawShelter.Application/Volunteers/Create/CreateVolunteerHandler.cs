@@ -15,14 +15,18 @@ namespace PawShelter.Application.Volunteers.Create
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
         private readonly ILogger<CreateVolunteerHandler> _logger;
-      
-        public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateVolunteerHandler(
+            IVolunteerRepository volunteerRepository,
             IValidator<CreateVolunteerCommand> validator, 
-            ILogger<CreateVolunteerHandler> logger)
+            ILogger<CreateVolunteerHandler> logger,
+            IUnitOfWork unitOfWork)
         {
             _volunteerRepository = volunteerRepository;
             _validator = validator;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
       
         public async Task<Result<Guid, ErrorList>> Handle(
@@ -61,6 +65,8 @@ namespace PawShelter.Application.Volunteers.Create
             
             await _volunteerRepository.Add(volunteer, cancellationToken);
  
+            await _unitOfWork.SaveChanges(cancellationToken);
+            
             _logger.LogInformation(
                 "Volunteer {firstName} {middleName} created with id: {volunteerId}",
                 fullName.FirstName, fullName.MiddleName, volunteerId.Value);

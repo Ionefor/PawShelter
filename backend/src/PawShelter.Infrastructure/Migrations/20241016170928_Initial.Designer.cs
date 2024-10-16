@@ -13,8 +13,8 @@ using PawShelter.Infrastructure;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241012081856_Initial2")]
-    partial class Initial2
+    [Migration("20241016170928_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -485,7 +485,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.Navigation("Values");
                         });
 
-                    b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.ForPet.Photos", "Photos", b1 =>
+                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjectList<PawShelter.Domain.PetsManagement.ValueObjects.ForPet.PetPhoto>", "Photos", b1 =>
                         {
                             b1.Property<Guid>("PetId")
                                 .HasColumnType("uuid");
@@ -502,7 +502,7 @@ namespace PawShelter.Infrastructure.Migrations
 
                             b1.OwnsMany("PawShelter.Domain.PetsManagement.ValueObjects.ForPet.PetPhoto", "Values", b2 =>
                                 {
-                                    b2.Property<Guid>("PhotosPetId")
+                                    b2.Property<Guid>("ValueObjectListPetId")
                                         .HasColumnType("uuid");
 
                                     b2.Property<int>("Id")
@@ -516,15 +516,15 @@ namespace PawShelter.Infrastructure.Migrations
                                         .IsRequired()
                                         .HasColumnType("text");
 
-                                    b2.HasKey("PhotosPetId", "Id");
+                                    b2.HasKey("ValueObjectListPetId", "Id");
 
                                     b2.ToTable("Pets");
 
                                     b2.ToJson("pet_photos");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PhotosPetId")
-                                        .HasConstraintName("fk_pets_pets_photos_pet_id");
+                                        .HasForeignKey("ValueObjectListPetId")
+                                        .HasConstraintName("fk_pets_pets_value_object_list_pet_id");
                                 });
 
                             b1.Navigation("Values");

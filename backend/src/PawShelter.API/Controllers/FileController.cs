@@ -4,6 +4,7 @@ using PawShelter.Application.FileProvider;
 using PawShelter.Application.Files.Delete;
 using PawShelter.Application.Files.Get;
 using PawShelter.Application.Files.Upload;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 
 namespace PawShelter.API.Controllers
 {
@@ -35,7 +36,7 @@ namespace PawShelter.API.Controllers
             [FromServices] DeleteFileHandler fileHandler,
             CancellationToken cancellationToken)
         {
-            var fileData = new FileMetaData("photos", objectName.ToString());
+            var fileData = new FileMetaData("photos", FilePath.Create(objectName.ToString()).Value);
             var command = new DeleteFileCommand(fileData);
             
             var result = await fileHandler.Handle(command, cancellationToken);
@@ -52,7 +53,7 @@ namespace PawShelter.API.Controllers
             [FromServices] GetFileHandler handler,
             CancellationToken cancellationToken)
         {
-            var fileData = new FileMetaData("photos", objectName.ToString());
+            var fileData = new FileMetaData("photos", FilePath.Create(objectName.ToString()).Value);
             var command = new GetFileCommand(fileData);
             
             var result = await handler.Handle(command, cancellationToken);

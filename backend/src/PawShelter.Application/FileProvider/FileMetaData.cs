@@ -1,3 +1,5 @@
-﻿namespace PawShelter.Application.FileProvider;
+﻿using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 
-public record FileMetaData(string BucketName, string ObjectName);
+namespace PawShelter.Application.FileProvider;
+
+public record FileMetaData(string BucketName, FilePath FilePath);
