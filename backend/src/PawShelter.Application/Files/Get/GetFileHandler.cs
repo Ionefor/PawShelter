@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using PawShelter.Application.FileProvider;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.Shared;
 
 namespace PawShelter.Application.Files.Get;
@@ -13,12 +15,11 @@ public class GetFileHandler
         _fileProvider = fileProvider;
     }
     
-    public async Task<Result<string, Error>> Handle(
+    public async Task<Result<FilePath, Error>> Handle(
         GetFileCommand command,
         CancellationToken cancellationToken)
     {
-        var fileData = new FileMetaData(
-            command.FileData.BucketName, command.FileData.ObjectName);
+        var fileData = new FileMetaData(command.FileData.BucketName, command.FileData.FilePath);
 
        return  await _fileProvider.GetFileByObjectName(fileData, cancellationToken);
     }

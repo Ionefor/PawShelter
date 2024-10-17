@@ -13,14 +13,18 @@ public class UpdateSocialNetworksHandler
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly IValidator<UpdateSocialNetworksCommand> _validator;
     private readonly ILogger<UpdateSocialNetworksCommand> _logger;
-      
-    public UpdateSocialNetworksHandler(IVolunteerRepository volunteerRepository,
+    private readonly IUnitOfWork _unitOfWork;
+
+    public UpdateSocialNetworksHandler(
+        IVolunteerRepository volunteerRepository,
         IValidator<UpdateSocialNetworksCommand> validator, 
-        ILogger<UpdateSocialNetworksCommand> logger)
+        ILogger<UpdateSocialNetworksCommand> logger,
+        IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _validator = validator;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -39,14 +43,14 @@ public class UpdateSocialNetworksHandler
             Select(s => SocialNetwork.Create(s.Name, s.Link).Value);
             
         volunteerResult.Value.UpdateSocialNetworks(new SocialNetworks(socialNetworks));
-            
-        var result = await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
-
+        
+        await _unitOfWork.SaveChanges(cancellationToken);
+        
         _logger.LogInformation(
             "SocialNetworks of the Volunteer {firstName} {middleName} has been updated",
             volunteerResult.Value.FullName.FirstName,
             volunteerResult.Value.FullName.MiddleName);
            
-        return result;
+        return volunteerResult.Value.Id.Value;
     }
 }

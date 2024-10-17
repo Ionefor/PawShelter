@@ -18,7 +18,7 @@ public class SpeciesRepository : ISpeciesRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Result<bool, Error>> ExistSpecies(
+    public async Task<Result<Species, Error>> ExistSpecies(
         string speciesName,
         CancellationToken cancellationToken = default)
     {
@@ -27,24 +27,24 @@ public class SpeciesRepository : ISpeciesRepository
             FirstOrDefaultAsync(
                 s => s.Value == speciesName, cancellationToken);
 
-        if (species == null)
-            return false;
+        if(species == null)
+            return Error.NotFound("Species.not.found", "Species not found");
         
-        return true;
+        return species;
     }
     
-    public async Task<Result<bool, Error>> ExistBreed(
+    public async Task<Result<Breed, Error>> ExistBreed(
         string breedName,
         CancellationToken cancellationToken = default)
     {
-        var breedExist =  await _dbContext.Species.
+        var breed =  await _dbContext.Species.
             SelectMany(s => s.Breeds).
             FirstOrDefaultAsync(b => b.Value == breedName, cancellationToken);
 
-        if (breedExist == null)
-            return false;
+        if (breed == null)
+            return Error.NotFound("Breed.not.found", "Breed not found");
 
-        return true;
+        return breed;
     }
     
     
@@ -77,4 +77,6 @@ public class SpeciesRepository : ISpeciesRepository
         
         return species;
     }
+    
+    
 }

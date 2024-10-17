@@ -66,6 +66,10 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
             SocialNetworks = socialNetworks;
         }
 
+        public void AddPet(Pet pet)
+        {
+            _pets.Add(pet);
+        }
         public void Delete()
         {
             _isDeleted = true;        

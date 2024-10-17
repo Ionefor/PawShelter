@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PawShelter.Application.Volunteers;
 using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.PetsManagement.Entities;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.Shared;
 
@@ -18,26 +19,18 @@ namespace PawShelter.Infrastructure.Repositories
         public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
             return volunteer.Id;
         }
 
-        public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
            _dbContext.Volunteers.Attach(volunteer);
-           await _dbContext.SaveChangesAsync(cancellationToken);
-
            return volunteer.Id;
         }
 
-        public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             _dbContext.Volunteers.Remove(volunteer);
-            
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
             return volunteer.Id;
         }
 
@@ -53,6 +46,26 @@ namespace PawShelter.Infrastructure.Repositories
                 return Errors.General.NotFound(volunteerId);
 
             return volunteer;
+        }
+        
+        public async Task<Result<Pet, Error>> GetPetById(
+            PetId petId,
+            CancellationToken cancellationToken = default)
+        {
+            var volunteers = _dbContext.Volunteers.Include(v => v.Pets);
+
+            var volunteer = await volunteers.
+                FirstOrDefaultAsync(v => v.Pets!.Any(p => p.Id == petId), cancellationToken);
+
+            if (volunteer is null)
+                return Error.Failure("volunteer.not.found", "volunteer not found");
+            
+            var pet = volunteer.Pets!.FirstOrDefault(p => p.Id == petId);
+            
+            if (pet is null)
+                return Errors.General.NotFound(petId.Value);
+
+            return pet;
         }
     }
 }

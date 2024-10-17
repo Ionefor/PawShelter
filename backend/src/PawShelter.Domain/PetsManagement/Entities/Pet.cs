@@ -24,7 +24,7 @@ namespace PawShelter.Domain.PetsManagement.Entities
                 bool isVaccinated,
                 Birthday birthday,
                 DateTime publicationDate,
-                Photos? photos,
+                ValueObjectList<PetPhoto>? photos,
                 Requisites requisites,
                 PetStatus status)
                 : base(id)
@@ -57,9 +57,14 @@ namespace PawShelter.Domain.PetsManagement.Entities
         public bool IsVaccinated { get; private set; }
         public Birthday Birthday { get; private set; }
         public DateTime PublicationDate { get; private set; } = default!;
-        public Photos? Photos { get; private set; }
+        public ValueObjectList<PetPhoto>? Photos { get; private set; }
         public Requisites Requisites { get; private set; }
         public PetStatus Status { get; private set; }
+
+        public void UpdatePetPhotos(ValueObjectList<PetPhoto> photos)
+        {
+            Photos = photos;
+        }
         public void Delete()
         {
             _isDeleted = true;        

@@ -14,14 +14,18 @@ public class UpdateMainInfoHandler
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IValidator<UpdateMainInfoCommand> _validator;
         private readonly ILogger<UpdateMainInfoCommand> _logger;
-      
-        public UpdateMainInfoHandler(IVolunteerRepository volunteerRepository,
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateMainInfoHandler(
+            IVolunteerRepository volunteerRepository,
             IValidator<UpdateMainInfoCommand> validator, 
-            ILogger<UpdateMainInfoCommand> logger)
+            ILogger<UpdateMainInfoCommand> logger,
+            IUnitOfWork unitOfWork)
         {
             _volunteerRepository = volunteerRepository;
             _validator = validator;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
       
         public async Task<Result<Guid, ErrorList>> Handle(
@@ -51,13 +55,13 @@ public class UpdateMainInfoHandler
             
             volunteerResult.Value.UpdateMainInfo(
                 fullName, email, description, phoneNumber, experience);
-
-           var result = await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
-
+            
+           await _unitOfWork.SaveChanges(cancellationToken);
+           
            _logger.LogInformation(
                "Main info of the Volunteer {firstName} {middleName} has been updated",
                     fullName.FirstName, fullName.MiddleName);
            
-           return result;
+           return volunteerResult.Value.Id.Value;
         }
     }
