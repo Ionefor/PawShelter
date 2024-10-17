@@ -1,15 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.Domain.Shared;
+using PawShelter.Domain.SpeciesManagement.Entities;
 using PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
 
 namespace PawShelter.Application.Species;
 
 public interface ISpeciesRepository
 {
-    Task<Result<bool, Error>> ExistSpecies(
+    Task<Result<Domain.SpeciesManagement.Aggregate.Species, Error>> ExistSpecies(
         string speciesName, CancellationToken cancellationToken = default);
 
-    public Task<Result<bool, Error>> ExistBreed(
+    public Task<Result<Breed, Error>> ExistBreed(
         string breedName,
         CancellationToken cancellationToken = default);
 

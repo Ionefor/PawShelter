@@ -1,7 +1,6 @@
 ﻿using PawShelter.Application.Dto;
-using PawShelter.Application.Volunteers.Create;
 
-namespace PawShelter.Application.Volunteers.CreateVolunteer;
+namespace PawShelter.Application.Volunteers.Create;
 
 public record CreateVolunteerRequest(
              FullNameDto FullNameDto,

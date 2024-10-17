@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Domain.PetsManagement.Entities;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
 
@@ -127,12 +128,14 @@ namespace PawShelter.Infrastructure.Configurations
                 pp.ToJson("pet_photos");
 
                 pp.OwnsMany(phs => phs.Values, ph =>
-                {                 
-                    ph.Property(h => h.Path)
-                        .IsRequired();
+                {
+                    ph.Property(ps => ps.Path).HasConversion(
+                        path => path.Path,
+                        value => FilePath.Create(value).Value).
+                        IsRequired();
 
                     ph.Property(h => h.IsMain)
-                        .IsRequired();                  
+                        .IsRequired();
                 });
             });
 

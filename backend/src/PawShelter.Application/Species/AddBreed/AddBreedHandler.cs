@@ -11,7 +11,7 @@ namespace PawShelter.Application.Species.AddBreed;
 
 public class AddBreedHandler
 {
-    public IValidator<AddBreedCommand> _validator;
+    private IValidator<AddBreedCommand> _validator;
     private readonly ILogger<AddBreedHandler> _logger;
     private readonly ISpeciesRepository _speciesRepository;
 
@@ -38,15 +38,12 @@ public class AddBreedHandler
         if(speciesResult.IsFailure)
             return speciesResult.Error.ToErrorList();
         
-        var breedResult = await _speciesRepository.ExistBreed(command.BreedName, cancellationToken);
+        var breedExistResult = await _speciesRepository.ExistBreed(command.BreedName, cancellationToken);
 
-        if (breedResult.IsFailure)
-            return breedResult.Error.ToErrorList();
-
-        if (breedResult.Value)
+        if (breedExistResult.IsSuccess)
         {
             return Error.Conflict(
-                "Breed.already.exists", "Breed already exists").ToErrorList();
+                "breed.already.exists", "Breed already exists").ToErrorList();
         }
         
         var breedId = BreedId.NewBreedId();

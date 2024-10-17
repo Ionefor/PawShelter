@@ -5,6 +5,8 @@ using PawShelter.Application.Files.Get;
 using PawShelter.Application.Files.Upload;
 using PawShelter.Application.Species.AddBreed;
 using PawShelter.Application.Species.AddSpecies;
+using PawShelter.Application.Volunteers.AddPet;
+using PawShelter.Application.Volunteers.AddPetPhotos;
 using PawShelter.Application.Volunteers.Create;
 using PawShelter.Application.Volunteers.Delete;
 using PawShelter.Application.Volunteers.UpdateMainInfo;
@@ -27,6 +29,8 @@ namespace PawShelter.Application
             services.AddScoped<GetFileHandler>();
             services.AddScoped<AddSpeciesHandler>();
             services.AddScoped<AddBreedHandler>();
+            services.AddScoped<AddPetHandler>();
+            services.AddScoped<AddPetPhotosHandler>();
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             
             return services;

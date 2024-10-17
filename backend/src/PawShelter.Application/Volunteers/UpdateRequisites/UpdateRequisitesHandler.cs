@@ -13,14 +13,18 @@ public class UpdateRequisitesHandler
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IValidator<UpdateRequisitesCommand> _validator;
         private readonly ILogger<UpdateRequisitesCommand> _logger;
-      
-        public UpdateRequisitesHandler(IVolunteerRepository volunteerRepository,
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateRequisitesHandler(
+            IVolunteerRepository volunteerRepository,
             IValidator<UpdateRequisitesCommand> validator, 
-            ILogger<UpdateRequisitesCommand> logger)
+            ILogger<UpdateRequisitesCommand> logger,
+            IUnitOfWork unitOfWork)
         {
             _volunteerRepository = volunteerRepository;
             _validator = validator;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
       
         public async Task<Result<Guid, ErrorList>> Handle(
@@ -40,13 +44,13 @@ public class UpdateRequisitesHandler
             
             volunteerResult.Value.UpdateRequisites(new Requisites(requisites));
             
-            var result = await _volunteerRepository.Save(volunteerResult.Value, cancellationToken);
-
+            await _unitOfWork.SaveChanges(cancellationToken);
+            
             _logger.LogInformation(
                 "Requisites of the Volunteer {firstName} {middleName} has been updated",
                     volunteerResult.Value.FullName.FirstName,
                     volunteerResult.Value.FullName.MiddleName);
            
-           return result;
+           return volunteerResult.Value.Id.Value;
         }
     }

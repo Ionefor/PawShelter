@@ -33,18 +33,15 @@ public class AddSpeciesHandler
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
         
-        var speciesExist = await _speciesRepository.
+        var speciesExistResult = await _speciesRepository.
             ExistSpecies(command.Species, cancellationToken);
-        
-        if(speciesExist.IsFailure)
-            return speciesExist.Error.ToErrorList();
 
-        if (speciesExist.Value)
+        if (speciesExistResult.IsSuccess)
         {
             return Error.Conflict(
-                "Species.already.exists", "Species already exists").ToErrorList();
+                "species.already.exists", "Species already exists").ToErrorList();
         }
-
+        
         var speciesId = SpeciesId.NewSpeciesId();
         
         await _speciesRepository.Add(PawShelter.Domain.SpeciesManagement.Aggregate.

@@ -9,12 +9,16 @@ public class DeleteVolunteerHandler
 {
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly ILogger<DeleteVolunteerCommand> _logger;
-      
-    public DeleteVolunteerHandler(IVolunteerRepository volunteerRepository,
-        ILogger<DeleteVolunteerCommand> logger)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public DeleteVolunteerHandler(
+        IVolunteerRepository volunteerRepository,
+        ILogger<DeleteVolunteerCommand> logger,
+        IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
+        _unitOfWork = unitOfWork;
     }
       
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -27,14 +31,14 @@ public class DeleteVolunteerHandler
         if(volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
         
-        var result = await _volunteerRepository.Delete(volunteerResult.Value, cancellationToken);
-
+        await _unitOfWork.SaveChanges(cancellationToken);
+        
         _logger.LogInformation(
             "Volunteer {firstName} {middleName} has been deleted", 
                 volunteerResult.Value.FullName.FirstName,
                 volunteerResult.Value.FullName.MiddleName);
            
-        return result;
+        return volunteerResult.Value.Id.Value;
     }
 }
     
