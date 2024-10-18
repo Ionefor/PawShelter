@@ -1,4 +1,7 @@
-﻿using PawShelter.Domain.PetsManagement.Entities;
+﻿using System.Runtime.InteropServices.JavaScript;
+using CSharpFunctionalExtensions;
+using PawShelter.Domain.PetsManagement.Entities;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
@@ -6,7 +9,7 @@ using PawShelter.Domain.Shared;
 
 namespace PawShelter.Domain.PetsManagement.Aggregate
 {
-    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
+    public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     {
         private bool _isDeleted = false;
         private readonly List<Pet> _pets = [];
@@ -66,15 +69,71 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
             SocialNetworks = socialNetworks;
         }
 
-        public void AddPet(Pet pet)
+        public UnitResult<Error> AddPet(Pet pet)
         {
+            var positionToAddedPet = Position.Create(this._pets.Count + 1);
+            
+            if(positionToAddedPet.IsFailure)
+                return positionToAddedPet.Error;
+
+            pet.Move(positionToAddedPet.Value);
             _pets.Add(pet);
+
+            return Result.Success<Error>();
+        }
+
+        public UnitResult<Error> MovePet(Pet pet, Position newPosition)
+        {
+            var currentPosition = pet.Position;
+            
+            if(currentPosition == newPosition)
+                return Result.Success<Error>();
+
+            if (newPosition > _pets.Count || newPosition < 1)
+            {
+                return UnitResult.Failure(
+                    Errors.Extra.InvalidPosition(newPosition));
+            }
+            
+            MovePetsBetweenPositions(newPosition, currentPosition);
+            pet.Move(newPosition);
+            
+            return Result.Success<Error>();
+        }
+
+        private UnitResult<Error> MovePetsBetweenPositions(Position newPosition, Position currentPosition)
+        {
+            if (newPosition < currentPosition)
+            {
+                var petsToMove = _pets.
+                    Where(p => p.Position >= newPosition && p.Position < currentPosition);
+
+                foreach (var pet in petsToMove)
+                {
+                    var result = pet.MoveForward();
+                    if(result.IsFailure)
+                        return result.Error;
+                }
+            }
+            else if (newPosition > currentPosition)
+            {
+                var petsToMove = _pets.
+                    Where(p => p.Position <= newPosition && p.Position > currentPosition);
+               
+                foreach (var pet in petsToMove)
+                {
+                    var result = pet.MoveBackward();
+                    if(result.IsFailure)
+                        return result.Error;
+                }
+            }
+            
+            return Result.Success<Error>();
         }
         public void Delete()
         {
             _isDeleted = true;        
         }
-
         public void Restore()
         {
             _isDeleted = false;
