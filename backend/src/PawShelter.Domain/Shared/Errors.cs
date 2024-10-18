@@ -27,5 +27,14 @@
                 return Error.Failure("server.internal", message);
             }
         }
+
+        public static class Extra
+        {
+            public static Error InvalidPosition(int? value = null)
+            {
+                var position = value is null ? "" : $"{value} ";
+                return Error.NotFound("position.is.invalid", $"position {value}does not exist");
+            }
+        }
     }
 }

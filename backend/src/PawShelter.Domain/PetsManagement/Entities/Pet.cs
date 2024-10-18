@@ -1,4 +1,6 @@
-﻿using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
+﻿using CSharpFunctionalExtensions;
+using PawShelter.Domain.PetsManagement.Aggregate;
+using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
 using PawShelter.Domain.Shared;
@@ -6,7 +8,7 @@ using PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
 
 namespace PawShelter.Domain.PetsManagement.Entities
 {
-    public class Pet : Entity<PetId>, ISoftDeletable
+    public class Pet : Shared.Entity<PetId>, ISoftDeletable
     {
         private bool _isDeleted = false;
         private Pet(PetId id) : base(id) { }
@@ -45,6 +47,8 @@ namespace PawShelter.Domain.PetsManagement.Entities
             Requisites = requisites;
             Status = status;
         }
+        
+        
         public Name Name { get; private set; } = null!;
         public Description Description { get; private set; } = null!;
         public SpeciesBreedsId SpeciesBreedsId { get; private set; }
@@ -55,12 +59,40 @@ namespace PawShelter.Domain.PetsManagement.Entities
         public PetCharacteristics PetCharacteristics { get; private set; }
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
+        public Position Position { get; private set; }
         public Birthday Birthday { get; private set; }
         public DateTime PublicationDate { get; private set; } = default!;
         public ValueObjectList<PetPhoto>? Photos { get; private set; }
         public Requisites Requisites { get; private set; }
         public PetStatus Status { get; private set; }
 
+        internal void Move(Position position)
+        {
+            Position = position;
+        }
+        
+        internal UnitResult<Error> MoveForward()
+        {
+            var newPosition = Position.Forward();
+            if(newPosition.IsFailure)
+                return newPosition.Error;
+
+            Position = newPosition.Value;
+
+            return Result.Success<Error>();
+        }
+        
+        internal UnitResult<Error> MoveBackward()
+        {
+            var newPosition = Position.Backward();
+            if(newPosition.IsFailure)
+                return newPosition.Error;
+
+            Position = newPosition.Value;
+
+            return Result.Success<Error>();
+        }
+        
         public void UpdatePetPhotos(ValueObjectList<PetPhoto> photos)
         {
             Photos = photos;
