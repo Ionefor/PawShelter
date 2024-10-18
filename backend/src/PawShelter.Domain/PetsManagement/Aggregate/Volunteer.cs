@@ -130,6 +130,7 @@ namespace PawShelter.Domain.PetsManagement.Aggregate
             
             return Result.Success<Error>();
         }
+        
         public void Delete()
         {
             _isDeleted = true;        
