@@ -13,7 +13,7 @@ using PawShelter.Infrastructure;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241016170928_Initial")]
+    [Migration("20241019123415_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -220,6 +220,15 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("phoneNumber");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Position", "PawShelter.Domain.PetsManagement.Entities.Pet.Position#Position", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("position");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("SpeciesBreedsId", "PawShelter.Domain.PetsManagement.Entities.Pet.SpeciesBreedsId#SpeciesBreedsId", b1 =>

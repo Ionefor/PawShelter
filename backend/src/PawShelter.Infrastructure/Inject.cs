@@ -2,9 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PawShelter.Application;
-using PawShelter.Application.FileProvider;
+using PawShelter.Application.Messaging;
+using PawShelter.Application.PhotoProvider;
 using PawShelter.Application.Species;
 using PawShelter.Application.Volunteers;
+using PawShelter.Infrastructure.MessageQueues;
 using PawShelter.Infrastructure.Options;
 using PawShelter.Infrastructure.Providers;
 using PawShelter.Infrastructure.Repositories;
@@ -22,6 +24,8 @@ namespace PawShelter.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMinio(configuration);
            
+            services.AddSingleton<IMessageQueue<IEnumerable<PhotoMetaData>>,
+                InMemoryMessageQueue<IEnumerable<PhotoMetaData>>>();
             return services;
         }
 
@@ -41,7 +45,7 @@ namespace PawShelter.Infrastructure
                 options.WithSSL(minioOptions.WithSSL);
             });
             
-            services.AddScoped<IFileProvider, MinioProvider>();
+            services.AddScoped<IPhotoProvider, MinioProvider>();
             
             return services;
         }

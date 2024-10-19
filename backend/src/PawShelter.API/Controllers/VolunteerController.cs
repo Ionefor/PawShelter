@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PawShelter.API.Extensions;
 using PawShelter.API.Processors;
-using PawShelter.Application.FileProvider;
-using PawShelter.Application.Files.Upload;
 using PawShelter.Application.Volunteers.AddPet;
 using PawShelter.Application.Volunteers.AddPetPhotos;
 using PawShelter.Application.Volunteers.Create;

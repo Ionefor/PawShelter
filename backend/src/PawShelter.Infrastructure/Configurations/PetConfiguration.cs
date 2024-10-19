@@ -113,6 +113,13 @@ namespace PawShelter.Infrastructure.Configurations
             builder.Property(p => p.IsVaccinated).
                IsRequired();
 
+            builder.ComplexProperty(p => p.Position, pb =>
+            {
+                pb.Property(b => b.Value).
+                    IsRequired().
+                    HasColumnName("position");
+            });
+            
             builder.ComplexProperty(p => p.Birthday, pb =>
             {
                 pb.Property(b => b.Value).
