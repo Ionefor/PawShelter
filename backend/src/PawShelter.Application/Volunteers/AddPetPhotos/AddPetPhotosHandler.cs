@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
-using PawShelter.Application.FileProvider;
+using PawShelter.Application.Messaging;
+using PawShelter.Application.PhotoProvider;
 using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 using PawShelter.Domain.Shared;
@@ -9,22 +10,25 @@ namespace PawShelter.Application.Volunteers.AddPetPhotos;
 
 public class AddPetPhotosHandler
 {
-    private readonly IFileProvider _fileProvider;
+    private readonly IPhotoProvider _photoProvider;
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AddPetPhotosHandler> _logger;
+    private readonly IMessageQueue<IEnumerable<PhotoMetaData>> _messageQueue;
     private const string BUCKET_NAME = "photos";
     
     public AddPetPhotosHandler(
         IVolunteerRepository volunteerRepository,
-        IFileProvider fileProvider,
+        IPhotoProvider photoProvider,
         IUnitOfWork unitOfWork,
-        ILogger<AddPetPhotosHandler> logger)
+        ILogger<AddPetPhotosHandler> logger,
+        IMessageQueue<IEnumerable<PhotoMetaData>> messageQueue)
     {
         _volunteerRepository = volunteerRepository;
-        _fileProvider = fileProvider;
+        _photoProvider = photoProvider;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _messageQueue = messageQueue;
     }
     public async Task<Result<Guid, ErrorList>> Handle(
         AddPetPhotosCommand command,
@@ -46,26 +50,33 @@ public class AddPetPhotosHandler
             if(petResult.IsFailure)
                 return petResult.Error.ToErrorList();
 
-            List<FileData> filesData = [];
+            List<PhotoData> photosData = [];
             foreach (var file in command.Files)
             {
                 var filePath = FilePath.Create();
 
-                var fileData = new FileData(file.Content, filePath, BUCKET_NAME);
-                filesData.Add(fileData);
+                var fileData = new PhotoData(file.Content, filePath, BUCKET_NAME);
+                photosData.Add(fileData);
             }
 
-            var petPhotos = filesData.Select(
+            var petPhotos = photosData.Select(
                 f => PetPhoto.Create(f.FilePath, false).Value).ToList();
             
             petResult.Value.UpdatePetPhotos(petPhotos);
             
             await _unitOfWork.SaveChanges(cancellationToken);
             
-            var uploadResult = await _fileProvider.UploadFiles(filesData, cancellationToken);
-            
+            var uploadResult = await _photoProvider.UploadFiles(photosData, cancellationToken);
+
             if (uploadResult.IsFailure)
+            {
+                await _messageQueue.WriteAsync(
+                    photosData.Select(
+                        p => new PhotoMetaData(p.BucketName, p.FilePath)), cancellationToken);
+                
                 return uploadResult.Error.ToErrorList();
+            }
+                
             
             transaction.Commit();
             

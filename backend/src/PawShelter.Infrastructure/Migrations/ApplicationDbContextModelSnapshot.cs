@@ -219,6 +219,15 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnName("phoneNumber");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("Position", "PawShelter.Domain.PetsManagement.Entities.Pet.Position#Position", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("position");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("SpeciesBreedsId", "PawShelter.Domain.PetsManagement.Entities.Pet.SpeciesBreedsId#SpeciesBreedsId", b1 =>
                         {
                             b1.IsRequired();
