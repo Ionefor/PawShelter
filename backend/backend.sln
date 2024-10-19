@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PawShelter.API", "src\PawSh
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ADC08DF5-F7C7-4E69-B673-71677305A0A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9096D0D3-D532-4879-99F9-0CB4419305B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{F65DC9E9-FBD5-4F94-9282-8BA330946D60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,11 +43,18 @@ Global
 		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADC08DF5-F7C7-4E69-B673-71677305A0A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F65DC9E9-FBD5-4F94-9282-8BA330946D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F65DC9E9-FBD5-4F94-9282-8BA330946D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F65DC9E9-FBD5-4F94-9282-8BA330946D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F65DC9E9-FBD5-4F94-9282-8BA330946D60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC49D186-0A41-4B2F-8A47-1668725944B8}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F65DC9E9-FBD5-4F94-9282-8BA330946D60} = {9096D0D3-D532-4879-99F9-0CB4419305B9}
 	EndGlobalSection
 EndGlobal
