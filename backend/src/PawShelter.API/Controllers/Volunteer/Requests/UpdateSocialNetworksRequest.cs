@@ -1,6 +1,7 @@
 ﻿using PawShelter.Application.Dto;
+using PawShelter.Application.Volunteers.UpdateSocialNetworks;
 
-namespace PawShelter.Application.Volunteers.UpdateSocialNetworks;
+namespace PawShelter.API.Controllers.Volunteer.Requests;
 
 public record UpdateSocialNetworksRequest(SocialNetworksDto SocialNetworksDto)
 {

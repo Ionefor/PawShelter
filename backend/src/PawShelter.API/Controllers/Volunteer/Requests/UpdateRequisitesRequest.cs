@@ -1,6 +1,7 @@
 ﻿using PawShelter.Application.Dto;
+using PawShelter.Application.Volunteers.UpdateRequisites;
 
-namespace PawShelter.Application.Volunteers.UpdateRequisites;
+namespace PawShelter.API.Controllers.Volunteer.Requests;
 
 public record UpdateRequisitesRequest(RequisitesDto RequisitesDto)
 {
