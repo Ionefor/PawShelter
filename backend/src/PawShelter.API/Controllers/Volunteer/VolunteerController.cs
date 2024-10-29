@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PawShelter.API.Controllers.Volunteer.Requests;
 using PawShelter.API.Processors;
 using PawShelter.Application.Volunteers.AddPet;
 using PawShelter.Application.Volunteers.AddPetPhotos;
@@ -8,7 +9,7 @@ using PawShelter.Application.Volunteers.UpdateMainInfo;
 using PawShelter.Application.Volunteers.UpdateRequisites;
 using PawShelter.Application.Volunteers.UpdateSocialNetworks;
 
-namespace PawShelter.API.Controllers
+namespace PawShelter.API.Controllers.Volunteer
 {
     public class VolunteerController : ApplicationController
     {
@@ -114,7 +115,7 @@ namespace PawShelter.API.Controllers
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(request.Files);
 
-            var command = new AddPetPhotosCommand(volunteerId, petId, filesDto);
+            var command = request.ToCommand(volunteerId, petId, filesDto);
             
             var result = await handler.
                 Handle(command, cancellationToken);
