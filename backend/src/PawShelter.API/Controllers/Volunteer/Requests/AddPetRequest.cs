@@ -1,7 +1,8 @@
 ﻿using PawShelter.Application.Dto;
+using PawShelter.Application.Volunteers.AddPet;
 using PawShelter.Domain.PetsManagement;
 
-namespace PawShelter.Application.Volunteers.AddPet;
+namespace PawShelter.API.Controllers.Volunteer.Requests;
 
 public record AddPetRequest(
     string Name,

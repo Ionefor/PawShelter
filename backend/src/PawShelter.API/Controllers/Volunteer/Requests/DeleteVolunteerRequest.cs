@@ -1,4 +1,6 @@
-﻿namespace PawShelter.Application.Volunteers.Delete;
+﻿using PawShelter.Application.Volunteers.Delete;
+
+namespace PawShelter.API.Controllers.Volunteer.Requests;
 
 public record DeleteVolunteerRequest(Guid VolunteerId)
 {

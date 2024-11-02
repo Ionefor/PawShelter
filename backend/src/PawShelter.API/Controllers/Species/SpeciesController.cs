@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PawShelter.API.Controllers.Species.Requests;
 using PawShelter.API.Extensions;
 using PawShelter.Application.Species.AddBreed;
 using PawShelter.Application.Species.AddSpecies;
 
-namespace PawShelter.API.Controllers;
+namespace PawShelter.API.Controllers.Species;
 
 public class SpeciesController : ApplicationController
 {
