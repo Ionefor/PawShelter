@@ -1,3 +1,5 @@
-﻿namespace PawShelter.Application.Species.AddSpecies;
+﻿using PawShelter.Application.Abstractions;
 
-public record AddSpeciesCommand(string Species);
+namespace PawShelter.Application.Species.AddSpecies;
+
+public record AddSpeciesCommand(string Species): ICommand;

@@ -12,15 +12,20 @@ public record Envelope
         Errors = errors;
         TimeGenerated = DateTime.Now;
     }
+
     public object? Result { get; }
-    
+
     public ErrorList? Errors { get; }
 
     public DateTime TimeGenerated { get; }
 
-    public static Envelope Ok(object? result = null) =>
-        new(result, null);
+    public static Envelope Ok(object? result = null)
+    {
+        return new Envelope(result, null);
+    }
 
-    public static Envelope Error(ErrorList errors) =>
-        new(null, errors);
+    public static Envelope Error(ErrorList errors)
+    {
+        return new Envelope(null, errors);
+    }
 }

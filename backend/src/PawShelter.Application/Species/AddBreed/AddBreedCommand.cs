@@ -1,3 +1,5 @@
-﻿namespace PawShelter.Application.Species.AddBreed;
+﻿using PawShelter.Application.Abstractions;
 
-public record AddBreedCommand(Guid SpeciesId, string BreedName);
+namespace PawShelter.Application.Species.AddBreed;
+
+public record AddBreedCommand(Guid SpeciesId, string BreedName) : ICommand;

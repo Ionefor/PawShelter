@@ -1,14 +1,17 @@
-﻿namespace PawShelter.Domain.SpeciesManagement.ValueObjects.Ids
+﻿namespace PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
+
+public record SpeciesBreedsId
 {
-    public record SpeciesBreedsId
+    private SpeciesBreedsId()
     {
-        private SpeciesBreedsId() { }
-        public SpeciesBreedsId(SpeciesId speciesId, Guid breedId) 
-        {
-            SpeciesId = speciesId;
-            BreedId = breedId;
-        }
-        public SpeciesId SpeciesId { get; }
-        public Guid BreedId { get; }
     }
+
+    public SpeciesBreedsId(SpeciesId speciesId, Guid breedId)
+    {
+        SpeciesId = speciesId;
+        BreedId = breedId;
+    }
+
+    public SpeciesId SpeciesId { get; }
+    public Guid BreedId { get; }
 }

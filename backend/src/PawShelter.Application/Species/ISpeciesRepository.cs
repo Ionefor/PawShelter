@@ -17,8 +17,9 @@ public interface ISpeciesRepository
     public Task<Guid> Add(Domain.SpeciesManagement.Aggregate.Species species,
         CancellationToken cancellationToken = default);
 
-    public Task<Guid> Save(Domain.SpeciesManagement.Aggregate.Species species, CancellationToken cancellationToken = default);
-    
+    public Task<Guid> Save(Domain.SpeciesManagement.Aggregate.Species species,
+        CancellationToken cancellationToken = default);
+
     public Task<Result<Domain.SpeciesManagement.Aggregate.Species, Error>> GetById(SpeciesId speciesId,
         CancellationToken cancellationToken = default);
 }

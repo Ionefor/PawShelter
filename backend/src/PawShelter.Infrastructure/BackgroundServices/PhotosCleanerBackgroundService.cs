@@ -14,7 +14,7 @@ public class PhotosCleanerBackgroundService(
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         logger.LogInformation("Starting PhotosCleanerBackgroundService");
-        
+
         await using var scope = scopeFactory.CreateAsyncScope();
 
         var photoProvider = scope.ServiceProvider.GetRequiredService<IPhotoProvider>();
@@ -23,10 +23,7 @@ public class PhotosCleanerBackgroundService(
         {
             var photoInfos = await messageQueue.ReadAsync(cancellationToken);
 
-            foreach (var photoInfo in photoInfos)
-            {
-                await photoProvider.DeleteFile(photoInfo, cancellationToken);
-            }
+            foreach (var photoInfo in photoInfos) await photoProvider.DeleteFile(photoInfo, cancellationToken);
         }
 
         await Task.CompletedTask;

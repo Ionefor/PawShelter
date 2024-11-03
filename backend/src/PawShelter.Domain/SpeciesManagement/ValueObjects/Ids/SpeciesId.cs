@@ -1,11 +1,26 @@
-﻿namespace PawShelter.Domain.SpeciesManagement.ValueObjects.Ids
+﻿namespace PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
+
+public record SpeciesId
 {
-    public record SpeciesId
+    private SpeciesId(Guid value)
     {
-        private SpeciesId(Guid value) => Value = value;
-        public Guid Value { get; }
-        public static SpeciesId NewSpeciesId() => new(Guid.NewGuid());
-        public static SpeciesId Empty() => new(Guid.Empty);
-        public static SpeciesId Create(Guid id) => new(id);
+        Value = value;
+    }
+
+    public Guid Value { get; }
+
+    public static SpeciesId NewSpeciesId()
+    {
+        return new SpeciesId(Guid.NewGuid());
+    }
+
+    public static SpeciesId Empty()
+    {
+        return new SpeciesId(Guid.Empty);
+    }
+
+    public static SpeciesId Create(Guid id)
+    {
+        return new SpeciesId(id);
     }
 }
