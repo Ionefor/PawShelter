@@ -15,13 +15,12 @@ public class SpeciesController : ApplicationController
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(request.ToCommand(), cancellationToken);
-            
-        if(result.IsFailure)
+
+        if (result.IsFailure)
             return result.Error.ToResponse();
-            
+
         return Ok(result.Value);
     }
-    
     [HttpPost("{id:guid}/breed")]
     public async Task<ActionResult> AddBreed(
         [FromRoute] Guid id,
@@ -30,11 +29,10 @@ public class SpeciesController : ApplicationController
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(request.ToCommand(id), cancellationToken);
-            
-        if(result.IsFailure)
+
+        if (result.IsFailure)
             return result.Error.ToResponse();
-            
+
         return Ok(result.Value);
     }
-    
 }

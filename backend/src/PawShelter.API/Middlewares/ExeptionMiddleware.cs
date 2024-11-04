@@ -1,5 +1,4 @@
-﻿using System.Net;
-using PawShelter.Domain.Shared;
+﻿using PawShelter.Domain.Shared;
 
 namespace PawShelter.API.Middlewares;
 
@@ -22,7 +21,7 @@ public class ExeptionMiddleware
         {
             var error = Errors.General.InternalServer(ex.Message);
             var envelope = Envelope.Error(error);
-            
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

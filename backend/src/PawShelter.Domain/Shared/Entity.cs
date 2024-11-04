@@ -1,8 +1,11 @@
-﻿namespace PawShelter.Domain.Shared
+﻿namespace PawShelter.Domain.Shared;
+
+public abstract class Entity<TId> where TId : notnull
 {
-    public abstract class Entity<TId> where TId : notnull
-    {      
-        protected Entity(TId id) => Id = id;
-        public TId Id { get; private set; }
+    protected Entity(TId id)
+    {
+        Id = id;
     }
+
+    public TId Id { get; private set; }
 }

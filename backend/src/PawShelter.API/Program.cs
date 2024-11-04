@@ -1,5 +1,4 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using PawShelter.API.Extensions;
 using PawShelter.API.Middlewares;
 using PawShelter.Application;
@@ -24,10 +23,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
     .CreateLogger();
 
-builder.Services.AddHttpLogging(o =>
-{
-    o.CombineLogs = true;
-});
+builder.Services.AddHttpLogging(o => { o.CombineLogs = true; });
 
 builder.Services.AddSerilog();
 
@@ -35,9 +31,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.
-    AddInfrastructure(builder.Configuration).
-    AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 

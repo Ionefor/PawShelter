@@ -1,9 +1,8 @@
-﻿namespace PawShelter.Domain.PetsManagement
+﻿namespace PawShelter.Domain.PetsManagement;
+
+public enum PetStatus
 {
-    public enum PetStatus
-    {
-        NeedsHelp,
-        LookingHome,
-        FoundHome
-    }
+    NeedsHelp,
+    LookingHome,
+    FoundHome
 }
