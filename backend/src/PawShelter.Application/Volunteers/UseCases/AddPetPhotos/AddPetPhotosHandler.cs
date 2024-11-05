@@ -67,7 +67,7 @@ public class AddPetPhotosHandler : ICommandHandler<Guid, AddPetPhotosCommand>
 
             petResult.Value.UpdatePetPhotos(petPhotos);
 
-            await _unitOfWork.SaveChanges(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var uploadResult = await _photoProvider.UploadFiles(photosData, cancellationToken);
 

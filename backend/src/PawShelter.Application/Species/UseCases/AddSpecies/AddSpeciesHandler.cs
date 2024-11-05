@@ -6,7 +6,7 @@ using PawShelter.Application.Extensions;
 using PawShelter.Domain.Shared;
 using PawShelter.Domain.SpeciesManagement.ValueObjects.Ids;
 
-namespace PawShelter.Application.Species.AddSpecies;
+namespace PawShelter.Application.Species.UseCases.AddSpecies;
 
 public class AddSpeciesHandler : ICommandHandler<Guid, AddSpeciesCommand>
 {

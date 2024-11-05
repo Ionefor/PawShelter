@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PawShelter.Application.Species.AddSpecies;
+namespace PawShelter.Application.Species.UseCases.AddSpecies;
 
 public class AddSpeciesCommandValidator : AbstractValidator<AddSpeciesCommand>
 {

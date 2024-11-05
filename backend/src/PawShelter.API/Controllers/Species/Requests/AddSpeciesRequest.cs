@@ -1,4 +1,4 @@
-﻿using PawShelter.Application.Species.AddSpecies;
+﻿using PawShelter.Application.Species.UseCases.AddSpecies;
 
 namespace PawShelter.API.Controllers.Species.Requests;
 

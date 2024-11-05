@@ -234,11 +234,11 @@ namespace PawShelter.Infrastructure.Migrations
 
                             b1.Property<Guid>("BreedId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("breed");
+                                .HasColumnName("breed_id");
 
                             b1.Property<Guid>("SpeciesId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("species_breeds_id_species_id");
+                                .HasColumnName("species_id");
                         });
 
                     b.HasKey("Id")
@@ -254,7 +254,7 @@ namespace PawShelter.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("species_id");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -264,21 +264,21 @@ namespace PawShelter.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_species");
 
-                    b.ToTable("Species", (string)null);
+                    b.ToTable("species", (string)null);
                 });
 
             modelBuilder.Entity("PawShelter.Domain.SpeciesManagement.Entities.Breed", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("id");
+                        .HasColumnName("breed_id");
 
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("breed");
 
-                    b.Property<Guid?>("species_id")
+                    b.Property<Guid>("species_id")
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
@@ -288,7 +288,7 @@ namespace PawShelter.Infrastructure.Migrations
                     b.HasIndex("species_id")
                         .HasDatabaseName("ix_breeds_species_id");
 
-                    b.ToTable("Breeds", (string)null);
+                    b.ToTable("breeds", (string)null);
                 });
 
             modelBuilder.Entity("PawShelter.Domain.PetsManagement.Aggregate.Volunteer", b =>
@@ -434,6 +434,7 @@ namespace PawShelter.Infrastructure.Migrations
                         .WithMany("Breeds")
                         .HasForeignKey("species_id")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_breeds_species_species_id");
                 });
 

@@ -5,5 +5,11 @@ namespace PawShelter.Application.Database;
 
 public interface IReadDbContext
 {
-    DbSet<VolunteerDto> Volunteers { get; }
+    IQueryable<VolunteerDto> Volunteers { get; }
+    
+    IQueryable<PetDto> Pets { get; }
+    
+    IQueryable<SpeciesDto> Species { get; }
+    
+    IQueryable<BreedDto> Breeds { get; }
 }

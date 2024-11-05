@@ -53,24 +53,23 @@ public class SpeciesRepository : ISpeciesRepository
 
         return species.Id.Value;
     }
-
-    public async Task<Guid> Save(Species species, CancellationToken cancellationToken = default)
-    {
-        _dbContext.Species.Attach(species);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-
-        return species.Id.Value;
-    }
-
+    
     public async Task<Result<Species, Error>> GetById(SpeciesId speciesId,
         CancellationToken cancellationToken = default)
     {
-        var species = await _dbContext.Species.Include(b => b.Breeds).FirstOrDefaultAsync(
-            s => s.Id == speciesId, cancellationToken);
+        var species = await _dbContext.Species.
+            Include(b => b.Breeds).
+            FirstOrDefaultAsync(
+                s => s.Id == speciesId, cancellationToken);
 
         if (species == null)
             return Error.NotFound("Species.not.found", "Species not found");
-
+        
         return species;
+    }
+
+    public void DeleteSpecies(Species species)
+    {
+        _dbContext.Species.Remove(species);
     }
 }
