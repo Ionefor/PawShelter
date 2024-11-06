@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PawShelter.Application.Abstractions;
-using PawShelter.Application.Species.AddBreed;
-using PawShelter.Application.Species.AddSpecies;
 using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
 using PawShelter.Application.Volunteers.UseCases.AddPet;
 using PawShelter.Application.Volunteers.UseCases.AddPetPhotos;

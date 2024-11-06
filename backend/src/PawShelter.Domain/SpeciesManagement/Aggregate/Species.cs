@@ -22,6 +22,10 @@ public class Species : Shared.Entity<SpeciesId>
         _breeds.Add(breed);
     }
 
+    public void DeleteBreed(Breed breed)
+    {
+        _breeds.Remove(breed);
+    }
     public static Result<Species, Error> Create(SpeciesId id, string value)
     {
         if (string.IsNullOrWhiteSpace(value))

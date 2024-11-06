@@ -10,8 +10,12 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
 {
     private const string DATABASE = "Database";
 
-    public DbSet<VolunteerDto> Volunteers => Set<VolunteerDto>();
+    public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
+    public IQueryable<PetDto> Pets => Set<PetDto>();
+    
+    public IQueryable<SpeciesDto> Species => Set<SpeciesDto>();
 
+    public IQueryable<BreedDto> Breeds => Set<BreedDto>();
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));

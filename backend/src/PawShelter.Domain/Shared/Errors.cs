@@ -35,5 +35,14 @@ public static class Errors
             var position = value is null ? "" : $"{value} ";
             return Error.NotFound("position.is.invalid", $"position {value}does not exist");
         }
+        
+        public static Error InvalidDeleteOperation(Guid? id = null, string? name = null)
+        {
+            var forId = id is null ? "" : $" for Id {id}";
+            name = name is null ? " " : " " + name + " ";
+            
+            return Error.Conflict("cannot.delete",
+                $"Cannot delete {name} {forId} because animals has this {name}");
+        }
     }
 }

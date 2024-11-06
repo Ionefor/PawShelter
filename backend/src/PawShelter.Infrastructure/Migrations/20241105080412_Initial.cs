@@ -12,15 +12,15 @@ namespace PawShelter.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Species",
+                name: "species",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     species = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_species", x => x.id);
+                    table.PrimaryKey("pk_species", x => x.species_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,21 +43,21 @@ namespace PawShelter.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Breeds",
+                name: "breeds",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     breed = table.Column<string>(type: "text", nullable: false),
-                    species_id = table.Column<Guid>(type: "uuid", nullable: true)
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_breeds", x => x.id);
+                    table.PrimaryKey("pk_breeds", x => x.breed_id);
                     table.ForeignKey(
                         name: "fk_breeds_species_species_id",
                         column: x => x.species_id,
-                        principalTable: "Species",
-                        principalColumn: "id",
+                        principalTable: "species",
+                        principalColumn: "species_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -87,8 +87,8 @@ namespace PawShelter.Infrastructure.Migrations
                     width = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
                     phone_number = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     position = table.Column<int>(type: "integer", nullable: false),
-                    breed = table.Column<Guid>(type: "uuid", nullable: false),
-                    species_breeds_id_species_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    breed_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,7 +103,7 @@ namespace PawShelter.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "ix_breeds_species_id",
-                table: "Breeds",
+                table: "breeds",
                 column: "species_id");
 
             migrationBuilder.CreateIndex(
@@ -116,13 +116,13 @@ namespace PawShelter.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Breeds");
+                name: "breeds");
 
             migrationBuilder.DropTable(
                 name: "pets");
 
             migrationBuilder.DropTable(
-                name: "Species");
+                name: "species");
 
             migrationBuilder.DropTable(
                 name: "volunteers");

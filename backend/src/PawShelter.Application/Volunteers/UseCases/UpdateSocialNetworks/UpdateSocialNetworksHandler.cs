@@ -46,7 +46,7 @@ public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNet
 
         volunteerResult.Value.UpdateSocialNetworks(new SocialNetworks(socialNetworks));
 
-        await _unitOfWork.SaveChanges(cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation(
             "SocialNetworks of the Volunteer {firstName} {middleName} has been updated",

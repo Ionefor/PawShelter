@@ -41,9 +41,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         {
             psb.Property(p => p.SpeciesId).HasConversion(
                 id => id.Value,
-                value => SpeciesId.Create(value));
+                value => SpeciesId.Create(value)).HasColumnName("species_id");
 
-            psb.Property(b => b.BreedId).IsRequired().HasColumnName("breed");
+            psb.Property(b => b.BreedId).IsRequired().HasColumnName("breed_id");
         });
 
         builder.ComplexProperty(p => p.Color,
