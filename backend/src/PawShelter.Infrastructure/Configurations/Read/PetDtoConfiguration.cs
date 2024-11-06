@@ -14,21 +14,6 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         builder.ToTable("pets");
 
         builder.HasKey(p => p.Id);
-
-        builder.HasOne<PetDto>().
-            WithMany().
-            HasForeignKey(p => p.VolunteerId).
-            IsRequired(false);
-        
-        builder.HasOne<PetDto>().
-            WithMany().
-            HasForeignKey(p => p.SpeciesId).
-            IsRequired(false);
-        
-        builder.HasOne<PetDto>().
-            WithMany().
-            HasForeignKey(p => p.BreedId).
-            IsRequired(false);
         
         builder.Property(b => b.Name);
         

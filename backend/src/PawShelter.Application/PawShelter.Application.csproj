@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Species\UseCases\" />
         <Folder Include="Volunteers\UseCases\"/>
     </ItemGroup>
 

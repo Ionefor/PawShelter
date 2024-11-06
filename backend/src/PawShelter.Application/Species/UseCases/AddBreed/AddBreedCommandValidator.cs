@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PawShelter.Application.Species.AddBreed;
+namespace PawShelter.Application.Species.UseCases.AddBreed;
 
 public class AddBreedCommandValidator : AbstractValidator<AddBreedCommand>
 {
