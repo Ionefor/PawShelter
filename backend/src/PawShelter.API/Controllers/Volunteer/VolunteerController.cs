@@ -3,11 +3,17 @@ using PawShelter.API.Controllers.Volunteer.Requests;
 using PawShelter.API.Processors;
 using PawShelter.Application.Volunteers.Queries.GetVolunteerById;
 using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
+using PawShelter.Application.Volunteers.UseCases;
 using PawShelter.Application.Volunteers.UseCases.AddPet;
 using PawShelter.Application.Volunteers.UseCases.AddPetPhotos;
 using PawShelter.Application.Volunteers.UseCases.Create;
 using PawShelter.Application.Volunteers.UseCases.Delete;
+using PawShelter.Application.Volunteers.UseCases.DeletePetPhoto;
+using PawShelter.Application.Volunteers.UseCases.SetMainPetPhoto;
+using PawShelter.Application.Volunteers.UseCases.SoftDeletePet;
 using PawShelter.Application.Volunteers.UseCases.UpdateMainInfo;
+using PawShelter.Application.Volunteers.UseCases.UpdatePet;
+using PawShelter.Application.Volunteers.UseCases.UpdatePetStatus;
 using PawShelter.Application.Volunteers.UseCases.UpdateRequisites;
 using PawShelter.Application.Volunteers.UseCases.UpdateSocialNetworks;
 
@@ -73,7 +79,26 @@ public class VolunteerController : ApplicationController
 
         return Ok(Envelope.Ok(result.Value));
     }
+    
+    [HttpPut("{volunteerId:guid}/pet/{petId:guid}/status")]
+    public async Task<ActionResult<Guid>> UpdatePetStatus(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromBody] UpdatePetStatusRequest request,
+        [FromServices] UpdatePetStatusHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
+        
+        var result = await handler.Handle(command, cancellationToken);
 
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+    
+    
     [HttpDelete("{id:guid}/volunteer")]
     public async Task<ActionResult<Guid>> Delete(
         [FromRoute] Guid id,
@@ -89,7 +114,59 @@ public class VolunteerController : ApplicationController
 
         return Ok(Envelope.Ok(result.Value));
     }
+    
+    [HttpDelete("{volunteerId:guid}/pet/{petId:guid}/photos")]
+    public async Task<ActionResult<string>> DeletePetPhoto(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] DeletePetPhotoHandler handler,
+        [FromForm] DeletePetPhotoRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
 
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{volunteerId:guid}/pet/{petId:guid}/soft")]
+    public async Task<ActionResult<Guid>> SoftDeletePet(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] SoftDeletePetHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new SoftDeletePetCommand(volunteerId, petId);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+    
+    [HttpDelete("{volunteerId:guid}/pet/{petId:guid}")]
+    public async Task<ActionResult<Guid>> DeletePet(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] HardDeletePetHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new HardDeletePetCommand(volunteerId, petId);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+    
     [HttpPost("{id:guid}/pet")]
     public async Task<ActionResult<Guid>> AddPet(
         [FromRoute] Guid id,
@@ -105,12 +182,30 @@ public class VolunteerController : ApplicationController
         return Ok(Envelope.Ok(result.Value));
     }
 
-    [HttpPost("{volunteerId:guid}/pet/{petId:guid}")]
-    public async Task<ActionResult<Guid>> AddPetPhotos(
+    [HttpPut("{volunteerId:guid}/pet/{petId:guid}/photos")]
+    public async Task<ActionResult<Guid>> SetMainPhoto(
         [FromRoute] Guid volunteerId,
         [FromRoute] Guid petId,
-        [FromServices] AddPetPhotosHandler handler,
-        [FromForm] AddPetPhotosRequest request,
+        [FromServices] SetMainPetPhotoHandler handler,
+        [FromForm] SetMainPetPhotoRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{volunteerId:guid}/pet/{petId:guid}")]
+    public async Task<ActionResult<Guid>> UpdatePetPhotos(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] UpdatePetPhotosHandler handler,
+        [FromForm] UpdatePetPhotosRequest request,
         CancellationToken cancellationToken)
     {
         await using var fileProcessor = new FormFileProcessor();
@@ -123,9 +218,28 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return BadRequest(Envelope.Error(result.Error));
 
-        return Ok(Envelope.Ok(result.Value));
+        return Ok(result.Value);
     }
+    
+    [HttpPut("{volunteerId:guid}/pet/{petId:guid}")]
+    public async Task<ActionResult<Guid>> UpdatePet(
+        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid petId,
+        [FromServices] UpdatePetHandler handler,
+        [FromBody] UpdatePetRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = request.ToCommand(volunteerId, petId);
 
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+
+        return Ok(result.Value);
+    }
+    
+    
     [HttpGet]
     public async Task<ActionResult<Guid>> GetAll(
         [FromServices] GetVolunteersWithPaginationHandler handler,
@@ -154,4 +268,5 @@ public class VolunteerController : ApplicationController
         
         return Ok(result.Value);
     }
+    
 }

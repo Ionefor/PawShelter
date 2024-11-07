@@ -14,7 +14,6 @@ public class ValueObjectList<T> : IReadOnlyList<T>
     }
 
     public IReadOnlyList<T> Values { get; } = null!;
-
     public T this[int index] => Values[index];
 
     public int Count => Values.Count;

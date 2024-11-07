@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PawShelter.Infrastructure.DbContexts;
@@ -12,9 +13,11 @@ using PawShelter.Infrastructure.DbContexts;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107185726_fs")]
+    partial class fs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,10 +209,10 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnType("double precision")
                                 .HasColumnName("height");
 
-                            b1.Property<double>("Weight")
+                            b1.Property<double>("Width")
                                 .HasMaxLength(100)
                                 .HasColumnType("double precision")
-                                .HasColumnName("weight");
+                                .HasColumnName("width");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.PetsManagement.Entities.Pet.PhoneNumber#PhoneNumber", b1 =>

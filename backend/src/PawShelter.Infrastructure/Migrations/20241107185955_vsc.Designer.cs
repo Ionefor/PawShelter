@@ -13,8 +13,8 @@ using PawShelter.Infrastructure.DbContexts;
 namespace PawShelter.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241105080412_Initial")]
-    partial class Initial
+    [Migration("20241107185955_vsc")]
+    partial class vsc
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,6 +99,10 @@ namespace PawShelter.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_vaccinated");
 
+                    b.Property<string>("Photos")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("photos");
+
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("publication_date");
@@ -111,7 +115,7 @@ namespace PawShelter.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid?>("volunteer_id")
+                    b.Property<Guid>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
@@ -182,7 +186,7 @@ namespace PawShelter.Infrastructure.Migrations
                             b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("health_Info");
+                                .HasColumnName("health_info");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PawShelter.Domain.PetsManagement.Entities.Pet.Name#Name", b1 =>
@@ -205,10 +209,10 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasColumnType("double precision")
                                 .HasColumnName("height");
 
-                            b1.Property<double>("Width")
+                            b1.Property<double>("Weight")
                                 .HasMaxLength(100)
                                 .HasColumnType("double precision")
-                                .HasColumnName("width");
+                                .HasColumnName("weight");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("PhoneNumber", "PawShelter.Domain.PetsManagement.Entities.Pet.PhoneNumber#PhoneNumber", b1 =>
@@ -384,6 +388,7 @@ namespace PawShelter.Infrastructure.Migrations
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
                     b.OwnsOne("PawShelter.Domain.PetsManagement.ValueObjects.Shared.Requisites", "Requisites", b1 =>
@@ -404,28 +409,6 @@ namespace PawShelter.Infrastructure.Migrations
                                 .HasForeignKey("PetId")
                                 .HasConstraintName("fk_pets_pets_id");
                         });
-
-                    b.OwnsOne("PawShelter.Domain.Shared.ValueObjectList<PawShelter.Domain.PetsManagement.ValueObjects.ForPet.PetPhoto>", "Photos", b1 =>
-                        {
-                            b1.Property<Guid>("PetId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.Property<string>("Values")
-                                .IsRequired()
-                                .HasColumnType("jsonb")
-                                .HasColumnName("photos");
-
-                            b1.HasKey("PetId");
-
-                            b1.ToTable("pets");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PetId")
-                                .HasConstraintName("fk_pets_pets_id");
-                        });
-
-                    b.Navigation("Photos");
 
                     b.Navigation("Requisites")
                         .IsRequired();
