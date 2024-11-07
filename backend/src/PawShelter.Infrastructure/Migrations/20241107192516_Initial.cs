@@ -84,7 +84,7 @@ namespace PawShelter.Infrastructure.Migrations
                     health_info = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     height = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
-                    width = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
+                    weight = table.Column<double>(type: "double precision", maxLength: 100, nullable: false),
                     phone_number = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     position = table.Column<int>(type: "integer", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
