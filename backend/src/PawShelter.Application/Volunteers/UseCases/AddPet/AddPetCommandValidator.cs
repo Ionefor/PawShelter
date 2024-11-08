@@ -28,7 +28,7 @@ public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
 
         RuleFor(a => a.PetCharacteristicsDto).MustBeValueObject(p =>
             PetCharacteristics.Create(
-                p.Height, p.Width));
+                p.Height, p.Weight));
 
         RuleFor(a => a.Birthday).MustBeValueObject(Birthday.Create);
 

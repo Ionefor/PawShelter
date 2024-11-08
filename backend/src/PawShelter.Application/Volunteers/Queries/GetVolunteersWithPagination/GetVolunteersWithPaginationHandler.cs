@@ -22,6 +22,7 @@ public class GetVolunteersWithPaginationHandler :
     {
         var volunteersQuery = _context.Volunteers;
 
-        return await volunteersQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
+        return await volunteersQuery.ToPagedList(
+            query.PaginationParamsDto!.Page, query.PaginationParamsDto.PageSize, cancellationToken);
     }
 }

@@ -101,7 +101,7 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         var number = PhoneNumber.Create(command.PhoneNumber).Value;
         var petCharacteristics = PetCharacteristics.Create(
             command.PetCharacteristicsDto.Height,
-            command.PetCharacteristicsDto.Width).Value;
+            command.PetCharacteristicsDto.Weight).Value;
 
         var birthday = Birthday.Create(command.Birthday).Value;
 
