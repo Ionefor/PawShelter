@@ -1,11 +1,11 @@
 ﻿using PawShelter.Application.Abstractions;
 using PawShelter.Application.Dto;
-using PawShelter.Domain.PetsManagement;
 
-namespace PawShelter.Application.Volunteers.UseCases.AddPet;
+namespace PawShelter.Application.Volunteers.UseCases.UpdatePet;
 
-public record AddPetCommand(
+public record UpdatePetCommand(
     Guid VolunteerId,
+    Guid PetId,
     string Name,
     string Description,
     string Color,
@@ -17,7 +17,6 @@ public record AddPetCommand(
     bool IsVaccinated,
     DateOnly Birthday,
     DateTime PublicationDate,
-    string Status,
     string Species,
     string Breed,
     RequisitesDto RequisitesDto) : ICommand;

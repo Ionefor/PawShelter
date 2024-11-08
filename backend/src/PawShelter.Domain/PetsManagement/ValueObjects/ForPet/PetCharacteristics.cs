@@ -12,21 +12,21 @@ public record PetCharacteristics
     {
     }
 
-    private PetCharacteristics(double height, double width)
+    private PetCharacteristics(double height, double weight)
     {
         Height = height;
-        Width = width;
+        Weight = weight;
     }
 
     public double Height { get; }
-    public double Width { get; }
+    public double Weight { get; }
 
-    public static Result<PetCharacteristics, Error> Create(double height, double width)
+    public static Result<PetCharacteristics, Error> Create(double height, double weight)
     {
         if (height <= MIN_VALUE || height > MAX_VALUE ||
-            width <= MIN_VALUE || width > MAX_VALUE)
+            weight <= MIN_VALUE || weight > MAX_VALUE)
             return Errors.General.ValueIsInvalid("PetCharacteristics");
 
-        return new PetCharacteristics(height, width);
+        return new PetCharacteristics(height, weight);
     }
 }

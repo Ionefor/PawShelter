@@ -54,7 +54,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             });
 
         builder.ComplexProperty(p => p.HealthInfo,
-            phi => { phi.Property(hi => hi.Value).IsRequired().HasColumnName("health_Info"); });
+            phi => { phi.Property(hi => hi.Value).
+                IsRequired().HasColumnName("health_info"); });
 
         builder.ComplexProperty(p => p.Address, pa =>
         {
@@ -71,9 +72,15 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.ComplexProperty(p => p.PetCharacteristics, pc =>
         {
-            pc.Property(c => c.Width).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("width");
+            pc.Property(c => c.Weight).
+                IsRequired().
+                HasMaxLength(
+                    Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("weight");
 
-            pc.Property(c => c.Height).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("height");
+            pc.Property(c => c.Height).
+                IsRequired().
+                HasMaxLength(
+                    Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("height");
         });
 
         builder.ComplexProperty(p => p.PhoneNumber,
@@ -94,30 +101,13 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             pb => { pb.Property(b => b.Value).IsRequired().HasColumnName("birthday"); });
 
         builder.Property(p => p.PublicationDate).IsRequired();
-
-        // builder.OwnsOne(p => p.Photos, pp =>
-        // {
-        //     pp.ToJson("pet_photos");
-        //
-        //     pp.OwnsMany(phs => phs.Values, ph =>
-        //     {
-        //         ph.Property(ps => ps.Path).HasConversion(
-        //             path => path.Path,
-        //             value => FilePath.Create(value).Value).IsRequired();
-        //
-        //         ph.Property(h => h.IsMain)
-        //             .IsRequired();
-        //     });
-        // });
-
-        builder.OwnsOne(p => p.Photos, pb =>
-        {
-            pb.Property(ph => ph.Values).
-                ValueObjectsCollectionJsonConversion(
-                    photo => new PetPhotoDto(photo.Path.Path, photo.IsMain),
-                    dto => new PetPhoto(FilePath.Create(dto.Path).Value, dto.IsMain)).
-                HasColumnName("photos");
-        });
+        
+        builder.Property(p => p.Photos)!.
+            ValueObjectsCollectionJsonConversion(
+                photo => new PetPhotoDto(photo.Path.Path, photo.IsMain),
+                dto => new PetPhoto(FilePath.Create(dto.Path).Value, dto.IsMain)).
+            HasColumnName("photos");      
+        
         
         builder.OwnsOne(p => p.Requisites, pr =>
         {

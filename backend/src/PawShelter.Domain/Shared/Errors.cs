@@ -44,5 +44,7 @@ public static class Errors
             return Error.Conflict("cannot.delete",
                 $"Cannot delete {name} {forId} because animals has this {name}");
         }
+        
+        
     }
 }

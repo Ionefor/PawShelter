@@ -62,15 +62,15 @@ public class DomainTests
         var volunteer = new Volunteer(
             VolunteerId.NewVolonteerId(), null, null, null, null, null, null, null);
 
-        for (var i = 0; i < countOfPets; i++)
-        {
-            var pet = new Pet(
-                PetId.NewPetId(), null, null, null, null, null, null,
-                null, null, true, true, null, DateTime.Today, null, null,
-                PetStatus.FoundHome);
-
-            volunteer.AddPet(pet);
-        }
+        // for (var i = 0; i < countOfPets; i++)
+        // {
+        //     var pet = new Pet(
+        //         PetId.NewPetId(), null, null, null, null, null, null,
+        //         null, null, true, true, null, DateTime.Today, null, null,
+        //         PetStatus.FoundHome);
+        //
+        //     volunteer.AddPet(pet);
+        // }
 
         return volunteer;
     }

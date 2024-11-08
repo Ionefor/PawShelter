@@ -25,13 +25,17 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
         
         builder.ComplexProperty(p => p.Address, ab =>
         {
-            ab.Property(a => a.Country);
+            ab.Property(a => a.Country).
+                HasColumnName("country");
 
-            ab.Property(a => a.City);
+            ab.Property(a => a.City).
+                HasColumnName("city");
 
-            ab.Property(a => a.Street);
+            ab.Property(a => a.Street).
+                HasColumnName("street");
 
-            ab.Property(a => a.HouseNumber);
+            ab.Property(a => a.HouseNumber).
+                HasColumnName("house_number");
         });
         
         builder.Property(d => d.Birthday);
@@ -40,16 +44,13 @@ public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
 
         builder.Property(p => p.Height);
 
-        builder.Property(p => p.HealthInfo)
-            .HasColumnName("health_info");
+        builder.Property(p => p.HealthInfo);
 
         builder.Property(p => p.Color);
 
-        builder.Property(p => p.IsCastrated)
-            .HasColumnName("is_castrated");
+        builder.Property(p => p.IsCastrated);
 
-        builder.Property(p => p.IsVaccinated)
-            .HasColumnName("is_vaccinated");
+        builder.Property(p => p.IsVaccinated);
         
         builder.Property(p => p.Requisites)
             .HasConversion(

@@ -15,16 +15,19 @@ public record FilePath
     }
 
     public string Path { get; }
-
+    
     public static FilePath Create()
     {
         var path = Guid.NewGuid();
         var extension = System.IO.Path.GetExtension(path.ToString());
-
-        var fullPath = extension + path;
+        
+        var fullPath = path + extension;
 
         return new FilePath(fullPath);
     }
+
+    public static FilePath ToFilePath(string filePath) =>
+        new FilePath(filePath);
 
     public static Result<FilePath, Error> Create(string path)
     {
@@ -33,8 +36,11 @@ public record FilePath
 
         var extension = System.IO.Path.GetExtension(path);
 
-        var fullPath = extension + path;
-
-        return new FilePath(fullPath);
+        if (!path.Contains(extension))
+        {
+            path += extension;
+        }
+        
+        return new FilePath(path);
     }
 }

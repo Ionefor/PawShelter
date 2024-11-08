@@ -6,6 +6,7 @@ using PawShelter.Application.Abstractions;
 using PawShelter.Application.Database;
 using PawShelter.Application.Extensions;
 using PawShelter.Application.Species;
+using PawShelter.Domain.PetsManagement;
 using PawShelter.Domain.PetsManagement.Entities;
 using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
@@ -107,12 +108,15 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         var requisiteList = command.RequisitesDto.Requisites.Select(r => Requisite.Create(r.Name, r.Description).Value);
 
         var requisites = new Requisites(requisiteList);
-
+        
+        Enum.TryParse(typeof(PetStatus), command.Status, out var status);
+        var statusEnum = (PetStatus)status!;
+        
         var pet = new Pet(
             petId, petName, petDescription, speciesBreedId, color,
             health, address, number, petCharacteristics, command.IsCastrated,
-            command.IsVaccinated, birthday, command.PublicationDate, null,
-            requisites, command.Status);
+            command.IsVaccinated, birthday, command.PublicationDate,
+            requisites, statusEnum);
 
         volunteerResult.Value.AddPet(pet);
 
