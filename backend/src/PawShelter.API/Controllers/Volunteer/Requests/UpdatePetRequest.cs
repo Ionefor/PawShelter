@@ -1,10 +1,10 @@
 ﻿using PawShelter.Application.Dto;
-using PawShelter.Application.Volunteers.UseCases.AddPet;
-using PawShelter.Domain.PetsManagement;
+using PawShelter.Application.Volunteers.UseCases.UpdatePet;
+using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
 
 namespace PawShelter.API.Controllers.Volunteer.Requests;
 
-public record AddPetRequest(
+public record UpdatePetRequest(
     string Name,
     string Description,
     string Color,
@@ -16,17 +16,16 @@ public record AddPetRequest(
     bool IsVaccinated,
     DateOnly Birthday,
     DateTime PublicationDate,
-    string Status,
     string Species,
     string Breed,
     RequisitesDto RequisitesDto)
 {
-    public AddPetCommand ToCommand(Guid volunteerId)
+    public UpdatePetCommand ToCommand(Guid volunteerId, Guid petId)
     {
-        return new AddPetCommand(volunteerId, Name, Description, Color,
+        return new UpdatePetCommand(volunteerId, petId, Name, Description, Color,
             HealthInfo, PhoneNumber, AddressDto,
             PetCharacteristicsDto, IsCastrated,
             IsVaccinated, Birthday, PublicationDate,
-            Status, Species, Breed, RequisitesDto);
+            Species, Breed, RequisitesDto);
     }
 }

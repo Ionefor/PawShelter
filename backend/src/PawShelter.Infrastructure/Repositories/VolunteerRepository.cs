@@ -23,24 +23,19 @@ public class VolunteerRepository : IVolunteerRepository
         await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
         return volunteer.Id;
     }
-
-    public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
-    {
-        _dbContext.Volunteers.Attach(volunteer);
-        return volunteer.Id;
-    }
-
+    
     public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _dbContext.Volunteers.Remove(volunteer);
         return volunteer.Id;
     }
-
+    
     public async Task<Result<Volunteer, Error>> GetById(
         VolunteerId volunteerId,
         CancellationToken cancellationToken = default)
     {
-        var volunteer = await _dbContext.Volunteers.Include(v => v.Pets)
+        var volunteer = await _dbContext.Volunteers.
+            Include(v => v.Pets)
             .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
         if (volunteer is null)

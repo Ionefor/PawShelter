@@ -12,7 +12,6 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
 {
     private readonly List<Pet> _pets = [];
     private bool _isDeleted;
-
     private Volunteer(VolunteerId id) : base(id)
     {
     }
@@ -43,7 +42,21 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
     public Experience Experience { get; private set; }
     public Requisites Requisites { get; private set; }
     public SocialNetworks SocialNetworks { get; private set; }
-    public IReadOnlyList<Pet>? Pets => _pets;
+    public IReadOnlyList<Pet> Pets => _pets;
+
+    public void DeletePet(Pet pet)
+    {
+        UpdatePositionPet(pet);
+        _pets.Remove(pet);
+    }
+
+    private void UpdatePositionPet(Pet pet)
+    {
+        for (int i = pet.Position; i < _pets.Count; i++)
+        {
+            _pets[i].MoveBackward();
+        }
+    }
 
     public void Delete()
     {
@@ -114,7 +127,8 @@ public class Volunteer : Shared.Entity<VolunteerId>, ISoftDeletable
         return Result.Success<Error>();
     }
 
-    private UnitResult<Error> MovePetsBetweenPositions(Position newPosition, Position currentPosition)
+    private UnitResult<Error> MovePetsBetweenPositions(
+        Position newPosition, Position currentPosition)
     {
         if (newPosition < currentPosition)
         {

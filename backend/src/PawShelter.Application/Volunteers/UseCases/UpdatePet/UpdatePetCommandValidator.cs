@@ -1,17 +1,20 @@
 ﻿using FluentValidation;
 using PawShelter.Application.Validation;
+using PawShelter.Application.Volunteers.UseCases.AddPet;
 using PawShelter.Domain.PetsManagement;
 using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
 using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
 
-namespace PawShelter.Application.Volunteers.UseCases.AddPet;
+namespace PawShelter.Application.Volunteers.UseCases.UpdatePet;
 
-public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
+public class UpdatePetCommandValidator : AbstractValidator<UpdatePetCommand>
 {
-    public AddPetCommandValidator()
+    public UpdatePetCommandValidator()
     {
-        RuleFor(a => a.VolunteerId).NotEmpty().WithMessage("Id cannot be empty");
+        RuleFor(a => a.VolunteerId).NotEmpty().WithMessage("VolunteerId cannot be empty");
 
+        RuleFor(a => a.PetId).NotEmpty().WithMessage("PetId cannot be empty");
+        
         RuleFor(a => a.Name).MustBeValueObject(Name.Create);
 
         RuleFor(a => a.Description).MustBeValueObject(Description.Create);
@@ -38,7 +41,5 @@ public class AddPetCommandValidator : AbstractValidator<AddPetCommand>
 
         RuleForEach(a => a.RequisitesDto.Requisites).MustBeValueObject(r =>
             Requisite.Create(r.Name, r.Description));
-
-        RuleFor(a => a.Status).MustBeEnum<AddPetCommand, string, PetStatus>();
     }
 }

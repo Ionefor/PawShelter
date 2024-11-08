@@ -28,4 +28,18 @@ public static class CustomValidators
     {
         return rule.WithMessage(error.Serialize());
     }
+    
+    public static IRuleBuilderOptionsConditions<T, TProperty>
+        MustBeEnum<T, TProperty, TEnum>(
+            this IRuleBuilder<T, TProperty> ruleBuilder) where TEnum : Enum
+    {
+        return ruleBuilder.Custom((value, context) =>
+        {
+            if (!Enum.TryParse(typeof(TEnum), value!.ToString(), out var result))
+            {
+                context.AddFailure(Errors.General.ValueIsInvalid(value.ToString()).Serialize());
+            }
+        });
+    }
+    
 }

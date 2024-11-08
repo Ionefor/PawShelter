@@ -86,22 +86,12 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     dto => SocialNetwork.Create(dto.Name, dto.Link).Value).
                 HasColumnName("social_networks");
         });
-        
-        // builder.OwnsOne(v => v.SocialNetworks, vs =>
-        // {
-        //     vs.ToJson("volunteer_socialNetworks");
-        //
-        //     vs.OwnsMany(vs => vs.Values, r =>
-        //     {
-        //         r.Property(n => n.Name).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-        //             .HasColumnName("socialNetwork_name");
-        //
-        //         r.Property(l => l.Link).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-        //             .HasColumnName("socialNetwork_link");
-        //     });
-        // });
 
-        builder.HasMany(v => v.Pets).WithOne().HasForeignKey("volunteer_id").OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(v => v.Pets).
+            WithOne().
+            HasForeignKey("volunteer_id").
+            OnDelete(DeleteBehavior.Cascade).
+            IsRequired();
 
         builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
