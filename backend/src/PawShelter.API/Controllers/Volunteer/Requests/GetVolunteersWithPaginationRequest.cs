@@ -3,10 +3,10 @@ using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
 namespace PawShelter.API.Controllers.Volunteer.Requests;
 
-public record GetVolunteersWithPaginationRequest(PaginationParamsDto PaginationParamsDto)
+public record GetVolunteersWithPaginationRequest(PaginationParamsDto PaginationParams)
 {
     public GetVolunteersWithPaginationQuery ToQuery()
     {
-        return new GetVolunteersWithPaginationQuery(PaginationParamsDto);
+        return new GetVolunteersWithPaginationQuery(PaginationParams);
     }
 }

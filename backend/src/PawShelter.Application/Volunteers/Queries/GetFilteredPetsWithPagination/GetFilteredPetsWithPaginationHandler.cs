@@ -24,48 +24,48 @@ public class GetFilteredPetsWithPaginationHandler :
 
         #region Filtering
 
-            if (query.FilteringParamsDto is not null)
+            if (query.FilteringParams is not null)
             {
                 petsQuery.WhereIf(
-                    query.FilteringParamsDto!.VolunteerId != null,
-                    q => q.VolunteerId == query.FilteringParamsDto.VolunteerId);
+                    query.FilteringParams!.VolunteerId != null,
+                    q => q.VolunteerId == query.FilteringParams.VolunteerId);
                 
                 petsQuery.WhereIf(
-                    !string.IsNullOrWhiteSpace(query.FilteringParamsDto!.Name),
-                    q => q.Name.Contains(query.FilteringParamsDto.Name!));
+                    !string.IsNullOrWhiteSpace(query.FilteringParams!.Name),
+                    q => q.Name.Contains(query.FilteringParams.Name!));
                 
                 petsQuery.WhereIf(
-                    !string.IsNullOrWhiteSpace(query.FilteringParamsDto!.Color),
-                    q => q.Color.Contains(query.FilteringParamsDto.Color!));
+                    !string.IsNullOrWhiteSpace(query.FilteringParams!.Color),
+                    q => q.Color.Contains(query.FilteringParams.Color!));
                 
                 petsQuery.WhereIf(
-                    query.FilteringParamsDto!.SpeciesId != null,
-                    q => q.SpeciesId == query.FilteringParamsDto.SpeciesId);
+                    query.FilteringParams!.SpeciesId != null,
+                    q => q.SpeciesId == query.FilteringParams.SpeciesId);
                 
                 petsQuery.WhereIf(
-                    query.FilteringParamsDto!.BreedId != null,
-                    q => q.BreedId == query.FilteringParamsDto.BreedId);
+                    query.FilteringParams!.BreedId != null,
+                    q => q.BreedId == query.FilteringParams.BreedId);
 
-                if (query.FilteringParamsDto.PetCharacteristics is not null)
+                if (query.FilteringParams.PetCharacteristics is not null)
                 {
                     petsQuery = petsQuery.Where(
                             q => q.Weight.Equals(
-                                     query.FilteringParamsDto.PetCharacteristics.Weight) &&
+                                     query.FilteringParams.PetCharacteristics.Weight) &&
                                  q.Height.Equals(
-                                     query.FilteringParamsDto.PetCharacteristics.Height));
+                                     query.FilteringParams.PetCharacteristics.Height));
                 }
                 
                 petsQuery.WhereIf(
-                    query.FilteringParamsDto!.BirthDate != null,
-                    q => q.Birthday == query.FilteringParamsDto.BirthDate);
+                    query.FilteringParams!.BirthDate != null,
+                    q => q.Birthday == query.FilteringParams.BirthDate);
 
-                if (query.FilteringParamsDto.Address is not null)
+                if (query.FilteringParams.Address is not null)
                 {
                     petsQuery = petsQuery.Where(
-                        q => q.Address.Country == query.FilteringParamsDto.Address.Country &&
-                             q.Address.City == query.FilteringParamsDto.Address.City &&
-                             q.Address.Street == query.FilteringParamsDto.Address.Street &&
-                             q.Address.HouseNumber == query.FilteringParamsDto.Address.HouseNumber);
+                        q => q.Address.Country == query.FilteringParams.Address.Country &&
+                             q.Address.City == query.FilteringParams.Address.City &&
+                             q.Address.Street == query.FilteringParams.Address.Street &&
+                             q.Address.HouseNumber == query.FilteringParams.Address.HouseNumber);
                 }
             }
             
@@ -73,29 +73,29 @@ public class GetFilteredPetsWithPaginationHandler :
 
         #region Sorting
 
-            if (query.SortingParamsDto is not null)
+            if (query.SortingParams is not null)
             {
                 petsQuery.SortIf(
-                    query.SortingParamsDto.VolunteerId is true,
+                    query.SortingParams.VolunteerId is true,
                         q => q.VolunteerId);
                 
                 petsQuery.SortIf(
-                    query.SortingParamsDto.Name is true,
+                    query.SortingParams.Name is true,
                     q => q.Name);
                 
                 petsQuery.SortIf(
-                    query.SortingParamsDto.Color is true,
+                    query.SortingParams.Color is true,
                     q => q.Color);
                 
                 petsQuery.SortIf(
-                    query.SortingParamsDto.Species is true,
+                    query.SortingParams.Species is true,
                     q => q.SpeciesId);
                 
                 petsQuery.SortIf(
-                    query.SortingParamsDto.Breed is true,
+                    query.SortingParams.Breed is true,
                     q => q.BreedId);
 
-                if (query.SortingParamsDto.PetCharacteristics is not null)
+                if (query.SortingParams.PetCharacteristics is not null)
                 {
                     petsQuery = petsQuery.
                         OrderBy(q => q.Weight);
@@ -105,10 +105,10 @@ public class GetFilteredPetsWithPaginationHandler :
                 }
                 
                 petsQuery.SortIf(
-                    query.SortingParamsDto.BirthDate is true,
+                    query.SortingParams.BirthDate is true,
                     q => q.Birthday);
 
-                if (query.SortingParamsDto.Address is not null)
+                if (query.SortingParams.Address is not null)
                 {
                     petsQuery = petsQuery.
                         OrderBy(q => q.Address.Country);
@@ -127,7 +127,7 @@ public class GetFilteredPetsWithPaginationHandler :
         #endregion
         
         return await petsQuery.ToPagedList(
-            query.PaginationParamsDto.Page,
-            query.PaginationParamsDto.PageSize, cancellationToken);
+            query.PaginationParams.Page,
+            query.PaginationParams.PageSize, cancellationToken);
     }
 }

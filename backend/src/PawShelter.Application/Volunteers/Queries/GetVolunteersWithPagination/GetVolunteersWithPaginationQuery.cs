@@ -3,4 +3,4 @@ using PawShelter.Application.Dto.QueryDto;
 
 namespace PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
-public record GetVolunteersWithPaginationQuery(PaginationParamsDto? PaginationParamsDto) : IQuery;
+public record GetVolunteersWithPaginationQuery(PaginationParamsDto? PaginationParams) : IQuery;

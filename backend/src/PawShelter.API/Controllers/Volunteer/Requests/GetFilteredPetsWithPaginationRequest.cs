@@ -4,10 +4,10 @@ using PawShelter.Application.Volunteers.Queries.GetFilteredPetsWithPagination;
 namespace PawShelter.API.Controllers.Volunteer.Requests;
 
 public record GetFilteredPetsWithPaginationRequest(
-    FilteringParamsDto? FilteringParamsDto,
-    SortingParamsDto? SortingParamsDto,
-    PaginationParamsDto PaginationParamsDto)
+    FilteringParamsDto? FilteringParams,
+    SortingParamsDto? SortingParams,
+    PaginationParamsDto PaginationParams)
 {
     public GetFilteredPetsWithPaginationQuery ToQuery() =>
-        new(FilteringParamsDto, SortingParamsDto, PaginationParamsDto);
+        new(FilteringParams, SortingParams, PaginationParams);
 }
