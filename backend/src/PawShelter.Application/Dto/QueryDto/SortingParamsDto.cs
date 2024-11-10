@@ -6,6 +6,7 @@ public record SortingParamsDto(
     bool? Color,
     bool? Species,
     bool? Breed,
-    bool? PetCharacteristics,
+    bool? Height,
+    bool? Weight,
     bool? BirthDate,
     bool? Address);
