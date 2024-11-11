@@ -1,11 +1,12 @@
-﻿using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
+﻿using PawShelter.Application.Dto.QueryDto;
+using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
 
 namespace PawShelter.API.Controllers.Volunteer.Requests;
 
-public record GetVolunteersWithPaginationRequest(int Page, int PageSize)
+public record GetVolunteersWithPaginationRequest(PaginationParamsDto PaginationParams)
 {
     public GetVolunteersWithPaginationQuery ToQuery()
     {
-        return new GetVolunteersWithPaginationQuery(Page, PageSize);
+        return new GetVolunteersWithPaginationQuery(PaginationParams);
     }
 }

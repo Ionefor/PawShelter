@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PawShelter.API.Controllers.Volunteer.Requests;
 using PawShelter.API.Processors;
+using PawShelter.Application.Volunteers.Queries.GetFilteredPetsWithPagination;
+using PawShelter.Application.Volunteers.Queries.GetPetById;
 using PawShelter.Application.Volunteers.Queries.GetVolunteerById;
 using PawShelter.Application.Volunteers.Queries.GetVolunteersWithPagination;
 using PawShelter.Application.Volunteers.UseCases;
@@ -269,4 +271,33 @@ public class VolunteerController : ApplicationController
         return Ok(result.Value);
     }
     
+    
+    [HttpGet("/pets")]
+    public async Task<ActionResult<Guid>> GetAllPet(
+        [FromServices] GetFilteredPetsWithPaginationHandler handler,
+        [FromQuery] GetFilteredPetsWithPaginationRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = request.ToQuery();
+
+        var response = await handler.Handle(query, cancellationToken);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("/pets/{petId:guid}")]
+    public async Task<ActionResult<Guid>> GetPetById(
+        [FromRoute] Guid petId,
+        [FromServices] GetPetByIdHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetPetByIdQuery(petId);
+    
+        var result = await handler.Handle(query, cancellationToken);
+        
+        if (result.IsFailure)
+            return BadRequest(Envelope.Error(result.Error));
+        
+        return Ok(result.Value);
+    }
 }
