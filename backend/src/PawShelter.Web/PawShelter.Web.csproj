@@ -12,25 +12,26 @@
 
     <ItemGroup>
         <PackageReference Include="CSharpFunctionalExtensions" Version="3.1.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.2.24474.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0"/>
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
         <PackageReference Include="Serilog.Enrichers.AspNetCore" Version="1.0.0"/>
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
         <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0"/>
         <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0-dev-00310"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\PawShelter.Application\PawShelter.Application.csproj"/>
-        <ProjectReference Include="..\PawShelter.Domain\PawShelter.Domain.csproj"/>
-        <ProjectReference Include="..\PawShelter.Infrastructure\PawShelter.Infrastructure.csproj"/>
-        <ProjectReference Include="..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
-        <ProjectReference Include="..\Shared\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
+      <ProjectReference Include="..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
+      <ProjectReference Include="..\Species\PawShelter.Species.Infrastructure\PawShelter.Species.Infrastructure.csproj" />
+      <ProjectReference Include="..\Species\PawShelter.Species.Presentation\PawShelter.Species.Presentation.csproj" />
+      <ProjectReference Include="..\Volunteers\PawShelter.Volunteers.Infrastructure\PawShelter.Volunteers.Infrastructure.csproj" />
+      <ProjectReference Include="..\Volunteers\PawShelter.Volunteers.Presentation\PawShelter.Volunteers.Presentation.csproj" />
     </ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\PawShelter.Domain\PawShelter.Domain.csproj"/>
+        <ProjectReference Include="..\..\src\Volunteers\PawShelter.Volunteers.Domain\PawShelter.Volunteers.Domain.csproj" />
     </ItemGroup>
 
 </Project>

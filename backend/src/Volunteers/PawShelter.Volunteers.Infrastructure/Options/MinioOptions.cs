@@ -1,4 +1,4 @@
-﻿namespace PawShelter.Infrastructure.Options;
+﻿namespace PawShelter.Volunteers.Infrastructure.Options;
 
 public class MinioOptions
 {

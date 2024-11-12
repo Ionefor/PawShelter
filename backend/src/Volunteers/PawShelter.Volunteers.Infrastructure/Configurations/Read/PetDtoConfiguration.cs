@@ -1,11 +1,9 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PawShelter.Application.Dto;
-using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
-using PawShelter.Infrastructure.Extensions;
+using PawShelter.Core.Dto;
 
-namespace PawShelter.Infrastructure.Configurations.Read;
+namespace PawShelter.Volunteers.Infrastructure.Configurations.Read;
 
 public class PetDtoConfiguration : IEntityTypeConfiguration<PetDto>
 {

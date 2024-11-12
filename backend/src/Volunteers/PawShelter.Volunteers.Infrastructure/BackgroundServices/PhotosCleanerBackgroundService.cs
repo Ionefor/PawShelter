@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PawShelter.Application.Messaging;
-using PawShelter.Application.PhotoProvider;
+using PawShelter.Core.Messaging;
+using PawShelter.Volunteers.Application.PhotoProvider;
 
-namespace PawShelter.Infrastructure.BackgroundServices;
+namespace PawShelter.Volunteers.Infrastructure.BackgroundServices;
 
 public class PhotosCleanerBackgroundService(
     IServiceScopeFactory scopeFactory,

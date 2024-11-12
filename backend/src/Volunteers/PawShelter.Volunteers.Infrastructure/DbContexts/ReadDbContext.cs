@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PawShelter.Application.Database;
-using PawShelter.Application.Dto;
+using PawShelter.Core.Dto;
+using PawShelter.Volunteers.Application;
 
-namespace PawShelter.Infrastructure.DbContexts;
+namespace PawShelter.Volunteers.Infrastructure.DbContexts;
 
 public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
 {
@@ -12,7 +12,6 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
 
     public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
     public IQueryable<PetDto> Pets => Set<PetDto>();
-    
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

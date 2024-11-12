@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PawShelter.Application.Volunteers;
-using PawShelter.Domain.PetsManagement.Aggregate;
-using PawShelter.Domain.PetsManagement.Entities;
-using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
-using PawShelter.Domain.Shared;
-using PawShelter.Infrastructure.DbContexts;
+using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.Volunteers.Application.Volunteers;
+using PawShelter.Volunteers.Domain.Aggregate;
+using PawShelter.Volunteers.Domain.Entities;
+using PawShelter.Volunteers.Infrastructure.DbContexts;
 
-namespace PawShelter.Infrastructure.Repositories;
+namespace PawShelter.Volunteers.Infrastructure.Repositories;
 
 public class VolunteerRepository : IVolunteerRepository
 {
@@ -18,9 +18,17 @@ public class VolunteerRepository : IVolunteerRepository
         _dbContext = dbContext;
     }
 
+    public void Save(Volunteer volunteer)
+    {
+       
+      
+    }
+
     public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
+       await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        
         return volunteer.Id;
     }
     

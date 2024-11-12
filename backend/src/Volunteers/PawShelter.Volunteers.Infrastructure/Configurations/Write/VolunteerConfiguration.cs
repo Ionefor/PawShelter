@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PawShelter.Application.Dto;
-using PawShelter.Domain.PetsManagement.Aggregate;
-using PawShelter.Domain.PetsManagement.ValueObjects.ForVolunteer;
-using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
-using PawShelter.Domain.PetsManagement.ValueObjects.Shared;
-using PawShelter.Domain.Shared;
-using PawShelter.Infrastructure.Extensions;
+using PawShelter.Core.Dto;
+using PawShelter.Core.Extensions;
+using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.Volunteers.Domain.Aggregate;
+using PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
+using PawShelter.Volunteers.Domain.ValueObjects.Shared;
 
-namespace PawShelter.Infrastructure.Configurations.Write;
+namespace PawShelter.Volunteers.Infrastructure.Configurations.Write;
 
 public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 {
@@ -27,45 +26,45 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             vf.ToJson("full_name");
 
             vf.Property(vf => vf.FirstName).IsRequired().
-                HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
                 HasColumnName("first_name");
 
             vf.Property(vf => vf.MiddleName).
                 IsRequired().
-                HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
                 HasColumnName("middle_name");
 
             vf.Property(vf => vf.LastName).
                 IsRequired().
-                HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
                 HasColumnName("last_name");
         });
 
         builder.ComplexProperty(v => v.Email,
             ve =>
             {
-                ve.Property(ve => ve.Value).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                ve.Property(ve => ve.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
                     .HasColumnName("email");
             });
 
         builder.ComplexProperty(v => v.Description,
             vd =>
             {
-                vd.Property(d => d.Value).IsRequired().HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                vd.Property(d => d.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_HIGH_TEXT_LENGTH)
                     .HasColumnName("description");
             });
 
         builder.ComplexProperty(v => v.PhoneNumber,
             vn =>
             {
-                vn.Property(n => n.Value).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                vn.Property(n => n.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
                     .HasColumnName("phone_number");
             });
 
         builder.ComplexProperty(v => v.Experience,
             vn =>
             {
-                vn.Property(e => e.Value).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                vn.Property(e => e.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
                     .HasColumnName("experience");
             });
 

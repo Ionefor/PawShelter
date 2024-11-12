@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
+    </ItemGroup>
+
 </Project>

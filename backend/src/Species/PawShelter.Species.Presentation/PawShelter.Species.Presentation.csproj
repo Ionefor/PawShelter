@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PawShelter.Framework\PawShelter.Framework.csproj" />
+      <ProjectReference Include="..\PawShelter.Species.Application\PawShelter.Species.Application.csproj" />
+      <ProjectReference Include="..\PawShelter.Species.Contracts\PawShelter.Species.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

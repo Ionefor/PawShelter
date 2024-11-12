@@ -2,12 +2,13 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Minio;
+using Minio.ApiEndpoints;
 using Minio.DataModel.Args;
-using PawShelter.Application.PhotoProvider;
-using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
-using PawShelter.Domain.Shared;
+using PawShelter.SharedKernel;
+using PawShelter.Volunteers.Application.PhotoProvider;
+using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
 
-namespace PawShelter.Infrastructure.Providers;
+namespace PawShelter.Volunteers.Infrastructure.Providers;
 
 public class MinioProvider : IPhotoProvider
 {

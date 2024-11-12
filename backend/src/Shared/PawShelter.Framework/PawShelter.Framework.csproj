@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PawShelter.Core\PawShelter.Core.csproj" />
-      <ProjectReference Include="..\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
     </ItemGroup>
 
     <ItemGroup>

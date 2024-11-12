@@ -1,7 +1,11 @@
 using FluentValidation;
+using PawShelter.Species.Application;
+using PawShelter.Species.Infrastructure;
+using PawShelter.Species.Presentation;
+using PawShelter.Volunteers.Application;
+using PawShelter.Volunteers.Infrastructure;
+using PawShelter.Volunteers.Presentation;
 using PawShelter.Web.Middlewares;
-using PawShelter.Application;
-using PawShelter.Infrastructure;
 using Serilog;
 using Serilog.Events;
 
@@ -30,7 +34,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
+builder.Services.
+    AddVolunteersInfrastructure(builder.Configuration).
+    AddVolunteersApplication().
+    AddVolunteersPresentation();
+
+builder.Services.
+    AddSpeciesInfrastructure(builder.Configuration).
+    AddSpeciesApplication().
+    AddSpeciesPresentation();
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 

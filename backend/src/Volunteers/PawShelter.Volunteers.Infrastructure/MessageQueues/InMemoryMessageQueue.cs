@@ -1,7 +1,7 @@
 ﻿using System.Threading.Channels;
-using PawShelter.Application.Messaging;
+using PawShelter.Core.Messaging;
 
-namespace PawShelter.Infrastructure.MessageQueues;
+namespace PawShelter.Volunteers.Infrastructure.MessageQueues;
 
 public class InMemoryMessageQueue<TMessage> : IMessageQueue<TMessage>
 {
