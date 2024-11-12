@@ -1,9 +1,8 @@
+
 using FluentAssertions;
-using PawShelter.Domain.PetsManagement;
-using PawShelter.Domain.PetsManagement.Aggregate;
-using PawShelter.Domain.PetsManagement.Entities;
-using PawShelter.Domain.PetsManagement.ValueObjects.ForPet;
-using PawShelter.Domain.PetsManagement.ValueObjects.Ids;
+using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.Volunteers.Domain.Aggregate;
+using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
 
 namespace UnitTests;
 
