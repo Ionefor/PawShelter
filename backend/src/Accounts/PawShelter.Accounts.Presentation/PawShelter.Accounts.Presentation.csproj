@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PawShelter.Framework\PawShelter.Framework.csproj" />
+      <ProjectReference Include="..\PawShelter.Accounts.Application\PawShelter.Accounts.Application.csproj" />
+      <ProjectReference Include="..\PawShelter.Accounts.Contracts\PawShelter.Accounts.Contracts.csproj" />
+    </ItemGroup>
+
+</Project>

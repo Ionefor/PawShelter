@@ -13,10 +13,12 @@
     <ItemGroup>
         <PackageReference Include="CSharpFunctionalExtensions" Version="3.1.0"/>
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-rc.2.24474.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.1" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0"/>
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
         <PackageReference Include="Serilog.Enrichers.AspNetCore" Version="1.0.0"/>
@@ -27,6 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Accounts\PawShelter.Accounts.Infrastructure\PawShelter.Accounts.Infrastructure.csproj" />
+      <ProjectReference Include="..\Accounts\PawShelter.Accounts.Presentation\PawShelter.Accounts.Presentation.csproj" />
       <ProjectReference Include="..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
       <ProjectReference Include="..\Species\PawShelter.Species.Infrastructure\PawShelter.Species.Infrastructure.csproj" />
       <ProjectReference Include="..\Species\PawShelter.Species.Presentation\PawShelter.Species.Presentation.csproj" />
