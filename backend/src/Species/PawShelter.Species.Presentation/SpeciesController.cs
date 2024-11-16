@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PawShelter.Framework;
 using PawShelter.Framework.Extensions;
 using PawShelter.Species.Application.Species.Commands.AddBreed;
@@ -13,6 +14,7 @@ namespace PawShelter.Species.Presentation;
 
 public class SpeciesController : ApplicationController
 {
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> AddSpecies(
         [FromBody] AddSpeciesRequest request,
@@ -26,6 +28,8 @@ public class SpeciesController : ApplicationController
 
         return Ok(result.Value);
     }
+    
+    [Authorize]
     [HttpPost("{id:guid}/breed")]
     public async Task<ActionResult> AddBreed(
         [FromRoute] Guid id,
@@ -41,6 +45,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> DeleteSpecies(
         [FromRoute] Guid id,
@@ -57,6 +62,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpDelete("{speciesId:guid}/breed/{breedId:guid}")]
     public async Task<ActionResult> DeleteBreed(
         [FromRoute] Guid speciesId,
