@@ -1,4 +1,8 @@
 using FluentValidation;
+using Microsoft.OpenApi.Models;
+using PawShelter.Accounts.Application;
+using PawShelter.Accounts.Infrastructure;
+using PawShelter.Accounts.Presentation;
 using PawShelter.Species.Application;
 using PawShelter.Species.Infrastructure;
 using PawShelter.Species.Presentation;
@@ -44,8 +48,47 @@ builder.Services.
     AddSpeciesApplication().
     AddSpeciesPresentation();
 
+builder.Services.
+    AddAccountsInfrastructure(builder.Configuration).
+    AddAccountsApplication().
+    AddAccountsPresentation();
+
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "PawShelter API",
+        Version = "1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Insert JWT token value",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+
+    { 
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 // Add services to the container.
 
 var app = builder.Build();
@@ -66,6 +109,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
