@@ -10,6 +10,7 @@ namespace PawShelter.Accounts.Application.Command.Register;
 public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 {
     private readonly UserManager<User> _userManager;
+
     public RegisterUserHandler(UserManager<User> userManager)
     {
         _userManager = userManager;
@@ -25,7 +26,7 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         };
         
         var result = await _userManager.CreateAsync(user, command.Password);
-        
+
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();

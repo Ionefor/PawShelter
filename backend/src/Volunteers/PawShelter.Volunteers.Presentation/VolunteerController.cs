@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PawShelter.Core.Models;
 using PawShelter.Core.Processors;
