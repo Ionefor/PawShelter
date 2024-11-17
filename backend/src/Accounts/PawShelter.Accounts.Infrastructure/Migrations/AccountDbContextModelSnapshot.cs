@@ -17,6 +17,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("accounts")
                 .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -49,7 +50,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -79,7 +80,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -106,7 +107,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -125,7 +126,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -149,7 +150,90 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_asp_net_user_tokens");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "accounts");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.AdminAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_admin_account");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_admin_account_user_id");
+
+                    b.ToTable("admin_account", "accounts");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.VolunteerAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Certificates")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("certificates");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer")
+                        .HasColumnName("experience");
+
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requisites");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_volunteer_account");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_volunteer_account_user_id");
+
+                    b.ToTable("volunteer_account", "accounts");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("code");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("description");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permissions");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasDatabaseName("ix_permissions_code");
+
+                    b.ToTable("permissions", "accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Role", b =>
@@ -181,7 +265,26 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "accounts");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.RolePermission", b =>
+                {
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permission_id");
+
+                    b.HasKey("RoleId", "PermissionId")
+                        .HasName("pk_role_permissions");
+
+                    b.HasIndex("PermissionId")
+                        .HasDatabaseName("ix_role_permissions_permission_id");
+
+                    b.ToTable("role_permissions", "accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.User", b =>
@@ -239,9 +342,18 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("phone_number_confirmed");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("text")
+                        .HasColumnName("photo");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text")
                         .HasColumnName("security_stamp");
+
+                    b.Property<string>("SocialNetworks")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("social_networks");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean")
@@ -262,7 +374,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -320,6 +432,96 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.AdminAccount", b =>
+                {
+                    b.HasOne("PawShelter.Accounts.Domain.User", "User")
+                        .WithOne()
+                        .HasForeignKey("PawShelter.Accounts.Domain.Accounts.AdminAccount", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_admin_account_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.VolunteerAccount", b =>
+                {
+                    b.HasOne("PawShelter.Accounts.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_volunteer_account_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.RolePermission", b =>
+                {
+                    b.HasOne("PawShelter.Accounts.Domain.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permissions_permissions_permission_id");
+
+                    b.HasOne("PawShelter.Accounts.Domain.Role", "Role")
+                        .WithMany("RolePermission")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permissions_roles_role_id");
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.User", b =>
+                {
+                    b.OwnsOne("PawShelter.SharedKernel.ValueObjects.FullName", "FullName", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("first_name");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("last_name");
+
+                            b1.Property<string>("MiddleName")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("middle_name");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("AspNetUsers", "accounts");
+
+                            b1.ToJson("full_name");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId")
+                                .HasConstraintName("fk_users_users_id");
+                        });
+
+                    b.Navigation("FullName")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Role", b =>
+                {
+                    b.Navigation("RolePermission");
                 });
 #pragma warning restore 612, 618
         }

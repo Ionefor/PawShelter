@@ -30,8 +30,8 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
         if (!passwordConfirmed)
             return Errors.General.ValueIsInvalid("Your credentials").ToErrorList();
 
-        var token = _tokenProvider.GenerateAccessToken(user);
-
-        return token;
+        var token = _tokenProvider.GenerateAccessToken(user, cancellationToken);
+        
+        return token.Result;
     }
 }
