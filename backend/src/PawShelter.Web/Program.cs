@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.OpenApi.Models;
 using PawShelter.Accounts.Application;
 using PawShelter.Accounts.Infrastructure;
+using PawShelter.Accounts.Infrastructure.Seading;
 using PawShelter.Accounts.Presentation;
 using PawShelter.Species.Application;
 using PawShelter.Species.Infrastructure;
@@ -92,6 +93,10 @@ builder.Services.AddSwaggerGen(c =>
 // Add services to the container.
 
 var app = builder.Build();
+
+var accountSeeder = app.Services.GetRequiredService<AccountSeeder>();
+
+await accountSeeder.SeedAsync();
 
 app.UseSerilogRequestLogging();
 

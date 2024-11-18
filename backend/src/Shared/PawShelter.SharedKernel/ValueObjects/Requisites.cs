@@ -1,4 +1,4 @@
-﻿namespace PawShelter.Volunteers.Domain.ValueObjects.Shared;
+﻿namespace PawShelter.SharedKernel.ValueObjects;
 
 public record Requisites
 {

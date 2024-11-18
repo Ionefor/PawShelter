@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using PawShelter.SharedKernel;
 
-namespace PawShelter.Volunteers.Domain.ValueObjects.Shared;
+namespace PawShelter.SharedKernel.ValueObjects;
 
 public record Description
 {

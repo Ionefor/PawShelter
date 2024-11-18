@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PawShelter.Core.Models;
 using PawShelter.Framework;
 using PawShelter.Framework.Extensions;
 using PawShelter.Species.Application.Species.Commands.AddBreed;
@@ -14,7 +15,7 @@ namespace PawShelter.Species.Presentation;
 
 public class SpeciesController : ApplicationController
 {
-    [Authorize]
+    [Permission(Permissions.Species.Create)]
     [HttpPost]
     public async Task<ActionResult> AddSpecies(
         [FromBody] AddSpeciesRequest request,
@@ -29,7 +30,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
-    [Authorize]
+    [Permission(Permissions.Breeds.Create)]
     [HttpPost("{id:guid}/breed")]
     public async Task<ActionResult> AddBreed(
         [FromRoute] Guid id,
@@ -45,7 +46,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
-    [Authorize]
+    [Permission(Permissions.Species.Delete)]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> DeleteSpecies(
         [FromRoute] Guid id,
@@ -62,7 +63,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
-    [Authorize]
+    [Permission(Permissions.Breeds.Delete)]
     [HttpDelete("{speciesId:guid}/breed/{breedId:guid}")]
     public async Task<ActionResult> DeleteBreed(
         [FromRoute] Guid speciesId,
@@ -80,6 +81,7 @@ public class SpeciesController : ApplicationController
         return Ok(result.Value);
     }
     
+    [Permission(Permissions.Species.Read)]
     [HttpGet]
     public async Task<ActionResult> GetSpecies(
         [FromQuery] GetSpeciesWithPaginationRequest request,
@@ -93,6 +95,7 @@ public class SpeciesController : ApplicationController
         return Ok(response);
     }
     
+    [Permission(Permissions.Breeds.Read)]
     [HttpGet("{speciesId:guid}/breed/")]
     public async Task<ActionResult> GetBreeds(
         [FromRoute] Guid speciesId,
@@ -106,5 +109,4 @@ public class SpeciesController : ApplicationController
         
         return Ok(response);
     }
-    
 }

@@ -1,4 +1,4 @@
-﻿namespace PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
+﻿namespace PawShelter.SharedKernel.ValueObjects;
 
 public record SocialNetworks
 {

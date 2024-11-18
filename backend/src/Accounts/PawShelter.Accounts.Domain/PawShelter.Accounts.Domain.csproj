@@ -10,4 +10,8 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
+    </ItemGroup>
+
 </Project>
