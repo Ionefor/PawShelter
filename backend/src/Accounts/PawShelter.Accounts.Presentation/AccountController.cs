@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PawShelter.Accounts.Application.Command.Login;
+using PawShelter.Accounts.Application.Command.RefreshTokens;
 using PawShelter.Accounts.Application.Command.Register;
 using PawShelter.Accounts.Presentation.Requests;
 using PawShelter.Framework;
@@ -22,7 +23,6 @@ public class AccountController : ApplicationController
         return Ok();
     }
     
-   
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromBody] LoginUserRequest request,
@@ -30,6 +30,22 @@ public class AccountController : ApplicationController
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(request.ToCommand(), cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok(result.Value);
+    }
+    
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTokens(
+        [FromBody] RefreshTokenRequest request,
+        [FromServices] RefreshTokenHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(
+            new RefreshTokenCommand(request.AccessToken, request.RefreshToken),
+            cancellationToken);
+        
         if (result.IsFailure)
             return result.Error.ToResponse();
         

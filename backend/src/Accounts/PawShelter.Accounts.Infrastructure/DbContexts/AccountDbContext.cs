@@ -19,6 +19,7 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
     public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
     public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();
     public DbSet<VolunteerAccount> VolunteerAccounts => Set<VolunteerAccount>();
+    public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -82,6 +83,14 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
             HasConversion(
                 u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
                 json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!);
+        
+        modelBuilder.Entity<RefreshSession>().
+            ToTable("refresh_sessions");
+        
+        modelBuilder.Entity<RefreshSession>().
+            HasOne(r => r.User).
+            WithMany().
+            HasForeignKey(r => r.UserId);
         
         modelBuilder.Entity<Role>().
             ToTable("roles");

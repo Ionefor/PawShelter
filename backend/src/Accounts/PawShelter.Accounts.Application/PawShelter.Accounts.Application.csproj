@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
+      <ProjectReference Include="..\PawShelter.Accounts.Contracts\PawShelter.Accounts.Contracts.csproj" />
       <ProjectReference Include="..\PawShelter.Accounts.Domain\PawShelter.Accounts.Domain.csproj" />
     </ItemGroup>
 

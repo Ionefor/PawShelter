@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using PawShelter.Accounts.Infrastructure.DbContexts;
 using PawShelter.Accounts.Infrastructure.Options;
 using PawShelter.Accounts.Infrastructure.Providers;
 using PawShelter.Accounts.Infrastructure.Seading;
+using PawShelter.Core.Abstractions;
 
 namespace PawShelter.Accounts.Infrastructure;
 
@@ -27,7 +29,8 @@ public static class Inject
             .AddCustomAuthorization()
             .AddJwtOptions(configuration)
             .AddAdminOptins(configuration)
-            .AddJwtBearer(configuration);
+            .AddJwtBearer(configuration).
+            AddDatabase();
 
         return services;
     }
@@ -83,22 +86,18 @@ public static class Inject
                 var jwtOptions = configuration.GetSection(JwtOptions.JWT).Get<JwtOptions>()
                                  ?? throw new ApplicationException("Missing JWT configuration");
                 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.TokenValidationParameters =
+                    TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
             });
 
         return services;
     }
-    
+    private static IServiceCollection AddDatabase(this IServiceCollection services)
+    {
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>("Accounts");
+        
+        return services;
+    }
     private static IServiceCollection AddCustomAuthorization(this IServiceCollection services)
     {                                               
         services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
@@ -112,6 +111,8 @@ public static class Inject
         services.AddScoped<AccountsSeederService>();
 
         services.AddScoped<PermissionManager>();
+        
+        services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
         
         services.AddScoped<RolePermissionManager>();
         
