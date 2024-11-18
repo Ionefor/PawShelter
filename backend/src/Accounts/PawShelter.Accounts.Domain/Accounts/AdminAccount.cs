@@ -2,11 +2,16 @@
 
 public class AdminAccount
 {
+    public static string Admin = nameof(Admin);
     private AdminAccount() {}
 
-    public AdminAccount(User user)
+    public static AdminAccount Create(User user)
     {
-        User = user;
+        return new AdminAccount
+        {
+            Id = Guid.NewGuid(),
+            User = user,
+        };
     }
     
     public Guid Id { get; set; }
