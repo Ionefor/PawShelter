@@ -165,13 +165,33 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_admin_account");
+                        .HasName("pk_admin_accounts");
 
                     b.HasIndex("UserId")
                         .IsUnique()
-                        .HasDatabaseName("ix_admin_account_user_id");
+                        .HasDatabaseName("ix_admin_accounts_user_id");
 
-                    b.ToTable("admin_account", "accounts");
+                    b.ToTable("admin_accounts", "accounts");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.ParticipantAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_participant_accounts");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_participant_accounts_user_id");
+
+                    b.ToTable("participant_accounts", "accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.VolunteerAccount", b =>
@@ -200,12 +220,12 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_volunteer_account");
+                        .HasName("pk_volunteer_accounts");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_volunteer_account_user_id");
+                        .HasDatabaseName("ix_volunteer_accounts_user_id");
 
-                    b.ToTable("volunteer_account", "accounts");
+                    b.ToTable("volunteer_accounts", "accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Permission", b =>
@@ -441,7 +461,19 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .HasForeignKey("PawShelter.Accounts.Domain.Accounts.AdminAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_admin_account_users_user_id");
+                        .HasConstraintName("fk_admin_accounts_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.ParticipantAccount", b =>
+                {
+                    b.HasOne("PawShelter.Accounts.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_participant_accounts_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -453,7 +485,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_volunteer_account_users_user_id");
+                        .HasConstraintName("fk_volunteer_accounts_users_user_id");
 
                     b.Navigation("User");
                 });

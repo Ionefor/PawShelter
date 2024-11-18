@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PawShelter.Accounts.Application;
+using PawShelter.Accounts.Application.Abstractions;
 using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Infrastructure.Authorization;
 using PawShelter.Accounts.Infrastructure.DbContexts;
@@ -25,6 +26,7 @@ public static class Inject
             .AddDbContext()
             .AddCustomAuthorization()
             .AddJwtOptions(configuration)
+            .AddAdminOptins(configuration)
             .AddJwtBearer(configuration);
 
         return services;
@@ -53,6 +55,18 @@ public static class Inject
         return services;
     }
 
+    private static IServiceCollection AddAdminOptins(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<AdminOptions>(
+            configuration.GetSection(AdminOptions.ADMIN));
+
+        services.AddOptions<AdminOptions>();
+        
+        return services;
+    }
+    
     private static IServiceCollection AddJwtBearer(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -89,6 +103,7 @@ public static class Inject
     {                                               
         services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<IAccountManager, AccountManager>();
 
         services.AddAuthorization();
 

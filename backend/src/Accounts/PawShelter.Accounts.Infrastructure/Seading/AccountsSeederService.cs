@@ -1,7 +1,10 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using PawShelter.Accounts.Application.Abstractions;
 using PawShelter.Accounts.Domain;
+using PawShelter.Accounts.Domain.Accounts;
 using PawShelter.Accounts.Infrastructure.Options;
 using PawShelter.Core.Models;
 
@@ -11,8 +14,13 @@ public class AccountsSeederService(
     RoleManager<Role> roleManager,
     PermissionManager permissionManager,
     RolePermissionManager rolePermissionManager,
-    ILogger<AccountSeeder> logger)
+    IAccountManager accountManager,
+    UserManager<User> userManager,
+    ILogger<AccountSeeder> logger,
+    IOptions<AdminOptions> adminOptions)
 {
+    private readonly AdminOptions _adminOptions = adminOptions.Value;
+    
     public async Task SeedAsync(CancellationToken cancellationToken)
     {
         var json = await File.ReadAllTextAsync(FilePath.Accounts, cancellationToken);
@@ -26,6 +34,30 @@ public class AccountsSeederService(
 
         await SeedRolePermissions(seedData);
         
+        await SeedAdmin();
+    }
+
+    private async Task SeedAdmin()
+    {
+        var adminRole = await roleManager.FindByNameAsync(AdminAccount.Admin)
+                        ?? throw new ApplicationException("Seeding error: unable to find admin role");
+
+        if (await accountManager.AdminAccountExists())
+        {
+            logger.LogInformation("Admin account already exists in database, aborting admin seeding");
+            return;
+        }
+
+        var adminUser = User.CreateAdmin(_adminOptions.UserName, _adminOptions.Email, adminRole);
+        var creationResult = await userManager.CreateAsync(adminUser.Value, _adminOptions.Password);
+        if (creationResult.Succeeded == false)
+            throw new ApplicationException(creationResult.Errors.First().Description);
+        
+
+        var adminAccount = AdminAccount.Create(adminUser.Value);
+        await accountManager.CreateAdminAccount(adminAccount);
+
+        logger.LogInformation("Successfully seeded admin account to database");
     }
     
     private async Task SeedPermissions(RolePermissionOptions seedData)

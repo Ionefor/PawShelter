@@ -16,6 +16,9 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
     
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<RolePermission> RolePermission => Set<RolePermission>();
+    public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
+    public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();
+    public DbSet<VolunteerAccount> VolunteerAccounts => Set<VolunteerAccount>();
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
