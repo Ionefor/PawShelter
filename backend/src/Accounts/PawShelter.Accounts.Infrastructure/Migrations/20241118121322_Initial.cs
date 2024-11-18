@@ -97,7 +97,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "admin_account",
+                name: "admin_accounts",
                 schema: "accounts",
                 columns: table => new
                 {
@@ -106,9 +106,9 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_admin_account", x => x.id);
+                    table.PrimaryKey("pk_admin_accounts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_admin_account_users_user_id",
+                        name: "fk_admin_accounts_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "accounts",
                         principalTable: "AspNetUsers",
@@ -211,7 +211,27 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "volunteer_account",
+                name: "participant_accounts",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participant_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participant_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "volunteer_accounts",
                 schema: "accounts",
                 columns: table => new
                 {
@@ -223,9 +243,9 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_volunteer_account", x => x.id);
+                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_volunteer_account_users_user_id",
+                        name: "fk_volunteer_accounts_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "accounts",
                         principalTable: "AspNetUsers",
@@ -261,9 +281,9 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_admin_account_user_id",
+                name: "ix_admin_accounts_user_id",
                 schema: "accounts",
-                table: "admin_account",
+                table: "admin_accounts",
                 column: "user_id",
                 unique: true);
 
@@ -312,6 +332,12 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_participant_accounts_user_id",
+                schema: "accounts",
+                table: "participant_accounts",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_permissions_code",
                 schema: "accounts",
                 table: "permissions",
@@ -325,9 +351,9 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 column: "permission_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_volunteer_account_user_id",
+                name: "ix_volunteer_accounts_user_id",
                 schema: "accounts",
-                table: "volunteer_account",
+                table: "volunteer_accounts",
                 column: "user_id");
         }
 
@@ -335,7 +361,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "admin_account",
+                name: "admin_accounts",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
@@ -359,11 +385,15 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                 schema: "accounts");
 
             migrationBuilder.DropTable(
+                name: "participant_accounts",
+                schema: "accounts");
+
+            migrationBuilder.DropTable(
                 name: "role_permissions",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
-                name: "volunteer_account",
+                name: "volunteer_accounts",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
