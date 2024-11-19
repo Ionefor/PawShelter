@@ -1,6 +1,5 @@
 ﻿using PawShelter.Accounts.Application.Command.Register;
 using PawShelter.Core.Dto;
-using PawShelter.SharedKernel.ValueObjects;
 
 namespace PawShelter.Accounts.Presentation.Requests;
 

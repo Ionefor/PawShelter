@@ -1,12 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using PawShelter.Accounts.Application.Abstractions;
+using PawShelter.Accounts.Contracts.Responses;
 using PawShelter.Accounts.Domain;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
 
 namespace PawShelter.Accounts.Application.Command.Login;
 
-public class LoginHandler : ICommandHandler<string, LoginCommand>
+public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenProvider _tokenProvider;
@@ -18,7 +20,7 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
         _userManager = userManager;
         _tokenProvider = tokenProvider;
     }
-    public async Task<Result<string, ErrorList>> Handle(
+    public async Task<Result<LoginResponse, ErrorList>> Handle(
         LoginCommand command,
         CancellationToken cancellationToken = default)
     {
@@ -30,8 +32,9 @@ public class LoginHandler : ICommandHandler<string, LoginCommand>
         if (!passwordConfirmed)
             return Errors.General.ValueIsInvalid("Your credentials").ToErrorList();
 
-        var token = _tokenProvider.GenerateAccessToken(user, cancellationToken);
+        var accessToken = _tokenProvider.GenerateAccessToken(user, cancellationToken);
+        var refreshToken = _tokenProvider.GenerateRefreshToken(user, accessToken.Result.Jti, cancellationToken);
         
-        return token.Result;
+        return new LoginResponse(accessToken.Result.AccessToken, refreshToken.Result);
     }
 }
