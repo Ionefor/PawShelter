@@ -39,7 +39,7 @@ public class AddSpeciesHandler : ICommandHandler<Guid, AddSpeciesCommand>
             return Error.Conflict(
                 "species.already.exists", "Species already exists").ToErrorList();
 
-        var speciesId = SpeciesId.NewSpeciesId();
+        var speciesId = SpeciesId.NewGuid();
 
         await _speciesRepository.Add(
             Domain.Aggregate.Species.Create(speciesId, command.Species).Value,
@@ -47,6 +47,6 @@ public class AddSpeciesHandler : ICommandHandler<Guid, AddSpeciesCommand>
 
         _logger.LogInformation("Species {species} has been added", command.Species);
 
-        return speciesId.Value;
+        return speciesId.Id;
     }
 }

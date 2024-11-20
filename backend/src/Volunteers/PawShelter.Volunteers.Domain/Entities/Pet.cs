@@ -6,10 +6,8 @@ using PawShelter.Volunteers.Domain.ValueObjects.Shared;
 
 namespace PawShelter.Volunteers.Domain.Entities;
 
-public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
+public class Pet : SoftDeletableEntity<PetId>
 {
-    private bool _isDeleted;
-
     private Pet(PetId id) : base(id)
     {
     }
@@ -64,17 +62,7 @@ public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
     public DateTime PublicationDate { get; private set; }
     public Requisites Requisites { get; private set; }
     public PetStatus Status { get; private set; }
-
-    public void Delete()
-    {
-        _isDeleted = true;
-    }
-
-    public void Restore()
-    {
-        _isDeleted = false;
-    }
-
+    
     internal void Move(Position position)
     {
         Position = position;
@@ -90,15 +78,12 @@ public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
 
         return Result.Success<Error>();
     }
-
     internal UnitResult<Error> MoveBackward()
     {
         var newPosition = Position.Backward();
         if (newPosition.IsFailure)
             return newPosition.Error;
         
-        
-
         Position = newPosition.Value;
 
         return Result.Success<Error>();

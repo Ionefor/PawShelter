@@ -35,7 +35,7 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
 
-        var volunteerId = VolunteerId.NewVolonteerId();
+        var volunteerId = VolunteerId.NewGuid();
 
         var fullName = FullName.Create(
             command.FullNameDto.FirstName,
@@ -66,8 +66,8 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
 
         _logger.LogInformation(
             "Volunteer {firstName} {middleName} created with id: {volunteerId}",
-            fullName.FirstName, fullName.MiddleName, volunteerId.Value);
+            fullName.FirstName, fullName.MiddleName, volunteerId.Id);
 
-        return volunteer.Id.Value;
+        return volunteer.Id.Id;
     }
 }

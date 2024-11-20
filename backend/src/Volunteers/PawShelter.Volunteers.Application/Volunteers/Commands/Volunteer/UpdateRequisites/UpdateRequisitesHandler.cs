@@ -52,6 +52,6 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
             volunteerResult.Value.FullName.FirstName,
             volunteerResult.Value.FullName.MiddleName);
 
-        return volunteerResult.Value.Id.Value;
+        return volunteerResult.Value.Id.Id;
     }
 }

@@ -49,7 +49,7 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
             return Error.Conflict(
                 "breed.already.exists", "Breed already exists").ToErrorList();
 
-        var breedId = BreedId.NewBreedId();
+        var breedId = BreedId.NewGuid();
 
         speciesResult.Value.AddBreed(
             Breed.Create(breedId, command.BreedName).Value);
@@ -59,6 +59,6 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
       
         _logger.LogInformation("Breed {breed} has been added", command.BreedName);
 
-        return breedId.Value;
+        return breedId.Id;
     }
 }

@@ -66,7 +66,7 @@ public class VolunteerRepository : IVolunteerRepository
         var pet = volunteer.Pets!.FirstOrDefault(p => p.Id == petId);
 
         if (pet is null)
-            return Errors.General.NotFound(petId.Value);
+            return Errors.General.NotFound(petId.Id);
 
         return pet;
     }
