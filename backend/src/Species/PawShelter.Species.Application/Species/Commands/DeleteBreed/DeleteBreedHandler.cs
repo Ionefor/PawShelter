@@ -55,6 +55,6 @@ public class DeleteBreedHandler : ICommandHandler<Guid, DeleteBreedCommand>
         _logger.LogInformation(
             $"Breed {breed.Value} has been deleted");
         
-        return breedId.Value;
+        return breedId.Id;
     }
 }

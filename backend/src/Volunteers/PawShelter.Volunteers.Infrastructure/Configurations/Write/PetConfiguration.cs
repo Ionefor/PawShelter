@@ -18,7 +18,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id).HasConversion(
-            id => id.Value,
+            id => id.Id,
             value => PetId.Create(value));
 
         builder.ComplexProperty(p => p.Name,
@@ -39,7 +39,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.ComplexProperty(p => p.SpeciesBreedsId, psb =>
         {
             psb.Property(p => p.SpeciesId).HasConversion(
-                id => id.Value,
+                id => id.Id,
                 value => SpeciesId.Create(value)).HasColumnName("species_id");
 
             psb.Property(b => b.BreedId).IsRequired().HasColumnName("breed_id");

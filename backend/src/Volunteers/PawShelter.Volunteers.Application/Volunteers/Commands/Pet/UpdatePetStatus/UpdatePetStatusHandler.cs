@@ -73,6 +73,6 @@ public class UpdatePetStatusHandler :
         petResult.Value.UpdatePetStatus(statusEnum);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return petResult.Value.Id.Value;
+        return petResult.Value.Id.Id;
     }
 }

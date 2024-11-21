@@ -92,7 +92,7 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
             
             transaction.Commit();
 
-            return petResult.Value.Id.Value;
+            return petResult.Value.Id.Id;
         }
         catch (Exception ex)
         {

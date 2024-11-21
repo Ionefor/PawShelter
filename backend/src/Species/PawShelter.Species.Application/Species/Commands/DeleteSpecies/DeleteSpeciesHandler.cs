@@ -50,6 +50,6 @@ public class DeleteSpeciesHandler :
         _logger.LogInformation(
             $"Species {speciesResult.Value.Value} has been deleted");
         
-        return speciesResult.Value.Id.Value;
+        return speciesResult.Value.Id;
     }
 }

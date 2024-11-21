@@ -107,7 +107,7 @@ public class UpdatePetHandler :
         
         var speciesId = SpeciesId.Create(species.SpeciesId);
         var breedId = BreedId.Create(breed.BreedId);
-        var speciesBreedId = new SpeciesBreedsId(speciesId, breedId.Value);
+        var speciesBreedId = new SpeciesBreedsId(speciesId, breedId.Id);
         
         petToUpdate!.UpdatePet(petName, petDescription, speciesBreedId, color,
             health, address, number, petCharacteristics, command.IsCastrated,
@@ -120,6 +120,6 @@ public class UpdatePetHandler :
             "Pet {petName} has been updated  with id: {petId}",
             petName, petId);
         
-        return petToUpdate!.Id.Value;
+        return petToUpdate!.Id.Id;
     }
 }

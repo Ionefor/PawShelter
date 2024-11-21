@@ -64,6 +64,6 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
             "Main info of the Volunteer {firstName} {middleName} has been updated",
             fullName.FirstName, fullName.MiddleName);
 
-        return volunteerResult.Value.Id.Value;
+        return volunteerResult.Value.Id.Id;
     }
 }

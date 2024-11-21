@@ -8,10 +8,10 @@ using PawShelter.Volunteers.Domain.ValueObjects.Shared;
 
 namespace PawShelter.Volunteers.Domain.Aggregate;
 
-public class Volunteer : SharedKernel.Entity<VolunteerId>, ISoftDeletable
+public class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
-    private bool _isDeleted;
+
     private Volunteer(VolunteerId id) : base(id)
     {
     }
@@ -58,14 +58,27 @@ public class Volunteer : SharedKernel.Entity<VolunteerId>, ISoftDeletable
         }
     }
 
-    public void Delete()
+    public void DeleteExpiredPet(Pet pet)
     {
-        _isDeleted = true;
+        UpdatePositionPet(pet);
+
+       _pets[pet.Position - 1].Delete();
+    }
+    
+    public override void Delete()
+    {
+        base.Delete();
+
+        foreach (var pet in _pets)
+            pet.Delete();
     }
 
-    public void Restore()
+    public override void Restore()
     {
-        _isDeleted = false;
+        base.Restore();
+
+        foreach (var pet in _pets)
+            pet.Restore();
     }
 
     public int CountPetsByStatus(PetStatus status)

@@ -117,6 +117,6 @@ public class HardDeletePetHandler :
                 "pet.photos.failure", "Can not delete photo").ToErrorList();
         }
         
-        return petForDelete.Value.Id.Value;
+        return petForDelete.Value.Id.Id;
     }
 }

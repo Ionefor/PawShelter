@@ -65,7 +65,7 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         
         var speciesId = SpeciesId.Create(species.SpeciesId);
         var breedId = BreedId.Create(breed.BreedId);
-        var speciesBreedId = new SpeciesBreedsId(speciesId, breedId.Value);
+        var speciesBreedId = new SpeciesBreedsId(speciesId, breedId.Id);
         
         var volunteerId = VolunteerId.Create(command.VolunteerId);
         
@@ -73,7 +73,7 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
         
-        var petId = PetId.NewPetId();
+        var petId = PetId.NewGuid();
         
         var petName = Name.Create(command.Name).Value;
         var petDescription = Description.Create(command.Description).Value;
@@ -114,6 +114,6 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
             "Pet {petName} has been added to the volunteer with id: {volunteerId}",
             petName, volunteerId);
         
-        return pet.Id.Value;
+        return pet.Id.Id;
     }
 }

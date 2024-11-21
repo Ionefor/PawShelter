@@ -5,11 +5,11 @@ using PawShelter.Species.Domain.Entities;
 
 namespace PawShelter.Species.Domain.Aggregate;
 
-public class Species : SharedKernel.Entity<SpeciesId>
+public class Species : BaseId<SpeciesId>
 {
     private readonly List<Breed> _breeds;
 
-    private Species(SpeciesId id, string value) : base(id)
+    private Species(SpeciesId id, string value) : base(id.Id)
     {
         Value = value;
     }

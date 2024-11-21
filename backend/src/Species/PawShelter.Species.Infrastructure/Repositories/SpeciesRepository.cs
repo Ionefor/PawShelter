@@ -49,7 +49,7 @@ public class SpeciesRepository : ISpeciesRepository
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return species.Id.Value;
+        return species.Id;
     }
     
     public async Task<Result<Domain.Aggregate.Species, Error>> GetById(SpeciesId speciesId,
@@ -58,7 +58,7 @@ public class SpeciesRepository : ISpeciesRepository
         var species = await _dbContext.Species.
             Include(b => b.Breeds).
             FirstOrDefaultAsync(
-                s => s.Id == speciesId, cancellationToken);
+                s => s.Id == speciesId.Id, cancellationToken);
 
         if (species == null)
             return Error.NotFound("Species.not.found", "Species not found");

@@ -1,26 +1,10 @@
 ﻿namespace PawShelter.SharedKernel.ValueObjects;
 
-public record PetId
+public class PetId : BaseId<PetId>
 {
-    private PetId(Guid value)
-    {
-        Value = value;
-    }
-
-    public Guid Value { get; }
-
-    public static PetId NewPetId()
-    {
-        return new PetId(Guid.NewGuid());
-    }
-
-    public static PetId Empty()
-    {
-        return new PetId(Guid.Empty);
-    }
-
-    public static PetId Create(Guid id)
-    {
-        return new PetId(id);
-    }
+    private PetId(PetId id) : base(id) {}
+    
+    public static implicit operator Guid(PetId petId) => petId.Id;
+    public static implicit operator PetId(Guid id) => new(id);
+    
 }

@@ -65,6 +65,6 @@ public class SoftDeletePetHandler :
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return petForDelete.Value.Id.Value;
+        return petForDelete.Value.Id.Id;
     }
 }

@@ -18,7 +18,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.HasKey(v => v.Id);
 
         builder.Property(v => v.Id).HasConversion(
-            id => id.Value,
+            id => id.Id,
             value => VolunteerId.Create(value));
 
         builder.OwnsOne(v => v.FullName, vf =>
