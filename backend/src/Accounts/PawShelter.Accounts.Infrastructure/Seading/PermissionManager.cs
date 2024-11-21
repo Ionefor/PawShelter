@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PawShelter.Accounts.Application.Abstractions;
 using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Infrastructure.DbContexts;
 
 namespace PawShelter.Accounts.Infrastructure.Seading;
 
-public class PermissionManager(AccountDbContext accountDbContext)
+public class PermissionManager(AccountDbContext accountDbContext) : IPermissionManager
 {
     public async Task AddRangeIfExist(IEnumerable<string> permissions)
     {

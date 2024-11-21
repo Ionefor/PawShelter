@@ -6,12 +6,15 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PawShelter.Accounts.Application;
 using PawShelter.Accounts.Application.Abstractions;
+using PawShelter.Accounts.Application.Models;
 using PawShelter.Accounts.Domain;
+using PawShelter.Accounts.Infrastructure.Authorization;
 using PawShelter.Accounts.Infrastructure.DbContexts;
 using PawShelter.Accounts.Infrastructure.Options;
 using PawShelter.Accounts.Infrastructure.Seading;
 using PawShelter.Core.Models;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Accounts.Infrastructure.Providers;
 
@@ -69,8 +72,10 @@ public class JwtTokenProvider : ITokenProvider
         var validationParameters = TokenValidationParametersFactory.CreateWithoutTime(_jwtOptions);
         
         var validationResult = await jwtHandler.ValidateTokenAsync(jwtToken, validationParameters);
-        if(!validationResult.IsValid)
-            return Errors.General.ValueIsInvalid("Invalid token");
+        if (!validationResult.IsValid)
+        {
+            return Errors.Extra.TokenIsInvalid();
+        }
 
         return validationResult.ClaimsIdentity.Claims.ToList();
     }

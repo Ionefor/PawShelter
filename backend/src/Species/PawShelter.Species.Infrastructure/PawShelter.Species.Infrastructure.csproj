@@ -7,15 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
-      <ProjectReference Include="..\PawShelter.Species.Application\PawShelter.Species.Application.csproj" />
-      <ProjectReference Include="..\PawShelter.Species.Domain\PawShelter.Species.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0-rc.2.24473.5" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0-rc.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
+      <ProjectReference Include="..\PawShelter.Species.Application\PawShelter.Species.Application.csproj" />
     </ItemGroup>
 
 </Project>

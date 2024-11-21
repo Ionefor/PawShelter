@@ -6,6 +6,7 @@ using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Domain.Accounts;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
 
 namespace PawShelter.Accounts.Application.Command.Register;
@@ -38,8 +39,10 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         var participantRole = await _roleManager.FindByNameAsync(ParticipantAccount.Participant);
         if (participantRole is null)
         {
-            return Error.NotFound(
-                "role.not.found", "Participant is doesn't exist").ToErrorList();
+            return Errors.General.
+                NotFound(new ErrorParameters.General.NotFound(
+                    nameof(Role), nameof(ParticipantAccount.Participant),
+                    ParticipantAccount.Participant)).ToErrorList();
         }
         
         var user = User.CreateParticipant(fullName, command.UserName, command.Email, participantRole!);
@@ -49,7 +52,8 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
         var result = await _userManager.CreateAsync(user.Value, command.Password);
         if (!result.Succeeded)
         {
-            var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
+            var errors = result.Errors.Select(e =>
+                Errors.General.Failed(new ErrorParameters.General.Failed(e.Description)));
               
             return new ErrorList(errors);
         }

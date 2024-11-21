@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
+using PawShelter.SharedKernel.Models.Error;
+using PawShelter.SharedKernel.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.PhotoProvider;
 

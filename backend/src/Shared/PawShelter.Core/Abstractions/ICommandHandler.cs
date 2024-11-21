@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Core.Abstractions;
 

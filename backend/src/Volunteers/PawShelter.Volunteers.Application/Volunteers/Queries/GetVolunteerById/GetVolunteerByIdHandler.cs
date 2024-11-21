@@ -5,6 +5,11 @@ using PawShelter.Core.Abstractions;
 using PawShelter.Core.Dto;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
+using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Contracts.Dto.Models;
+using PawShelter.Volunteers.Domain.Aggregate;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Queries.GetVolunteerById;
 
@@ -35,8 +40,15 @@ public class GetVolunteerByIdHandler :
             FirstOrDefaultAsync(
                 v => v.Id == query.VolunteerId, cancellationToken);
         
-        if(volunteer is null)
-            return Errors.General.NotFound(query.VolunteerId).ToErrorList();
+        if (volunteer is null)
+        {
+            return Errors.General.
+                NotFound(new ErrorParameters.
+                    General.NotFound(
+                        nameof(Volunteer),
+                        nameof(VolunteerId),
+                        query.VolunteerId)).ToErrorList();
+        }
         
         return volunteer;
     }

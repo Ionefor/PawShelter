@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Species.Application.Species;
 using PawShelter.Species.Domain.Entities;
 using PawShelter.Species.Infrastructure.DbContexts;
@@ -21,11 +23,15 @@ public class SpeciesRepository : ISpeciesRepository
         string speciesName,
         CancellationToken cancellationToken = default)
     {
-        var species = await _dbContext.Species.Include(b => b.Breeds).FirstOrDefaultAsync(
-            s => s.Value == speciesName, cancellationToken);
+        var species = await _dbContext.Species.Include(b => b.Breeds).
+            FirstOrDefaultAsync(s => s.Value == speciesName, cancellationToken);
 
-        if (species == null)
-            return Error.NotFound("Species.not.found", "Species not found");
+        if (species is null)
+        {
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Species), nameof(Species), speciesName));
+        }
 
         return species;
     }
@@ -37,8 +43,12 @@ public class SpeciesRepository : ISpeciesRepository
         var breed = await _dbContext.Species.SelectMany(s => s.Breeds)
             .FirstOrDefaultAsync(b => b.Value == breedName, cancellationToken);
 
-        if (breed == null)
-            return Error.NotFound("Breed.not.found", "Breed not found");
+        if (breed is null)
+        {
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Breed), nameof(Breed), breedName));
+        }
 
         return breed;
     }
@@ -60,8 +70,12 @@ public class SpeciesRepository : ISpeciesRepository
             FirstOrDefaultAsync(
                 s => s.Id == speciesId.Id, cancellationToken);
 
-        if (species == null)
-            return Error.NotFound("Species.not.found", "Species not found");
+        if (species is null)
+        {
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Species), nameof(SpeciesId), speciesId));
+        }
         
         return species;
     }

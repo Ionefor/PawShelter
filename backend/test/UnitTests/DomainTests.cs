@@ -2,7 +2,6 @@
 using FluentAssertions;
 using PawShelter.SharedKernel.ValueObjects;
 using PawShelter.Volunteers.Domain.Aggregate;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
 
 namespace UnitTests;
 

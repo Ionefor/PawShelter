@@ -4,15 +4,17 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Messaging;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Application.PhotoProvider;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.UpdatePetPhotos;
 
 public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosCommand>
 {
-    private const string BUCKET_NAME = "photos";
     private readonly ILogger<UpdatePetPhotosHandler> _logger;
     private readonly IMessageQueue<IEnumerable<PhotoMetaData>> _messageQueue;
     private readonly IPhotoProvider _photoProvider;
@@ -22,7 +24,7 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
     public UpdatePetPhotosHandler(
         IVolunteerRepository volunteerRepository,
         IPhotoProvider photoProvider,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         ILogger<UpdatePetPhotosHandler> logger,
         IMessageQueue<IEnumerable<PhotoMetaData>> messageQueue)
     {
@@ -41,14 +43,14 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
         
         try
         {
-            var volunteerResult = await _volunteerRepository.GetById(
-                VolunteerId.Create(command.VolunteerId), cancellationToken);
+            var volunteerResult = await _volunteerRepository.
+                GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
             if (volunteerResult.IsFailure)
                 return volunteerResult.Error.ToErrorList();
 
-            var petResult = await _volunteerRepository.GetPetById(
-                PetId.Create(command.PetId), cancellationToken);
+            var petResult = await _volunteerRepository.
+                GetPetById(PetId.Create(command.PetId), cancellationToken);
 
             if (petResult.IsFailure)
                 return petResult.Error.ToErrorList();
@@ -61,8 +63,9 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
                 if(filePathResult.IsFailure)
                     return filePathResult.Error.ToErrorList();
 
-                var fileData = new PhotoData(
-                    file.Content, filePathResult.Value, BUCKET_NAME);
+                var fileData = 
+                    new PhotoData(file.Content, filePathResult.Value, Constants.Shared.BucketNamePhotos);
+                
                 photosData.Add(fileData);
             }
 
@@ -75,7 +78,7 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
                 photosData.Select(
                     f => new PetPhoto(f.FilePath, false)).ToList());
             
-            petResult.Value.UpdatePetPhotos(petPhotos);
+            volunteerResult.Value.UpdatePetPhotos(petResult.Value, petPhotos);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -83,8 +86,8 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
 
             if (uploadResult.IsFailure)
             {
-                await _messageQueue.WriteAsync(
-                    photosData.Select(
+                await _messageQueue.
+                    WriteAsync(photosData.Select(
                         p => new PhotoMetaData(p.BucketName, p.FilePath)), cancellationToken);
 
                 return uploadResult.Error.ToErrorList();
@@ -101,8 +104,8 @@ public class UpdatePetPhotosHandler : ICommandHandler<Guid, UpdatePetPhotosComma
 
             transaction.Rollback();
 
-            return Error.Failure(
-                "pet.photos.failure", "Can not add photos to pet").ToErrorList();
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Can not add photos to pet")).ToErrorList();
         }
     }
 }

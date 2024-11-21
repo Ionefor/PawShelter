@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PawShelter.Core.Models;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Framework.Extensions;
 

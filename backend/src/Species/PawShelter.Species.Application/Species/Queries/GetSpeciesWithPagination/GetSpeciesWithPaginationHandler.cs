@@ -2,6 +2,7 @@
 using PawShelter.Core.Dto;
 using PawShelter.Core.Extensions;
 using PawShelter.Core.Models;
+using PawShelter.Species.Contracts.Dto;
 
 namespace PawShelter.Species.Application.Species.Queries.GetSpeciesWithPagination;
 
@@ -9,7 +10,6 @@ public class GetSpeciesWithPaginationHandler :
     IQueryHandler<PageList<SpeciesDto>, GetSpeciesWithPaginationQuery>
 {
     private readonly IReadDbContext _context;
-
     public GetSpeciesWithPaginationHandler(IReadDbContext context)
     {
         _context = context;

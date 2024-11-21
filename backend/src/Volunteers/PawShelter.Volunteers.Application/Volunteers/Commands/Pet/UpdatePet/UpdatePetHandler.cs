@@ -5,11 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
+using PawShelter.Core.Models;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Species.Contracts;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.UpdatePet;
 
@@ -27,7 +30,7 @@ public class UpdatePetHandler :
         IValidator<UpdatePetCommand> validator,
         IReadDbContext readDbContext,
         IVolunteerRepository volunteerRepository,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         ILogger<UpdatePetHandler> logger,
         ISpeciesContract contract)
     {
@@ -51,8 +54,9 @@ public class UpdatePetHandler :
         
         if (species is null)
         {
-            return Error.NotFound(
-                "species.not.found", "species not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(command.Species), nameof(command.Species), command.Species)).ToErrorList();
         }
         
         var breed = await _contract.
@@ -60,16 +64,19 @@ public class UpdatePetHandler :
         
         if (breed is null)
         {
-            return Error.NotFound(
-                "breed.not.found", "breed not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(command.Breed), nameof(command.Breed), command.Breed)).ToErrorList();
         }
 
         var petExist = await _readDbContext.Pets.
             FirstOrDefaultAsync(s => s.Id == command.PetId, cancellationToken);
+        
         if (petExist is null)
         {
-            return Error.NotFound(
-                "pet.not.found", "pet not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Pet), nameof(PetId), command.PetId)).ToErrorList();
         }
         
         var volunteerId = VolunteerId.Create(command.VolunteerId);
@@ -103,16 +110,16 @@ public class UpdatePetHandler :
         
         var requisiteList = command.RequisitesDto.Requisites.
             Select(r => Requisite.Create(r.Name, r.Description).Value);
+        
         var requisites = new Requisites(requisiteList);
         
         var speciesId = SpeciesId.Create(species.SpeciesId);
         var breedId = BreedId.Create(breed.BreedId);
         var speciesBreedId = new SpeciesBreedsId(speciesId, breedId.Id);
         
-        petToUpdate!.UpdatePet(petName, petDescription, speciesBreedId, color,
+        volunteerResult.Value.UpdatePet(petToUpdate!, petName, petDescription, speciesBreedId, color,
             health, address, number, petCharacteristics, command.IsCastrated,
-            command.IsVaccinated, birthday, command.PublicationDate,
-            requisites);
+            command.IsVaccinated, birthday, command.PublicationDate, requisites);
         
        await _unitOfWork.SaveChangesAsync(cancellationToken);
         

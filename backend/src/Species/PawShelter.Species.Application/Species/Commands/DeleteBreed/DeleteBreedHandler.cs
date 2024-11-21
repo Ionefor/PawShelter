@@ -3,7 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Species.Domain.Entities;
 using PawShelter.Volunteers.Contracts;
 
 namespace PawShelter.Species.Application.Species.Commands.DeleteBreed;
@@ -18,7 +22,7 @@ public class DeleteBreedHandler : ICommandHandler<Guid, DeleteBreedCommand>
     public DeleteBreedHandler(
         ISpeciesRepository speciesRepository,
         ILogger<DeleteBreedHandler> logger,
-        [FromKeyedServices("Species")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Species)]IUnitOfWork unitOfWork,
         IVolunteersContract volunteersContract)
     {
         _speciesRepository = speciesRepository;
@@ -32,9 +36,13 @@ public class DeleteBreedHandler : ICommandHandler<Guid, DeleteBreedCommand>
     {
         var petWithBreed = await _volunteersContract.
             PetWithBreed(command.BreedId, cancellationToken);
-        
-        if(petWithBreed is not null)
-            return Errors.Extra.InvalidDeleteOperation(command.BreedId, "breed").ToErrorList();
+
+        if (petWithBreed is not null)
+        {
+            return Errors.Extra.InvalidDeleteOperation(
+                new ErrorParameters.Extra.InvalidDeleteOperation(
+                    nameof(Breed), command.BreedId)).ToErrorList();
+        }
         
         var speciesId = SpeciesId.Create(command.SpeciesId);
         var speciesResult = await _speciesRepository.GetById(speciesId, cancellationToken);
@@ -44,16 +52,19 @@ public class DeleteBreedHandler : ICommandHandler<Guid, DeleteBreedCommand>
         
         var breedId = BreedId.Create(command.BreedId);
         var breed = speciesResult.Value.Breeds.FirstOrDefault(b => b.Id == breedId);
-        
-        if (breed is null)
-            return Errors.General.NotFound(command.BreedId).ToErrorList();
+
+        if(breed is null)
+        {
+            return Errors.General.
+                NotFound(new ErrorParameters.General.NotFound(
+                        nameof(Breed), nameof(BreedId), breedId)).ToErrorList();
+        }
         
         speciesResult.Value.DeleteBreed(breed);
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         
-        _logger.LogInformation(
-            $"Breed {breed.Value} has been deleted");
+        _logger.LogInformation($"Breed {breed.Value} has been deleted");
         
         return breedId.Id;
     }

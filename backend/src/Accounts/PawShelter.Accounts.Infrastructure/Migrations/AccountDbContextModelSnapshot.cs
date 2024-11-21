@@ -17,7 +17,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("accounts")
+                .HasDefaultSchema("Accounts")
                 .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -50,7 +50,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
-                    b.ToTable("AspNetRoleClaims", "accounts");
+                    b.ToTable("AspNetRoleClaims", "Accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -80,7 +80,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
-                    b.ToTable("AspNetUserClaims", "accounts");
+                    b.ToTable("AspNetUserClaims", "Accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -107,7 +107,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
-                    b.ToTable("AspNetUserLogins", "accounts");
+                    b.ToTable("AspNetUserLogins", "Accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -126,7 +126,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
-                    b.ToTable("AspNetUserRoles", "accounts");
+                    b.ToTable("AspNetUserRoles", "Accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -150,7 +150,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_asp_net_user_tokens");
 
-                    b.ToTable("AspNetUserTokens", "accounts");
+                    b.ToTable("AspNetUserTokens", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.AdminAccount", b =>
@@ -171,7 +171,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_admin_accounts_user_id");
 
-                    b.ToTable("admin_accounts", "accounts");
+                    b.ToTable("admin_accounts", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.ParticipantAccount", b =>
@@ -191,7 +191,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_participant_accounts_user_id");
 
-                    b.ToTable("participant_accounts", "accounts");
+                    b.ToTable("participant_accounts", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Accounts.VolunteerAccount", b =>
@@ -225,7 +225,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_volunteer_accounts_user_id");
 
-                    b.ToTable("volunteer_accounts", "accounts");
+                    b.ToTable("volunteer_accounts", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Permission", b =>
@@ -253,7 +253,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_permissions_code");
 
-                    b.ToTable("permissions", "accounts");
+                    b.ToTable("permissions", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.RefreshSession", b =>
@@ -289,7 +289,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_refresh_sessions_user_id");
 
-                    b.ToTable("refresh_sessions", "accounts");
+                    b.ToTable("refresh_sessions", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.Role", b =>
@@ -321,7 +321,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", "accounts");
+                    b.ToTable("AspNetRoles", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.RolePermission", b =>
@@ -340,7 +340,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                     b.HasIndex("PermissionId")
                         .HasDatabaseName("ix_role_permissions_permission_id");
 
-                    b.ToTable("role_permissions", "accounts");
+                    b.ToTable("role_permissions", "Accounts");
                 });
 
             modelBuilder.Entity("PawShelter.Accounts.Domain.User", b =>
@@ -430,7 +430,7 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", "accounts");
+                    b.ToTable("AspNetUsers", "Accounts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -568,25 +568,25 @@ namespace PawShelter.Accounts.Infrastructure.Migrations
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(20)
+                                .HasColumnType("character varying(20)")
                                 .HasColumnName("first_name");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(20)
+                                .HasColumnType("character varying(20)")
                                 .HasColumnName("last_name");
 
                             b1.Property<string>("MiddleName")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(20)
+                                .HasColumnType("character varying(20)")
                                 .HasColumnName("middle_name");
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("AspNetUsers", "accounts");
+                            b1.ToTable("AspNetUsers", "Accounts");
 
                             b1.ToJson("full_name");
 

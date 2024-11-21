@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Species.Infrastructure.Configurations.Write;
 
@@ -13,9 +14,9 @@ public class SpeciesConfiguration : IEntityTypeConfiguration<Species.Domain.Aggr
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.Id).HasConversion(
-            speciesId => speciesId,
-            value => SpeciesId.Create(value).Id).HasColumnName("species_id");
-
+            speciesId => speciesId.Id,
+            value => SpeciesId.Create(value)).HasColumnName("species_id");
+        
         builder.Property(s => s.Value).HasColumnName("species").IsRequired();
 
         builder.HasMany(s => s.Breeds).

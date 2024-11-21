@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Species.Application.Species.Commands.AddSpecies;
 
@@ -13,7 +15,6 @@ public class AddSpeciesHandler : ICommandHandler<Guid, AddSpeciesCommand>
     private readonly ILogger<AddSpeciesHandler> _logger;
     private readonly ISpeciesRepository _speciesRepository;
     private readonly IValidator<AddSpeciesCommand> _validator;
-
     public AddSpeciesHandler(
         ILogger<AddSpeciesHandler> logger,
         IValidator<AddSpeciesCommand> validator,
@@ -36,14 +37,15 @@ public class AddSpeciesHandler : ICommandHandler<Guid, AddSpeciesCommand>
         var speciesExistResult = await _speciesRepository.ExistSpecies(command.Species, cancellationToken);
 
         if (speciesExistResult.IsSuccess)
-            return Error.Conflict(
-                "species.already.exists", "Species already exists").ToErrorList();
+        {
+            return Errors.Extra.AlreadyExists(
+                new ErrorParameters.Extra.ValueAlreadyExists("Species already exists")).ToErrorList();
+        }
 
         var speciesId = SpeciesId.NewGuid();
 
-        await _speciesRepository.Add(
-            Domain.Aggregate.Species.Create(speciesId, command.Species).Value,
-            cancellationToken);
+        await _speciesRepository.
+            Add(Domain.Aggregate.Species.Create(speciesId, command.Species).Value, cancellationToken);
 
         _logger.LogInformation("Species {species} has been added", command.Species);
 

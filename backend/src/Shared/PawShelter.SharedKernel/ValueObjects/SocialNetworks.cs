@@ -1,15 +1,17 @@
-﻿namespace PawShelter.SharedKernel.ValueObjects;
+﻿using CSharpFunctionalExtensions;
 
-public record SocialNetworks
+namespace PawShelter.SharedKernel.ValueObjects;
+
+public class SocialNetworks : ComparableValueObject
 {
-    private SocialNetworks()
-    {
-    }
-
+    private SocialNetworks() {}
     public SocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
     {
         Values = socialNetworks.ToList();
     }
-
     public IReadOnlyList<SocialNetwork>? Values { get; }
+    protected override IEnumerable<IComparable> GetComparableEqualityComponents()
+    {
+        yield return Values!.Single();
+    }
 }

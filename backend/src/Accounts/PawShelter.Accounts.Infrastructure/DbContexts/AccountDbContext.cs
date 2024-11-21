@@ -6,14 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Domain.Accounts;
+using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
 using PawShelter.SharedKernel.ValueObjects;
 
 namespace PawShelter.Accounts.Infrastructure.DbContexts;
 
 public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
 {
-    private const string DATABASE = "Database";
-    
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<RolePermission> RolePermission => Set<RolePermission>();
     public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
@@ -23,12 +23,11 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString(Constants.Shared.Database));
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().
@@ -47,17 +46,17 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
             vf.ToJson("full_name");
 
             vf.Property(vf => vf.FirstName).IsRequired().
-                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(Constants.Shared.MaxLowTextLength).
                 HasColumnName("first_name");
 
             vf.Property(vf => vf.MiddleName).
                 IsRequired().
-                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(Constants.Shared.MaxLowTextLength).
                 HasColumnName("middle_name");
 
             vf.Property(vf => vf.LastName).
                 IsRequired().
-                HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).
+                HasMaxLength(Constants.Shared.MaxLowTextLength).
                 HasColumnName("last_name");
         });
         
@@ -137,11 +136,10 @@ public class AccountDbContext(IConfiguration configuration) : IdentityDbContext<
         modelBuilder.Entity<IdentityUserRole<Guid>>()
             .ToTable("user_roles");
         
-        modelBuilder.HasDefaultSchema("accounts");
+        modelBuilder.HasDefaultSchema(ModulesName.Accounts.ToString());
         
         base.OnModelCreating(modelBuilder);
     }
-
     private ILoggerFactory CreateLoggerFactory()
     {
         return LoggerFactory.Create(builder => { builder.AddConsole(); });

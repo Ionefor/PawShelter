@@ -4,6 +4,5 @@ namespace PawShelter.Accounts.Domain;
 
 public class Role : IdentityRole<Guid>
 {
-
-    public List<RolePermission> RolePermission { get; set; } = [];
+    public List<RolePermission> RolePermission { get; init; } = [];
 }

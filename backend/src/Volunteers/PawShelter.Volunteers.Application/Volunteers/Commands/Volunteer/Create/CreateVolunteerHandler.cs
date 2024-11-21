@@ -4,9 +4,10 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.Create;
 
@@ -50,13 +51,13 @@ public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerComma
 
         var experience = Experience.Create(command.Experience).Value;
 
-        var requisiteList = command.Requisites.Select(r =>
+        var requisiteList = command.Requisites!.Select(r =>
             Requisite.Create(r.Name, r.Description).Value);
         
         var requisites = new Requisites(requisiteList);
 
-        var socialNetworks = new SocialNetworks(command.SocialNetworks.Select(s =>
-            SocialNetwork.Create(s.Name, s.Link).Value).ToList());
+        var socialNetworks = new SocialNetworks(command.SocialNetworks!.
+            Select(s => SocialNetwork.Create(s.Name, s.Link).Value).ToList());
 
         var volunteer = new Domain.Aggregate.Volunteer(
             volunteerId, fullName, email, description,

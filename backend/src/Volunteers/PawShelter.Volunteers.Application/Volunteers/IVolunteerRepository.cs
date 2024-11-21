@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Domain.Aggregate;
 using PawShelter.Volunteers.Domain.Entities;
 
@@ -8,7 +10,6 @@ namespace PawShelter.Volunteers.Application.Volunteers;
 
 public interface IVolunteerRepository
 {
-    void Save(Volunteer volunteer);
     Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default);
     
     Guid Delete(Volunteer volunteer, CancellationToken cancellationToken = default);

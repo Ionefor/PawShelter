@@ -5,6 +5,8 @@ using PawShelter.Accounts.Contracts.Responses;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Models;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Accounts.Application.Command.RefreshTokens;
 
@@ -13,11 +15,10 @@ public class RefreshTokenHandler : ICommandHandler<LoginResponse, RefreshTokenCo
     private readonly IRefreshSessionManager _refreshSessionManager;
     private readonly ITokenProvider _tokenProvider;
     private readonly IUnitOfWork _unitOfWork;
-
     public RefreshTokenHandler(
         IRefreshSessionManager refreshSessionManager,
         ITokenProvider tokenProvider,
-        [FromKeyedServices("Accounts")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Accounts)]IUnitOfWork unitOfWork)
     {
         _refreshSessionManager = refreshSessionManager;
         _tokenProvider = tokenProvider;
@@ -33,9 +34,7 @@ public class RefreshTokenHandler : ICommandHandler<LoginResponse, RefreshTokenCo
 
         if (oldRefreshSession.Value.ExpiresIn < DateTime.Now)
         {
-            //реф ошибки
-            return Error.Deserialize(
-                "token.is.expires||refreshToken is expires||Failure").ToErrorList();
+            return Errors.Extra.TokenIsExpired().ToErrorList();
         }
         
         var userClaims = await _tokenProvider.GetUserClaims(command.AccessToken, cancellationToken);
@@ -43,39 +42,45 @@ public class RefreshTokenHandler : ICommandHandler<LoginResponse, RefreshTokenCo
             return userClaims.Error.ToErrorList();
         
         var userIdString = userClaims.Value.FirstOrDefault(c => c.Type == CustomClaims.Id)?.Value;
+        
         if (!Guid.TryParse(userIdString, out Guid userId))
         {
-            //реф ошибки
-            return Error.Failure("claim.userId", "claim userId is null").ToErrorList();
+            return Errors.General.
+                ValueIsRequired(
+                    new ErrorParameters.General.ValueIsRequired(nameof(CustomClaims.Id))).ToErrorList();
         }
         
         var userJtiString = userClaims.Value.FirstOrDefault(c => c.Type == CustomClaims.Jti)?.Value;
+        
         if (!Guid.TryParse(userJtiString, out Guid userJti))
         {
-            //реф ошибки
-            return Error.Failure("claim.userId", "claim userId is null").ToErrorList();
+            return Errors.General.
+                ValueIsRequired(
+                    new ErrorParameters.General.ValueIsRequired(nameof(CustomClaims.Jti))).ToErrorList();
         }
         
         if (oldRefreshSession.Value.UserId != userId)
         {
-            //реф ошибки
-            return Errors.General.ValueIsInvalid().ToErrorList();
+            return Errors.General.
+                ValueIsInvalid(new ErrorParameters.General.ValueIsInvalid(
+                    nameof(oldRefreshSession.Value.UserId))).ToErrorList();
         }
         
         if (oldRefreshSession.Value.Jti != userJti)
         {
-            //реф ошибки
-            return Errors.General.ValueIsInvalid().ToErrorList();
+            return Errors.General.
+                ValueIsInvalid(new ErrorParameters.General.ValueIsInvalid(
+                    nameof(oldRefreshSession.Value.Jti))).ToErrorList();
         }
 
         _refreshSessionManager.Delete(oldRefreshSession.Value);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var accessToken = _tokenProvider.GenerateAccessToken(
-            oldRefreshSession.Value.User, cancellationToken);
+        var accessToken = _tokenProvider.
+            GenerateAccessToken(oldRefreshSession.Value.User, cancellationToken);
         
-        var refreshToken = _tokenProvider.GenerateRefreshToken(
-            oldRefreshSession.Value.User, accessToken.Result.Jti, cancellationToken);
+        var refreshToken = _tokenProvider.
+            GenerateRefreshToken(oldRefreshSession.Value.User, accessToken.Result.Jti, cancellationToken);
         
         return new LoginResponse(accessToken.Result.AccessToken, refreshToken.Result);
     }

@@ -5,6 +5,7 @@ using PawShelter.Accounts.Contracts.Responses;
 using PawShelter.Accounts.Domain;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Accounts.Application.Command.Login;
 
@@ -26,12 +27,19 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
     {
         var user = await _userManager.FindByEmailAsync(command.Email);
         if (user is null)
-            return Errors.General.NotFound().ToErrorList();
+        {
+            return Errors.General.
+                NotFound(
+                    new ErrorParameters.General.NotFound(
+                        nameof(User), nameof(command.Email), command.Email)).ToErrorList();
+        }
         
         var passwordConfirmed = await _userManager.CheckPasswordAsync(user, command.Password);
         if (!passwordConfirmed)
-            return Errors.General.ValueIsInvalid("Your credentials").ToErrorList();
-
+        {
+            return Errors.Extra.CredentialsIsInvalid().ToErrorList();
+        }
+        
         var accessToken = _tokenProvider.GenerateAccessToken(user, cancellationToken);
         var refreshToken = _tokenProvider.GenerateRefreshToken(user, accessToken.Result.Jti, cancellationToken);
         

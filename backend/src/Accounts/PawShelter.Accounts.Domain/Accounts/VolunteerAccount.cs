@@ -12,13 +12,13 @@ public class VolunteerAccount
         User = user;
     }
     
-    public Guid Id { get; set; }
-    public User User { get; set; }
+    public Guid Id { get; init; }
+    public User User { get; init; }
     
-    public int Experience { get; set; }
+    public int Experience { get; init; }
     
-    public IEnumerable<Requisite> Requisites { get; set; }
+    public IEnumerable<Requisite> Requisites { get; init; }
     
-    public IEnumerable<Description> Certificates { get; set; }
+    public IEnumerable<Description> Certificates { get; init; }
     
 }

@@ -5,9 +5,11 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.UpdateMainInfo;
 
@@ -22,7 +24,7 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
         IVolunteerRepository volunteerRepository,
         IValidator<UpdateMainInfoCommand> validator,
         ILogger<UpdateMainInfoCommand> logger,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _validator = validator;
@@ -39,8 +41,8 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
 
-        var volunteerResult =
-            await _volunteerRepository.GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var volunteerResult = await _volunteerRepository.
+            GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
@@ -55,8 +57,8 @@ public class UpdateMainInfoHandler : ICommandHandler<Guid, UpdateMainInfoCommand
         var phoneNumber = PhoneNumber.Create(command.MainInfoDto.PhoneNumber).Value;
         var experience = Experience.Create(command.MainInfoDto.Experience).Value;
 
-        volunteerResult.Value.UpdateMainInfo(
-            fullName, email, description, phoneNumber, experience);
+        volunteerResult.Value.
+            UpdateMainInfo(fullName, email, description, phoneNumber, experience);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

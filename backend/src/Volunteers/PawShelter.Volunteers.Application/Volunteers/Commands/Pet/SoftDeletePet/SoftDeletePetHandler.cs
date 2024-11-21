@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.SoftDeletePet;
 
@@ -14,7 +17,7 @@ public class SoftDeletePetHandler :
     private readonly IVolunteerRepository _volunteerRepository;
 
     public SoftDeletePetHandler(
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         IReadDbContext readDbContext,
         IVolunteerRepository volunteerRepository)
     {
@@ -29,10 +32,12 @@ public class SoftDeletePetHandler :
     {
         var volunteerExist = _readDbContext.Volunteers.
             Any(v => v.Id == command.VolunteerId);
+        
         if (!volunteerExist)
         {
-            return Error.NotFound(
-                "volunteer.not.found", "Volunteer not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Volunteer), nameof(VolunteerId), command.VolunteerId)).ToErrorList();
         }
             
         var petExist = _readDbContext.Pets.
@@ -42,13 +47,13 @@ public class SoftDeletePetHandler :
         
         if (!petExist)
         {
-            return Error.NotFound(
-                "pet.not.found", "pet not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Pet), nameof(PetId), command.PetId)).ToErrorList();
         }
         
-        var volunteerResult =
-            await _volunteerRepository.GetById(
-                VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var volunteerResult = await _volunteerRepository.
+                GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
@@ -61,7 +66,7 @@ public class SoftDeletePetHandler :
         if(petForDelete.IsFailure)
             return petForDelete.Error.ToErrorList();
         
-        petForDelete.Value!.Delete();
+        volunteerResult.Value.SoftDeletePet(petForDelete.Value);
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         

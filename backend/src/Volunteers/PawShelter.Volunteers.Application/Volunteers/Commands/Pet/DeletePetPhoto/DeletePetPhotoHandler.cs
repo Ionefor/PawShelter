@@ -6,16 +6,18 @@ using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.Core.Messaging;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Application.PhotoProvider;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.DeletePetPhoto;
 
 public class DeletePetPhotoHandler :
     ICommandHandler<string, DeletePetPhotoCommand>
 {
-    private const string BUCKET_NAME = "photos";
     private readonly IValidator<DeletePetPhotoCommand> _validator;
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +27,7 @@ public class DeletePetPhotoHandler :
     public DeletePetPhotoHandler(
         IValidator<DeletePetPhotoCommand> validator,
         IVolunteerRepository volunteerRepository,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         IPhotoProvider photoProvider,
         IMessageQueue<IEnumerable<PhotoMetaData>> messageQueue,
         ILogger<DeletePetPhotoHandler> logger)
@@ -49,8 +51,8 @@ public class DeletePetPhotoHandler :
             if (!validationResult.IsValid)
                 return validationResult.ToErrorList();
 
-            var petResult = await _volunteerRepository.GetPetById(
-                PetId.Create(command.PetId), cancellationToken);
+            var petResult = await _volunteerRepository.
+                GetPetById(PetId.Create(command.PetId), cancellationToken);
 
             if (petResult.IsFailure)
                 return petResult.Error.ToErrorList();
@@ -59,27 +61,34 @@ public class DeletePetPhotoHandler :
 
             if (petResult.Value.Photos is null)
             {
-                return Error.NotFound(
-                    "photos.is.empty", "photos is empty").ToErrorList();
+                return Errors.General.ValueIsRequired(
+                    new ErrorParameters.General.ValueIsRequired(nameof(PetPhoto))).ToErrorList();
             }
 
             var photoToDelete = petResult.Value.Photos.
-                FirstOrDefault(p => p.Path.Path == filePath.Path);
+                FirstOrDefault(p => p.Path.Value == filePath.Value);
             
             if (photoToDelete is null)
             {
-                return Error.NotFound(
-                    "photo.not.found", "photo for delete not found").ToErrorList();
+                return Errors.General.NotFound(
+                    new ErrorParameters.General.NotFound(
+                        nameof(Pet), nameof(PetPhoto), filePath.Value)).ToErrorList();
             }
             
             var petPhotos = petResult.Value.Photos.ToList();
             petPhotos.Remove(photoToDelete);
             
-            petResult.Value.UpdatePetPhotos(petPhotos);
+            var volunteerResult = await _volunteerRepository.
+                GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
+
+            if (volunteerResult.IsFailure)
+                return volunteerResult.Error.ToErrorList();
+            
+            volunteerResult.Value.UpdatePetPhotos(petResult.Value, petPhotos);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             
-            var photoToDeleteMeta = new PhotoMetaData(BUCKET_NAME, photoToDelete.Path);
+            var photoToDeleteMeta = new PhotoMetaData(Constants.Shared.BucketNamePhotos, photoToDelete.Path);
             
             var deleteResult = await _photoProvider.
                 DeleteFile(photoToDeleteMeta, cancellationToken);
@@ -89,7 +98,7 @@ public class DeletePetPhotoHandler :
             
             transaction.Commit();
             
-            return photoToDelete.Path.Path;
+            return photoToDelete.Path.Value;
         }
         catch (Exception ex)
         {
@@ -98,8 +107,8 @@ public class DeletePetPhotoHandler :
 
             transaction.Rollback();
 
-            return Error.Failure(
-                "pet.photos.failure", "Can not delete photo").ToErrorList();
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Can not delete photo")).ToErrorList();
         }
     }
 }

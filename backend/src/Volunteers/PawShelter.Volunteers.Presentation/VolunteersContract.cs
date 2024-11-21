@@ -2,6 +2,7 @@
 using PawShelter.Core.Dto;
 using PawShelter.Volunteers.Application;
 using PawShelter.Volunteers.Contracts;
+using PawShelter.Volunteers.Contracts.Dto.Models;
 
 namespace PawShelter.Volunteers.Presentation;
 

@@ -1,4 +1,5 @@
 ﻿using PawShelter.Core.Dto;
+using PawShelter.Volunteers.Contracts.Dto.Models;
 
 namespace PawShelter.Volunteers.Application;
 

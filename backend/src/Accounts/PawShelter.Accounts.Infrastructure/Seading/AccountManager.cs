@@ -13,14 +13,12 @@ public class AccountManager(AccountDbContext accountDbContext) : IAccountManager
         
         await accountDbContext.SaveChangesAsync();
     }
-    
     public async Task CreateParticipantAccount(ParticipantAccount participantAccount)
     {
         accountDbContext.Add(participantAccount);
         
         await accountDbContext.SaveChangesAsync();
     }
-    
     public async Task<bool> AdminAccountExists(CancellationToken cancellationToken = default)
     {
         return await accountDbContext.AdminAccounts.AnyAsync(cancellationToken);

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PawShelter.Core.Models;
 using PawShelter.Core.Processors;
@@ -90,7 +89,7 @@ public class VolunteerController : ApplicationController
         return Ok(Envelope.Ok(result.Value));
     }
     
-    [Permission(Permissions.Pets.Read)]
+    [Permission(Permissions.Pets.Update)]
     [HttpPut("{volunteerId:guid}/pet/{petId:guid}/status")]
     public async Task<ActionResult<Guid>> UpdatePetStatus(
         [FromRoute] Guid volunteerId,
