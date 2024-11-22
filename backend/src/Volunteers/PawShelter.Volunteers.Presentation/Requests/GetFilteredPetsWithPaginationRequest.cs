@@ -1,5 +1,5 @@
-﻿using PawShelter.Core.Dto.Queries;
-using PawShelter.Volunteers.Application.Volunteers.Queries.GetFilteredPetsWithPagination;
+﻿using PawShelter.Volunteers.Application.Volunteers.Queries.GetFilteredPetsWithPagination;
+using PawShelter.Volunteers.Contracts.Dto.Query;
 
 namespace PawShelter.Volunteers.Presentation.Requests;
 

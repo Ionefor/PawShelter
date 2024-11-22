@@ -5,8 +5,10 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.UpdateSocialNetworks;
 
@@ -21,7 +23,7 @@ public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNet
         IVolunteerRepository volunteerRepository,
         IValidator<UpdateSocialNetworksCommand> validator,
         ILogger<UpdateSocialNetworksCommand> logger,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _validator = validator;
@@ -38,11 +40,11 @@ public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNet
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
 
-        var volunteerResult =
-            await _volunteerRepository.GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var volunteerResult = await _volunteerRepository.
+                GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
-        var socialNetworks =
-            command.SocialNetworksDto.SocialNetworks.Select(s => SocialNetwork.Create(s.Name, s.Link).Value);
+        var socialNetworks = command.SocialNetworksDto.SocialNetworks.
+            Select(s => SocialNetwork.Create(s.Name, s.Link).Value);
 
         volunteerResult.Value.UpdateSocialNetworks(new SocialNetworks(socialNetworks));
 

@@ -2,8 +2,7 @@
 using PawShelter.Core.Validation;
 using PawShelter.SharedKernel;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.AddPet;
 

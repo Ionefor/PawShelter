@@ -4,11 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
+using PawShelter.Core.Models;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Species.Contracts;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.AddPet;
 
@@ -16,7 +19,6 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
 {
     private readonly ILogger<AddPetHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IReadDbContext _readDbContext;
     private readonly ISpeciesContract _contract;
     private readonly IValidator<AddPetCommand> _validator;
     private readonly IVolunteerRepository _volunteerRepository;
@@ -25,15 +27,13 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         ILogger<AddPetHandler> logger,
         IValidator<AddPetCommand> validator,
         IVolunteerRepository volunteerRepository,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
-        IReadDbContext readDbContext,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         ISpeciesContract contract)
     {
         _logger = logger;
         _validator = validator;
         _volunteerRepository = volunteerRepository;
         _unitOfWork = unitOfWork;
-        _readDbContext = readDbContext;
         _contract = contract;
     }
 
@@ -50,8 +50,9 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         
         if (species is null)
         {
-            return Error.NotFound(
-                "species.not.found", "species not found").ToErrorList();
+            return Errors.General.
+                NotFound(new ErrorParameters.General.NotFound(
+                    nameof(Species), nameof(Species), command.Species)).ToErrorList();
         }
         
         var breed = await _contract.
@@ -59,8 +60,9 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         
         if (breed is null)
         {
-            return Error.NotFound(
-                "breed.not.found", "breed not found").ToErrorList();
+            return Errors.General.
+                NotFound(new ErrorParameters.General.NotFound(
+                    nameof(command.Breed), nameof(command.Breed), command.Breed)).ToErrorList();
         }
         
         var speciesId = SpeciesId.Create(species.SpeciesId);
@@ -93,7 +95,8 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
         
         var birthday = Birthday.Create(command.Birthday).Value;
         
-        var requisiteList = command.RequisitesDto.Requisites.Select(r => Requisite.Create(r.Name, r.Description).Value);
+        var requisiteList = command.RequisitesDto.Requisites.
+            Select(r => Requisite.Create(r.Name, r.Description).Value);
         
         var requisites = new Requisites(requisiteList);
         

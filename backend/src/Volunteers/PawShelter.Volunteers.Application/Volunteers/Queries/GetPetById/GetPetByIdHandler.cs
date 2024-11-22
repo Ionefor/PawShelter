@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Dto;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
+using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Contracts.Dto.Models;
+using PawShelter.Volunteers.Domain.Entities;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Queries.GetPetById;
 
@@ -26,8 +31,10 @@ public class GetPetByIdHandler :
 
         if (pet is null)
         {
-            return Errors.General.NotFound(
-                query.PetId).ToErrorList();
+            return Errors.General.
+                NotFound(new ErrorParameters.
+                    General.NotFound(nameof(Pet),
+                        nameof(PetId), query.PetId)).ToErrorList();
         }
         
         return pet;

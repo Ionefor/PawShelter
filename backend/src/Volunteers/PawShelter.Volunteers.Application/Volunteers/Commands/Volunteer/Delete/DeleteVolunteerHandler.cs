@@ -3,7 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.Delete;
 
@@ -16,7 +19,7 @@ public class DeleteVolunteerHandler : ICommandHandler<Guid, DeleteVolunteerComma
     public DeleteVolunteerHandler(
         IVolunteerRepository volunteerRepository,
         ILogger<DeleteVolunteerCommand> logger,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _logger = logger;
@@ -27,8 +30,8 @@ public class DeleteVolunteerHandler : ICommandHandler<Guid, DeleteVolunteerComma
         DeleteVolunteerCommand command,
         CancellationToken cancellationToken = default)
     {
-        var volunteerResult =
-            await _volunteerRepository.GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var volunteerResult = await _volunteerRepository.
+            GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();

@@ -7,12 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
-      <ProjectReference Include="..\..\Species\PawShelter.Species.Contracts\PawShelter.Species.Contracts.csproj" />
-      <ProjectReference Include="..\PawShelter.Volunteers.Domain\PawShelter.Volunteers.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-rc.2.24473.5" />
       <PackageReference Include="Scrutor" Version="5.0.2" />
@@ -22,6 +16,12 @@
     <ItemGroup>
       <Folder Include="Volunteers\Commands\Pet\" />
       <Folder Include="Volunteers\Commands\Volunteer\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Species\PawShelter.Species.Contracts\PawShelter.Species.Contracts.csproj" />
+      <ProjectReference Include="..\PawShelter.Volunteers.Contracts\PawShelter.Volunteers.Contracts.csproj" />
+      <ProjectReference Include="..\PawShelter.Volunteers.Domain\PawShelter.Volunteers.Domain.csproj" />
     </ItemGroup>
 
 </Project>

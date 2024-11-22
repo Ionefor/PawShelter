@@ -5,7 +5,10 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Species.Domain.Entities;
 
 namespace PawShelter.Species.Application.Species.Commands.AddBreed;
@@ -20,7 +23,7 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
     public AddBreedHandler(ILogger<AddBreedHandler> logger,
         IValidator<AddBreedCommand> validator,
         ISpeciesRepository speciesRepository,
-        [FromKeyedServices("Species")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Species)]IUnitOfWork unitOfWork)
     {
         _validator = validator;
         _logger = logger;
@@ -37,8 +40,8 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
         if (!validationResult.IsValid)
             return validationResult.ToErrorList();
 
-        var speciesResult = await _speciesRepository.GetById(
-            SpeciesId.Create(command.SpeciesId), cancellationToken);
+        var speciesResult = await _speciesRepository.
+            GetById(SpeciesId.Create(command.SpeciesId), cancellationToken);
 
         if (speciesResult.IsFailure)
             return speciesResult.Error.ToErrorList();
@@ -46,19 +49,20 @@ public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
         var breedExistResult = await _speciesRepository.ExistBreed(command.BreedName, cancellationToken);
 
         if (breedExistResult.IsSuccess)
-            return Error.Conflict(
-                "breed.already.exists", "Breed already exists").ToErrorList();
+        {
+            return Errors.Extra.AlreadyExists(
+                new ErrorParameters.Extra.ValueAlreadyExists("Breed already exists")).ToErrorList();
+        }
 
         var breedId = BreedId.NewGuid();
 
-        speciesResult.Value.AddBreed(
-            Breed.Create(breedId, command.BreedName).Value);
+        speciesResult.Value.
+            AddBreed(Breed.Create(breedId, command.BreedName).Value);
         
        await _unitOfWork.SaveChangesAsync(cancellationToken);
-      
-      
-        _logger.LogInformation("Breed {breed} has been added", command.BreedName);
+       
+       _logger.LogInformation("Breed {breed} has been added", command.BreedName);
 
-        return breedId.Id;
+       return breedId.Id;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PawShelter.Core.Dto;
+using PawShelter.Species.Contracts.Dto;
 
 namespace PawShelter.Species.Application;
 

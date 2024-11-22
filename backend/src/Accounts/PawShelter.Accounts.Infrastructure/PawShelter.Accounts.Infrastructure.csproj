@@ -17,9 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\PawShelter.Framework\PawShelter.Framework.csproj" />
       <ProjectReference Include="..\PawShelter.Accounts.Application\PawShelter.Accounts.Application.csproj" />
-      <ProjectReference Include="..\PawShelter.Accounts.Domain\PawShelter.Accounts.Domain.csproj" />
     </ItemGroup>
 
 </Project>

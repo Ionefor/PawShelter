@@ -1,20 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.SharedKernel.ValueObjects;
 
-public record FullName
+public class FullName : ComparableValueObject
 {
-    private FullName()
-    {
-    }
-
+    private FullName() {}
     private FullName(string firstName, string middleName, string lastName)
     {
         FirstName = firstName;
         MiddleName = middleName;
         LastName = lastName;
     }
-
     public string FirstName { get; }
     public string MiddleName { get; }
     public string LastName { get; }
@@ -24,8 +21,18 @@ public record FullName
         if (string.IsNullOrWhiteSpace(firstName) ||
             string.IsNullOrWhiteSpace(middleName) ||
             string.IsNullOrWhiteSpace(lastName))
-            return Errors.General.ValueIsInvalid("Fullname");
-
+        {
+            return Errors.General.
+                ValueIsInvalid(new ErrorParameters.General.ValueIsInvalid(nameof(FullName)));
+        }
+        
         return new FullName(firstName, middleName, lastName);
+    }
+
+    protected override IEnumerable<IComparable> GetComparableEqualityComponents()
+    {
+        yield return FirstName;
+        yield return MiddleName;
+        yield return LastName;
     }
 }

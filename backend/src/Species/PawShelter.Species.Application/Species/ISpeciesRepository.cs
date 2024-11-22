@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Species.Domain.Entities;
 
 namespace PawShelter.Species.Application.Species;

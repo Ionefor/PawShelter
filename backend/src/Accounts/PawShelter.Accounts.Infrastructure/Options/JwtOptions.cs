@@ -2,10 +2,9 @@
 
 public class JwtOptions
 {
-    public const string JWT = nameof(JWT);
-    
-    public string Audience { get; init; }
-    public string Issuer { get; init; }
-    public string Key { get; init; }
-    public string ExpiredMinutesTime { get; init; }
+    public const string Jwt = nameof(Jwt);
+    public string Audience { get; init; } = string.Empty;
+    public string Issuer { get; init; } = string.Empty;
+    public string Key { get; init; } = string.Empty;
+    public string ExpiredMinutesTime { get; init; } = string.Empty;
 }

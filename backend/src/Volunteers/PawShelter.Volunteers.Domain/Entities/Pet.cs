@@ -1,16 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Abstractions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Domain.Entities;
 
 public class Pet : SoftDeletableEntity<PetId>
 {
-    private Pet(PetId id) : base(id)
-    {
-    }
+    private Pet(PetId id) : base(id) {}
 
     public Pet(PetId id,
         Name name,
@@ -89,17 +89,17 @@ public class Pet : SoftDeletableEntity<PetId>
         return Result.Success<Error>();
     }
 
-    public void UpdatePetPhotos(IEnumerable<PetPhoto> photos)
+    internal void UpdatePhotos(IEnumerable<PetPhoto> photos)
     {
        _photos = photos!.ToList();
     }
 
-    public void UpdatePetStatus(PetStatus status)
+    internal void UpdateStatus(PetStatus status)
     {
         Status = status;
     }
 
-    public UnitResult<Error> SetMainPhoto(PetPhoto newPhoto)
+    internal UnitResult<Error> SetMainPhoto(PetPhoto newPhoto)
     {
         var oldMainPhoto = _photos.
             FirstOrDefault(p => p.IsMain);
@@ -115,8 +115,8 @@ public class Pet : SoftDeletableEntity<PetId>
         
         if (photo is null)
         {
-            return Error.NotFound(
-                "photo.not.found", "photo not found");
+            return Errors.General.
+                NotFound(new ErrorParameters.General.NotFound(nameof(Pet), nameof(PetPhoto), newPhoto.Path));
         }
 
         _photos.Remove(photo);
@@ -127,8 +127,7 @@ public class Pet : SoftDeletableEntity<PetId>
         
         return Result.Success<Error>();
     }
-
-    public void UpdatePet(
+    internal void UpdatePet(
         Name name,
         Description description,
         SpeciesBreedsId speciesBreedsId,

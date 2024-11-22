@@ -2,10 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Core.Dto;
 using PawShelter.Core.Extensions;
+using PawShelter.SharedKernel.Definitions;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Contracts.Dto.Command;
+using PawShelter.Volunteers.Contracts.Dto.Models;
 using PawShelter.Volunteers.Domain.Entities;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Infrastructure.Configurations.Write;
 
@@ -25,14 +28,14 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             pn =>
             {
                 pn.Property(n => n.Value).IsRequired().HasMaxLength(
-                        SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
+                        Constants.Shared.MaxLowTextLength)
                     .HasColumnName("name");
             });
 
         builder.ComplexProperty(p => p.Description,
             pd =>
             {
-                pd.Property(d => d.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_HIGH_TEXT_LENGTH)
+                pd.Property(d => d.Value).IsRequired().HasMaxLength(Constants.Shared.MaxLowTextLength)
                     .HasColumnName("description");
             });
 
@@ -48,7 +51,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.ComplexProperty(p => p.Color,
             pc =>
             {
-                pc.Property(c => c.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
+                pc.Property(c => c.Value).IsRequired().
+                    HasMaxLength(Constants.Shared.MaxLowTextLength)
                     .HasColumnName("color");
             });
 
@@ -58,14 +62,18 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.ComplexProperty(p => p.Address, pa =>
         {
-            pa.Property(a => a.Country).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
+            pa.Property(a => a.Country).IsRequired().
+                HasMaxLength(Constants.Shared.MaxLowTextLength)
                 .HasColumnName("country");
 
-            pa.Property(a => a.City).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("city");
+            pa.Property(a => a.City).IsRequired().
+                HasMaxLength(Constants.Shared.MaxLowTextLength).HasColumnName("city");
 
-            pa.Property(a => a.Street).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("street");
+            pa.Property(a => a.Street).IsRequired().
+                HasMaxLength(Constants.Shared.MaxLowTextLength).HasColumnName("street");
 
-            pa.Property(a => a.HouseNumber).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
+            pa.Property(a => a.HouseNumber).IsRequired().
+                HasMaxLength(Constants.Shared.MaxLowTextLength)
                 .HasColumnName("house_number");
         });
 
@@ -74,18 +82,19 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             pc.Property(c => c.Weight).
                 IsRequired().
                 HasMaxLength(
-                    SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("weight");
+                    Constants.Shared.MaxLowTextLength).HasColumnName("weight");
 
             pc.Property(c => c.Height).
                 IsRequired().
                 HasMaxLength(
-                    SharedKernel.Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("height");
+                    Constants.Shared.MaxLowTextLength).HasColumnName("height");
         });
 
         builder.ComplexProperty(p => p.PhoneNumber,
             pn =>
             {
-                pn.Property(n => n.Value).IsRequired().HasMaxLength(SharedKernel.Constants.MAX_LOW_TEXT_LENGTH)
+                pn.Property(n => n.Value).IsRequired().
+                    HasMaxLength(Constants.Shared.MaxLowTextLength)
                     .HasColumnName("phone_number");
             });
 
@@ -103,7 +112,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         
         builder.Property(p => p.Photos)!.
             ValueObjectsCollectionJsonConversion(
-                photo => new PetPhotoDto(photo.Path.Path, photo.IsMain),
+                photo => new PetPhotoDto(photo.Path.Value, photo.IsMain),
                 dto => new PetPhoto(FilePath.Create(dto.Path).Value, dto.IsMain)).
             HasColumnName("photos");      
         

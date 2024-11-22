@@ -17,6 +17,7 @@ namespace PawShelter.Species.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Species")
                 .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -36,7 +37,7 @@ namespace PawShelter.Species.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("pk_species");
 
-                    b.ToTable("species", (string)null);
+                    b.ToTable("species", "Species");
                 });
 
             modelBuilder.Entity("PawShelter.Species.Domain.Entities.Breed", b =>
@@ -60,7 +61,7 @@ namespace PawShelter.Species.Infrastructure.Migrations
                     b.HasIndex("species_id")
                         .HasDatabaseName("ix_breeds_species_id");
 
-                    b.ToTable("breeds", (string)null);
+                    b.ToTable("breeds", "Species");
                 });
 
             modelBuilder.Entity("PawShelter.Species.Domain.Entities.Breed", b =>

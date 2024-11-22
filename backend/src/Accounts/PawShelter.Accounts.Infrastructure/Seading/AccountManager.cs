@@ -5,24 +5,22 @@ using PawShelter.Accounts.Infrastructure.DbContexts;
 
 namespace PawShelter.Accounts.Infrastructure.Seading;
 
-public class AccountManager(AccountDbContext accountDbContext) : IAccountManager
+public class AccountManager(AccountsWriteDbContext accountsWriteDbContext) : IAccountManager
 {
     public async Task CreateAdminAccount(AdminAccount adminAccount)
     {
-        accountDbContext.Add(adminAccount);
+        accountsWriteDbContext.Add(adminAccount);
         
-        await accountDbContext.SaveChangesAsync();
+        await accountsWriteDbContext.SaveChangesAsync();
     }
-    
     public async Task CreateParticipantAccount(ParticipantAccount participantAccount)
     {
-        accountDbContext.Add(participantAccount);
+        accountsWriteDbContext.Add(participantAccount);
         
-        await accountDbContext.SaveChangesAsync();
+        await accountsWriteDbContext.SaveChangesAsync();
     }
-    
     public async Task<bool> AdminAccountExists(CancellationToken cancellationToken = default)
     {
-        return await accountDbContext.AdminAccounts.AnyAsync(cancellationToken);
+        return await accountsWriteDbContext.AdminAccounts.AnyAsync(cancellationToken);
     }
 }

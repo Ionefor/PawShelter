@@ -1,5 +1,6 @@
 ﻿using FluentValidation.Results;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Core.Extensions;
 
@@ -12,7 +13,8 @@ public static class ValidationExtension
         var errors = from validationError in validationErrors
             let errorMessage = validationError.ErrorMessage
             let error = Error.Deserialize(errorMessage)
-            select Error.Validation(error.Code, error.Message, validationError.PropertyName);
+            select Errors.General.ValueIsInvalid(
+                new ErrorParameters.General.ValueIsInvalid(nameof(validationError.PropertyName)));
 
         return errors.ToList();
     }

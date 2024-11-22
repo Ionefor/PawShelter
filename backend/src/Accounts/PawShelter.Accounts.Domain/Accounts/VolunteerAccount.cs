@@ -4,21 +4,19 @@ namespace PawShelter.Accounts.Domain.Accounts;
 
 public class VolunteerAccount
 {
-    private VolunteerAccount() { }
-
-    public VolunteerAccount(User user)
+    private VolunteerAccount() {}
+    public VolunteerAccount(User user, Experience experience, IReadOnlyList<Requisite> requisites)
     {
         Id = Guid.NewGuid();
         User = user;
+        Experience = experience;
+        Requisites = requisites;
     }
+    public Guid Id { get; init; }
+    public Guid UserId { get; init; }
+    public User User { get; init; }
+    public Experience Experience { get; init; }
+    public IReadOnlyList<Requisite> Requisites { get; init; }
     
-    public Guid Id { get; set; }
-    public User User { get; set; }
-    
-    public int Experience { get; set; }
-    
-    public IEnumerable<Requisite> Requisites { get; set; }
-    
-    public IEnumerable<Description> Certificates { get; set; }
-    
+    public IReadOnlyList<string> Certificates { get; init; }
 }

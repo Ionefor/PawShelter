@@ -5,8 +5,10 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.UpdateRequisites;
 
@@ -21,7 +23,7 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
         IVolunteerRepository volunteerRepository,
         IValidator<UpdateRequisitesCommand> validator,
         ILogger<UpdateRequisitesCommand> logger,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork)
     {
         _volunteerRepository = volunteerRepository;
         _validator = validator;
@@ -39,9 +41,11 @@ public class UpdateRequisitesHandler : ICommandHandler<Guid, UpdateRequisitesCom
             return validationResult.ToErrorList();
 
         var volunteerResult =
-            await _volunteerRepository.GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
+            await _volunteerRepository.
+                GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
-        var requisites = command.RequisitesDto.Requisites.Select(r => Requisite.Create(r.Name, r.Description).Value);
+        var requisites = command.RequisitesDto.Requisites.
+            Select(r => Requisite.Create(r.Name, r.Description).Value);
 
         volunteerResult.Value.UpdateRequisites(new Requisites(requisites));
 

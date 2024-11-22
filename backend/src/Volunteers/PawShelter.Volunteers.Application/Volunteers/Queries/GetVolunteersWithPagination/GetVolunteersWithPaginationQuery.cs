@@ -1,5 +1,5 @@
 ﻿using PawShelter.Core.Abstractions;
-using PawShelter.Core.Dto.Queries;
+using PawShelter.Volunteers.Contracts.Dto.Query;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Queries.GetVolunteersWithPagination;
 

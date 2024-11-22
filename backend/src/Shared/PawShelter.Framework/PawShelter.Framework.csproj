@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Accounts\PawShelter.Accounts.Contracts\PawShelter.Accounts.Contracts.csproj" />
-      <ProjectReference Include="..\PawShelter.Core\PawShelter.Core.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+      <ProjectReference Include="..\PawShelter.Core\PawShelter.Core.csproj" />
+      <ProjectReference Include="..\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
     </ItemGroup>
 
 </Project>

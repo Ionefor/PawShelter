@@ -5,17 +5,17 @@ using Minio;
 using Minio.ApiEndpoints;
 using Minio.DataModel.Args;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
+using PawShelter.SharedKernel.ValueObjects;
 using PawShelter.Volunteers.Application.PhotoProvider;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
 
 namespace PawShelter.Volunteers.Infrastructure.Providers;
 
 public class MinioProvider : IPhotoProvider
 {
-    private const int MAX_DEGREE_OF_PARALLELISM = 10;
     private readonly ILogger<MinioProvider> _logger;
     private readonly IMinioClient _minioClient;
-
     public MinioProvider(
         IMinioClient minioClient,
         ILogger<MinioProvider> logger)
@@ -23,7 +23,6 @@ public class MinioProvider : IPhotoProvider
         _minioClient = minioClient;
         _logger = logger;
     }
-
     public async Task<Result<FilePath, Error>> UploadFile(
         PhotoData fileData,
         CancellationToken cancellationToken = default)
@@ -43,7 +42,7 @@ public class MinioProvider : IPhotoProvider
             }
 
             var putObjectArgs = new PutObjectArgs().WithBucket(fileData.BucketName).WithStreamData(fileData.Stream)
-                .WithObjectSize(fileData.Stream.Length).WithObject(fileData.FilePath.Path);
+                .WithObjectSize(fileData.Stream.Length).WithObject(fileData.FilePath.Value);
 
             var result = await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
 
@@ -52,7 +51,9 @@ public class MinioProvider : IPhotoProvider
         catch (Exception ex)
         {
             _logger.LogError(ex, "Fail to upload to MinIO");
-            return Error.Failure("file.upload", "Fail to upload to MinIO");
+            
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Fail upload file to MinIO"));
         }
     }
 
@@ -60,7 +61,7 @@ public class MinioProvider : IPhotoProvider
         IEnumerable<PhotoData> filesData,
         CancellationToken cancellationToken = default)
     {
-        var semaphoreSlim = new SemaphoreSlim(MAX_DEGREE_OF_PARALLELISM);
+        var semaphoreSlim = new SemaphoreSlim(Constants.Shared.MaxDegreeOfParallelism);
         var filesList = filesData.ToList();
 
         try
@@ -83,7 +84,9 @@ public class MinioProvider : IPhotoProvider
         {
             _logger.LogError(ex,
                 "Fail to upload files in minio, files amount: {amount}", filesList.Count);
-            return Error.Failure("file.upload", "Fail to upload files in minio");
+            
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Fail upload files to MinIO"));
         }
     }
 
@@ -95,7 +98,7 @@ public class MinioProvider : IPhotoProvider
         {
             var statObjectArgs = new StatObjectArgs()
                 .WithBucket(photoData.BucketName)
-                .WithObject(photoData.FilePath.Path);
+                .WithObject(photoData.FilePath.Value);
 
             var objectStat = await _minioClient.StatObjectAsync(statObjectArgs, cancellationToken);
             if (objectStat is null)
@@ -103,14 +106,16 @@ public class MinioProvider : IPhotoProvider
 
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(photoData.BucketName)
-                .WithObject(photoData.FilePath.Path);
+                .WithObject(photoData.FilePath.Value);
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, cancellationToken);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Fail delete file from MinIO");
-            return Error.Failure("file.delete", "Fail delete file from MinIO");
+            
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Fail delete file from MinIO"));
         }
 
         return Result.Success<Error>();
@@ -124,7 +129,7 @@ public class MinioProvider : IPhotoProvider
         {
             var args = new PresignedGetObjectArgs()
                 .WithBucket(photoData.BucketName)
-                .WithObject(photoData.FilePath.Path).WithExpiry(60 * 60 * 24);
+                .WithObject(photoData.FilePath.Value).WithExpiry(60 * 60 * 24);
 
             var path = await _minioClient.PresignedGetObjectAsync(args);
 
@@ -133,13 +138,16 @@ public class MinioProvider : IPhotoProvider
         catch (Exception e)
         {
             _logger.LogError(e, "Fail to get file from minio");
-            return Error.Failure("file.get", "Fail to get file from minio");
+            
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Fail get file from MinIO"));
         }
     }
 
     public Result<IReadOnlyCollection<FilePath>> GetFiles()
     {
-        var listObjectsArgs = new ListObjectsArgs().WithBucket("photos").WithRecursive(false);
+        var listObjectsArgs = new ListObjectsArgs().
+            WithBucket(Constants.Shared.BucketNamePhotos).WithRecursive(false);
 
         var objects = _minioClient.ListObjectsAsync(listObjectsArgs);
 
@@ -161,7 +169,7 @@ public class MinioProvider : IPhotoProvider
             .WithBucket(fileData.BucketName)
             .WithStreamData(fileData.Stream)
             .WithObjectSize(fileData.Stream.Length)
-            .WithObject(fileData.FilePath.Path);
+            .WithObject(fileData.FilePath.Value);
 
         try
         {
@@ -174,9 +182,11 @@ public class MinioProvider : IPhotoProvider
         {
             _logger.LogError(ex,
                 "Fail to upload file in minio with path {path} in bucket {bucket}",
-                fileData.FilePath.Path,
+                fileData.FilePath.Value,
                 fileData.BucketName);
-            return Error.Failure("file.upload", "Fail to upload file in minio");
+            
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Fail upload file to MinIO"));
         }
         finally
         {

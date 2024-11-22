@@ -4,8 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
+using PawShelter.SharedKernel.ValueObjects.Ids;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.SetMainPetPhoto;
 
@@ -21,7 +24,7 @@ public class SetMainPetPhotoHandler :
         IValidator<SetMainPetPhotoCommand> validator,
         IReadDbContext readDbContext,
         IVolunteerRepository volunteerRepository,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork)
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork)
     {
         _validator = validator;
         _readDbContext = readDbContext;
@@ -38,10 +41,12 @@ public class SetMainPetPhotoHandler :
         
         var volunteerExist = _readDbContext.Volunteers.
             Any(v => v.Id == command.VolunteerId);
+        
         if (!volunteerExist)
         {
-            return Error.NotFound(
-                "volunteer.not.found", "Volunteer not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Volunteer), nameof(VolunteerId), command.VolunteerId)).ToErrorList();
         }
             
         var petExist = _readDbContext.Pets.
@@ -51,8 +56,9 @@ public class SetMainPetPhotoHandler :
         
         if (!petExist)
         {
-            return Error.NotFound(
-                "pet.not.found", "pet not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Pet), nameof(PetId), command.PetId)).ToErrorList();
         }
         
         var petId = PetId.Create(command.PetId);
@@ -61,10 +67,18 @@ public class SetMainPetPhotoHandler :
         
         if (petResult.IsFailure)
             return petResult.Error.ToErrorList();
+        
+        var volunteerId = VolunteerId.Create(command.VolunteerId);
+        var volunteerResult = await _volunteerRepository.
+            GetById(volunteerId, cancellationToken);
+        
+        if (volunteerResult.IsFailure)
+            return volunteerResult.Error.ToErrorList();
 
         var filePath = FilePath.ToFilePath(command.FilePath);
         var mainPhoto = new PetPhoto(filePath, true);
-        petResult.Value.SetMainPhoto(mainPhoto);
+        
+        volunteerResult.Value.SetMainPetPhoto(petResult.Value, mainPhoto);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         

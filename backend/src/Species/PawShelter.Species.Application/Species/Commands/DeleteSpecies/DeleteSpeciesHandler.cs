@@ -3,7 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Contracts;
 
 namespace PawShelter.Species.Application.Species.Commands.DeleteSpecies;
@@ -18,7 +21,7 @@ public class DeleteSpeciesHandler :
 
     public DeleteSpeciesHandler(
         ISpeciesRepository speciesRepository,
-        [FromKeyedServices("Species")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Species)]IUnitOfWork unitOfWork,
         ILogger<DeleteSpeciesHandler> logger,
         IVolunteersContract volunteersContract)
     {
@@ -33,9 +36,13 @@ public class DeleteSpeciesHandler :
     {
         var petWithSpecies = await _volunteersContract.
             PetWithSpecies(command.SpeciesId, cancellationToken);
-        
+
         if (petWithSpecies is not null)
-            return Errors.Extra.InvalidDeleteOperation(command.SpeciesId, "species").ToErrorList();
+        {
+            return Errors.Extra.InvalidDeleteOperation(
+                new ErrorParameters.Extra.InvalidDeleteOperation(
+                    nameof(Species), command.SpeciesId)).ToErrorList();
+        }
         
         var speciesId = SpeciesId.Create(command.SpeciesId);
         
@@ -50,6 +57,6 @@ public class DeleteSpeciesHandler :
         _logger.LogInformation(
             $"Species {speciesResult.Value.Value} has been deleted");
         
-        return speciesResult.Value.Id;
+        return speciesResult.Value.Id.Id;
     }
 }

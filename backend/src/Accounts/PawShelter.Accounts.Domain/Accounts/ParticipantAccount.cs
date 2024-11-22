@@ -4,7 +4,6 @@ public class ParticipantAccount
 {
     public static string Participant = nameof(Participant);
     private ParticipantAccount() {}
-
     public static ParticipantAccount Create(User user)
     {
         return new ParticipantAccount
@@ -13,9 +12,7 @@ public class ParticipantAccount
             User = user
         };
     }
-    
-    public Guid Id { get; set; }
-    
-    public Guid UserId { get; set; }
-    public User User { get; set; }
+    public Guid Id { get; init; }
+    public Guid UserId { get; init; }
+    public User User { get; init; }
 }

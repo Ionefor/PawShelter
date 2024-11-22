@@ -4,7 +4,6 @@ namespace PawShelter.Accounts.Infrastructure.Seading;
 
 public class AccountSeeder(IServiceScopeFactory scopeFactory)
 {
-    
     public async Task SeedAsync(CancellationToken cancellationToken = default)
     {
         using var scope = scopeFactory.CreateScope();

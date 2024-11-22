@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PawShelter.Core.Validation;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Volunteer.UpdateRequisites;
 

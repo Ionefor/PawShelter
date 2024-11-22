@@ -27,7 +27,7 @@ public class DeleteExpiredService
             {
                 foreach (var pet in volunteer.Pets)
                 {
-                    volunteer.DeleteExpiredPet(pet);
+                    volunteer.HardDeletePet(pet);
                 }
             }
         }

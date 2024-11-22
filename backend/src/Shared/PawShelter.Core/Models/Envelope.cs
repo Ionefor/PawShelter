@@ -1,4 +1,5 @@
 ﻿using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Core.Models;
 

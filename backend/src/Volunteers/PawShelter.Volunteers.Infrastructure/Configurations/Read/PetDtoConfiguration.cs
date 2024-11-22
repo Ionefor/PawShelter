@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Core.Dto;
+using PawShelter.Volunteers.Contracts.Dto.Command;
+using PawShelter.Volunteers.Contracts.Dto.Models;
 
 namespace PawShelter.Volunteers.Infrastructure.Configurations.Read;
 

@@ -1,20 +1,18 @@
 ﻿using CSharpFunctionalExtensions;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Abstractions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Domain.Entities;
-using PawShelter.Volunteers.Domain.ValueObjects.ForPet;
-using PawShelter.Volunteers.Domain.ValueObjects.ForVolunteer;
-using PawShelter.Volunteers.Domain.ValueObjects.Shared;
+using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Volunteers.Domain.Aggregate;
 
 public class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     private readonly List<Pet> _pets = [];
-
-    private Volunteer(VolunteerId id) : base(id)
-    {
-    }
+    private Volunteer(VolunteerId id) : base(id) {}
 
     public Volunteer(VolunteerId id,
         FullName fullName,
@@ -43,27 +41,6 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
     public Requisites Requisites { get; private set; }
     public SocialNetworks SocialNetworks { get; private set; }
     public IReadOnlyList<Pet> Pets => _pets;
-
-    public void DeletePet(Pet pet)
-    {
-        UpdatePositionPet(pet);
-        _pets.Remove(pet);
-    }
-
-    private void UpdatePositionPet(Pet pet)
-    {
-        for (int i = pet.Position; i < _pets.Count; i++)
-        {
-            _pets[i].MoveBackward();
-        }
-    }
-
-    public void DeleteExpiredPet(Pet pet)
-    {
-        UpdatePositionPet(pet);
-
-       _pets[pet.Position - 1].Delete();
-    }
     
     public override void Delete()
     {
@@ -131,8 +108,12 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
             return Result.Success<Error>();
 
         if (newPosition > _pets.Count || newPosition < 1)
-            return UnitResult.Failure(
-                Errors.Extra.InvalidPosition(newPosition));
+        {
+            return UnitResult.
+                Failure(Errors.Extra.
+                    PositionIsInvalid(
+                        new ErrorParameters.Extra.PositionIsInvalid(newPosition)));
+        }
 
         MovePetsBetweenPositions(newPosition, currentPosition);
         pet.Move(newPosition);
@@ -167,5 +148,63 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         }
 
         return Result.Success<Error>();
+    }
+    
+    public void HardDeletePet(Pet pet)
+    {
+        UpdatePositionPet(pet);
+        _pets.Remove(pet);
+    }
+    public void SoftDeletePet(Pet pet)
+    {
+        UpdatePositionPet(pet);
+
+        _pets[pet.Position - 1].Delete();
+    }
+
+    private void UpdatePositionPet(Pet pet)
+    {
+        for (int i = pet.Position; i < _pets.Count; i++)
+        {
+            _pets[i].MoveBackward();
+        }
+    }
+    
+    public void UpdatePet(
+        Pet pet,
+        Name name,
+        Description description,
+        SpeciesBreedsId speciesBreedsId,
+        Color color,
+        HealthInfo healthInfo,
+        Address address,
+        PhoneNumber phoneNumber,
+        PetCharacteristics petCharacteristics,
+        bool isCastrated,
+        bool isVaccinated,
+        Birthday birthday,
+        DateTime publicationDate,
+        Requisites requisites)
+    {
+        _pets[pet.Position - 1].UpdatePet(
+            name, description, speciesBreedsId, color,
+            healthInfo, address, phoneNumber,
+            petCharacteristics, isCastrated, isVaccinated,
+            birthday, publicationDate, requisites);
+    }
+    
+    public UnitResult<Error> SetMainPetPhoto(Pet pet, PetPhoto newPhoto)
+    {
+        return _pets[pet.Position - 1].SetMainPhoto(newPhoto);
+    }
+    
+    public void UpdatePetStatus(Pet pet, PetStatus status)
+    {
+        _pets[pet.Position - 1].UpdateStatus(status);
+    }
+    
+    public void UpdatePetPhotos(Pet pet, IEnumerable<PetPhoto> photos)
+    {
+        _pets[pet.Position - 1].UpdatePhotos(photos);
     }
 }

@@ -32,6 +32,7 @@
       <ProjectReference Include="..\Accounts\PawShelter.Accounts.Infrastructure\PawShelter.Accounts.Infrastructure.csproj" />
       <ProjectReference Include="..\Accounts\PawShelter.Accounts.Presentation\PawShelter.Accounts.Presentation.csproj" />
       <ProjectReference Include="..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
+      <ProjectReference Include="..\Shared\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
       <ProjectReference Include="..\Species\PawShelter.Species.Infrastructure\PawShelter.Species.Infrastructure.csproj" />
       <ProjectReference Include="..\Species\PawShelter.Species.Presentation\PawShelter.Species.Presentation.csproj" />
       <ProjectReference Include="..\Volunteers\PawShelter.Volunteers.Infrastructure\PawShelter.Volunteers.Infrastructure.csproj" />

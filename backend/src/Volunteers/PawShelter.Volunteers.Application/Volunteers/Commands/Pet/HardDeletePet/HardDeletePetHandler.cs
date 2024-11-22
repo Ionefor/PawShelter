@@ -4,7 +4,10 @@ using Microsoft.Extensions.Logging;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Messaging;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
+using PawShelter.SharedKernel.Models.Error;
 using PawShelter.SharedKernel.ValueObjects;
+using PawShelter.SharedKernel.ValueObjects.Ids;
 using PawShelter.Volunteers.Application.PhotoProvider;
 
 namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.HardDeletePet;
@@ -12,7 +15,6 @@ namespace PawShelter.Volunteers.Application.Volunteers.Commands.Pet.HardDeletePe
 public class HardDeletePetHandler : 
     ICommandHandler<Guid, HardDeletePetCommand>
 {
-    private const string BUCKET_NAME = "photos";
     private readonly IReadDbContext _readDbContext;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IVolunteerRepository _volunteerRepository;
@@ -22,7 +24,7 @@ public class HardDeletePetHandler :
 
     public HardDeletePetHandler(
         IReadDbContext readDbContext,
-        [FromKeyedServices("Volunteers")]IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesName.Volunteers)]IUnitOfWork unitOfWork,
         IVolunteerRepository volunteerRepository,
         ILogger<HardDeletePetHandler> logger,
         IPhotoProvider photoProvider,
@@ -41,10 +43,12 @@ public class HardDeletePetHandler :
     {
         var volunteerExist = _readDbContext.Volunteers.
             Any(v => v.Id == command.VolunteerId);
+        
         if (!volunteerExist)
         {
-            return Error.NotFound(
-                "volunteer.not.found", "Volunteer not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Volunteer), nameof(VolunteerId), command.VolunteerId)).ToErrorList();
         }
             
         var petExist = _readDbContext.Pets.
@@ -54,13 +58,13 @@ public class HardDeletePetHandler :
         
         if (!petExist)
         {
-            return Error.NotFound(
-                "pet.not.found", "pet not found").ToErrorList();
+            return Errors.General.NotFound(
+                new ErrorParameters.General.NotFound(
+                    nameof(Pet), nameof(PetId), command.PetId)).ToErrorList();
         }
         
-        var volunteerResult =
-            await _volunteerRepository.GetById(
-                VolunteerId.Create(command.VolunteerId), cancellationToken);
+        var volunteerResult = await _volunteerRepository.
+            GetById(VolunteerId.Create(command.VolunteerId), cancellationToken);
 
         if (volunteerResult.IsFailure)
             return volunteerResult.Error.ToErrorList();
@@ -83,7 +87,7 @@ public class HardDeletePetHandler :
             {
                 foreach (var photo in photosToDelete)
                 {
-                    var photoToDeleteMeta = new PhotoMetaData(BUCKET_NAME, photo.Path);
+                    var photoToDeleteMeta = new PhotoMetaData(Constants.Shared.BucketNamePhotos, photo.Path);
                 
                     var deleteResult = await _photoProvider.
                         DeleteFile(photoToDeleteMeta, cancellationToken);
@@ -92,7 +96,7 @@ public class HardDeletePetHandler :
                     {
                         await _messageQueue.WriteAsync(
                             photosToDelete.Select(
-                                p => new PhotoMetaData(BUCKET_NAME, p.Path)),
+                                p => new PhotoMetaData(Constants.Shared.BucketNamePhotos, p.Path)),
                             cancellationToken);
 
                         return deleteResult.Error.ToErrorList();
@@ -100,7 +104,7 @@ public class HardDeletePetHandler :
                 }
             }
             
-            volunteerResult.Value.DeletePet(petForDelete.Value);
+            volunteerResult.Value.HardDeletePet(petForDelete.Value);
         
            await _unitOfWork.SaveChangesAsync(cancellationToken);
            
@@ -113,8 +117,8 @@ public class HardDeletePetHandler :
 
             transaction.Rollback();
 
-            return Error.Failure(
-                "pet.photos.failure", "Can not delete photo").ToErrorList();
+            return Errors.General.
+                Failed(new ErrorParameters.General.Failed("Can not delete pet")).ToErrorList();
         }
         
         return petForDelete.Value.Id.Id;

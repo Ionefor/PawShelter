@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="FluentValidation" Version="11.10.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -25,6 +21,10 @@
       <Reference Include="Microsoft.AspNetCore.Authorization">
         <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Authorization.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
     </ItemGroup>
 
 </Project>

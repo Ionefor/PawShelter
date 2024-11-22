@@ -7,6 +7,8 @@ using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Domain.Accounts;
 using PawShelter.Accounts.Infrastructure.Options;
 using PawShelter.Core.Models;
+using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Definitions;
 
 namespace PawShelter.Accounts.Infrastructure.Seading;
 
@@ -23,7 +25,7 @@ public class AccountsSeederService(
     
     public async Task SeedAsync(CancellationToken cancellationToken)
     {
-        var json = await File.ReadAllTextAsync(FilePath.Accounts, cancellationToken);
+        var json = await File.ReadAllTextAsync(Constants.Accounts.AccountsPath, cancellationToken);
 
         var seedData = JsonSerializer.Deserialize<RolePermissionOptions>(json)
                        ?? throw new ApplicationException("Could not deserialize role permission config");
@@ -59,7 +61,6 @@ public class AccountsSeederService(
 
         logger.LogInformation("Successfully seeded admin account to database");
     }
-    
     private async Task SeedPermissions(RolePermissionOptions seedData)
     {
         var permissionsToAdd = seedData.Permissions.
@@ -69,7 +70,6 @@ public class AccountsSeederService(
         
         logger.LogInformation("Permissions added to seed data");
     }
-    
     private async Task SeedRoles(RolePermissionOptions seedData)
     {
         foreach (var role in seedData.Roles.Keys)
@@ -84,7 +84,6 @@ public class AccountsSeederService(
         
         logger.LogInformation("Role added to database.");
     }
-
     public async Task SeedRolePermissions(RolePermissionOptions seedData)
     {
         foreach (var roleName in seedData.Roles.Keys)

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using PawShelter.SharedKernel;
+using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Core.Validation;
 
@@ -37,7 +38,7 @@ public static class CustomValidators
         {
             if (!Enum.TryParse(typeof(TEnum), value!.ToString(), out var result))
             {
-                context.AddFailure(Errors.General.ValueIsInvalid(value.ToString()).Serialize());
+                context.AddFailure(Errors.General.ValueIsInvalid().Serialize());
             }
         });
     }

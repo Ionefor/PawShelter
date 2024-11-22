@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\PawShelter.SharedKernel\PawShelter.SharedKernel.csproj" />
+      <ProjectReference Include="..\..\Shared\PawShelter.Core\PawShelter.Core.csproj" />
     </ItemGroup>
 
 </Project>
