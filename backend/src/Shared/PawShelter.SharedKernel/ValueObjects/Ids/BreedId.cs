@@ -2,9 +2,8 @@
 
 namespace PawShelter.SharedKernel.ValueObjects.Ids;
 
-public class BreedId : BaseId<BreedId>
+public class BreedId(Guid id) : BaseId<BreedId>(id)
 {
-    private BreedId(BreedId id) : base(id) {}
     public static implicit operator Guid(BreedId breedId) => breedId.Id;
     public static implicit operator BreedId(Guid id) => new(id);
 }

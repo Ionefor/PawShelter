@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PawShelter.Core.Abstractions;
 using PawShelter.Core.Messaging;
-using PawShelter.SharedKernel;
 using PawShelter.SharedKernel.Definitions;
 using PawShelter.Volunteers.Application;
 using PawShelter.Volunteers.Application.PhotoProvider;

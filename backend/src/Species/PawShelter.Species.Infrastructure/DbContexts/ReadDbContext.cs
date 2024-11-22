@@ -26,6 +26,8 @@ public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbCon
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(ReadDbContext).Assembly,
             type => type.FullName?.Contains(Constants.Shared.ConfigurationsRead) ?? false);
+        
+        modelBuilder.HasDefaultSchema(ModulesName.Species.ToString());
     }
     private ILoggerFactory CreateLoggerFactory()
     {

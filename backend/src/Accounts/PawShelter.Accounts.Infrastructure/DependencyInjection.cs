@@ -1,12 +1,8 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using PawShelter.Accounts.Application;
 using PawShelter.Accounts.Application.Abstractions;
 using PawShelter.Accounts.Domain;
 using PawShelter.Accounts.Infrastructure.Authorization;
@@ -15,7 +11,6 @@ using PawShelter.Accounts.Infrastructure.Options;
 using PawShelter.Accounts.Infrastructure.Providers;
 using PawShelter.Accounts.Infrastructure.Seading;
 using PawShelter.Core.Abstractions;
-using PawShelter.SharedKernel;
 using PawShelter.SharedKernel.Definitions;
 
 namespace PawShelter.Accounts.Infrastructure;
@@ -38,13 +33,27 @@ public static class DependencyInjection
     private static IServiceCollection AddDbContext(this IServiceCollection services)
     {
         services
-            .AddScoped<AccountDbContext>()
-            .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
-            .AddEntityFrameworkStores<AccountDbContext>()
+            .AddIdentityCore<User>(options => options.User.RequireUniqueEmail = true)
+            .AddRoles<Role>()
+            .AddEntityFrameworkStores<AccountsWriteDbContext>()
             .AddDefaultTokenProviders();
 
+        services.AddScoped<AccountsWriteDbContext>();
+        
         return services;
     }
+    private static IServiceCollection AddRolePermissionOptions(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<RolePermissionOptions>(
+            configuration.GetSection(RolePermissionOptions.RolePermission));
+
+        services.AddOptions<RolePermissionOptions>();
+        
+        return services;
+    }
+    
     private static IServiceCollection AddJwtOptions(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -86,7 +95,12 @@ public static class DependencyInjection
                 options.TokenValidationParameters =
                     TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
             });
-
+        
+        services.AddAuthorization();
+        
+        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            
         return services;
     }
     private static IServiceCollection AddDatabase(this IServiceCollection services)
@@ -96,24 +110,17 @@ public static class DependencyInjection
         return services;
     }
     private static IServiceCollection AddCustomAuthorization(this IServiceCollection services)
-    {                                               
-        services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
-        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-        services.AddScoped<IAccountManager, AccountManager>();
+    {                
         services.AddScoped<IPermissionManager, PermissionManager>();
         services.AddScoped<PermissionManager>();
-        services.AddScoped<ITokenProvider, JwtTokenProvider>();
+        services.AddScoped<RolePermissionManager>();
+        services.AddScoped<IAccountManager, AccountManager>();
         services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
         
-        services.AddAuthorization();
-
         services.AddSingleton<AccountSeeder>();
-
         services.AddScoped<AccountsSeederService>();
         
-        
-        
-        services.AddScoped<RolePermissionManager>();
+        services.AddTransient<ITokenProvider, JwtTokenProvider>();
         
         return services;
     }

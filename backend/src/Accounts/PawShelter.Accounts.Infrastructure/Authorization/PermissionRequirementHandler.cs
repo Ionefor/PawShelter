@@ -19,12 +19,12 @@ public class PermissionRequirementHandler : AuthorizationHandler<PermissionAttri
         PermissionAttribute permission)
     {
         using var scope = _scopeFactory.CreateScope();
-
+        
         var accountContract = scope.ServiceProvider.GetRequiredService<IAccountsContract>();
-
+        
         var userIdString = context.User.Claims
             .FirstOrDefault(c => c.Type == CustomClaims.Id)?.Value;
-
+        
         if (!Guid.TryParse(userIdString, out Guid userId))
         {
             context.Fail();

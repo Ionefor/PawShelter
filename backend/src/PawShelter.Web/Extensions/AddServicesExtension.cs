@@ -52,7 +52,7 @@ public static class AddServicesExtension
                 In = ParameterLocation.Header,
                 Description = "Insert JWT token value",
                 Name = "Authorization",
-                Type = SecuritySchemeType.Http,
+                Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
             });

@@ -13,8 +13,8 @@ using PawShelter.Volunteers.Infrastructure.DbContexts;
 namespace PawShelter.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241121194024_Initial_V")]
-    partial class Initial_V
+    [Migration("20241122163545_Initial_VW")]
+    partial class Initial_VW
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

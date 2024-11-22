@@ -6,9 +6,8 @@ namespace PawShelter.Accounts.Infrastructure.Authorization;
 
 public static class TokenValidationParametersFactory
 {
-    public static TokenValidationParameters CreateWithLifeTime(JwtOptions jwtOptions)
-    {
-        return new TokenValidationParameters
+    public static TokenValidationParameters CreateWithLifeTime(JwtOptions jwtOptions) =>
+        new()
         {
             ValidIssuer = jwtOptions.Issuer,
             ValidAudience = jwtOptions.Audience,
@@ -19,10 +18,9 @@ public static class TokenValidationParametersFactory
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero
         };
-    }
-    public static TokenValidationParameters CreateWithoutTime(JwtOptions jwtOptions)
-    {
-        return new TokenValidationParameters
+    
+    public static TokenValidationParameters CreateWithoutLifeTime(JwtOptions jwtOptions) =>
+        new()
         {
             ValidIssuer = jwtOptions.Issuer,
             ValidAudience = jwtOptions.Audience,
@@ -31,6 +29,6 @@ public static class TokenValidationParametersFactory
             ValidateAudience = true,
             ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
         };
-    }
 }

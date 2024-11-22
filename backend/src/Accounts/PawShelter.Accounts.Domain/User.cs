@@ -9,7 +9,7 @@ namespace PawShelter.Accounts.Domain;
 
 public class User : IdentityUser<Guid>
 {
-    public List<SocialNetwork> SocialNetworks { get; init; } = [];
+    public IReadOnlyList<SocialNetwork>? SocialNetworks { get; init; } = [];
     public List<Role> Roles { get; init; } = [];
     public string? Photo { get; init; }
     public FullName FullName { get; init; } = null!;

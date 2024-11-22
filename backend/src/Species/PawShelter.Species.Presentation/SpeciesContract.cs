@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PawShelter.Core.Dto;
 using PawShelter.Species.Application;
 using PawShelter.Species.Contracts;
 using PawShelter.Species.Contracts.Dto;

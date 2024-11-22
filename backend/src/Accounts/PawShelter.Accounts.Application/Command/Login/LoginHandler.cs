@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PawShelter.Accounts.Application.Abstractions;
 using PawShelter.Accounts.Contracts.Responses;
 using PawShelter.Accounts.Domain;
@@ -25,7 +26,11 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
         LoginCommand command,
         CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.FindByEmailAsync(command.Email);
+        
+        var user = await _userManager.Users
+              .Include(u => u.Roles)
+              .FirstOrDefaultAsync(u => u.Email == command.Email, cancellationToken);
+      
         if (user is null)
         {
             return Errors.General.
@@ -33,7 +38,7 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
                     new ErrorParameters.General.NotFound(
                         nameof(User), nameof(command.Email), command.Email)).ToErrorList();
         }
-        
+
         var passwordConfirmed = await _userManager.CheckPasswordAsync(user, command.Password);
         if (!passwordConfirmed)
         {

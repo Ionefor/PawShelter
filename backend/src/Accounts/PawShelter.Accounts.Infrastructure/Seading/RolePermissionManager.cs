@@ -4,21 +4,21 @@ using PawShelter.Accounts.Infrastructure.DbContexts;
 
 namespace PawShelter.Accounts.Infrastructure.Seading;
 
-public class RolePermissionManager(AccountDbContext accountDbContext)
+public class RolePermissionManager(AccountsWriteDbContext accountsWriteDbContext)
 {
     public async Task AddRangeIfExist(Guid roleId, IEnumerable<string> permissions)
     {
         foreach (var permissionCode in permissions)
         {
-            var permission = await accountDbContext.Permissions.
+            var permission = await accountsWriteDbContext.Permissions.
                 FirstOrDefaultAsync(p => p.Code == permissionCode);
             
-            var rolePermissionExist = await accountDbContext.RolePermission.
+            var rolePermissionExist = await accountsWriteDbContext.RolePermission.
                 AnyAsync(rp => rp.RoleId == roleId && rp.PermissionId == permission!.Id);
 
             if (!rolePermissionExist)
             {
-                await accountDbContext.RolePermission.AddAsync(new RolePermission
+                await accountsWriteDbContext.RolePermission.AddAsync(new RolePermission
                 {
                     RoleId = roleId,
                     PermissionId = permission!.Id
@@ -26,6 +26,6 @@ public class RolePermissionManager(AccountDbContext accountDbContext)
             }
         }
         
-        await accountDbContext.SaveChangesAsync();
+        await accountsWriteDbContext.SaveChangesAsync();
     }
 }

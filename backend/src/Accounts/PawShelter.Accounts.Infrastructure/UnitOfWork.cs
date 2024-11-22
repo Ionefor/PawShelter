@@ -7,8 +7,8 @@ namespace PawShelter.Accounts.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly AccountDbContext _dbContext;
-    public UnitOfWork(AccountDbContext dbContext)
+    private readonly AccountsWriteDbContext _dbContext;
+    public UnitOfWork(AccountsWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

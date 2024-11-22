@@ -23,7 +23,6 @@ using PawShelter.Volunteers.Presentation.Requests;
 
 namespace PawShelter.Volunteers.Presentation;
 
-
 public class VolunteerController : ApplicationController
 {
     [Permission(Permissions.Volunteers.Create)]

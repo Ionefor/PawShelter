@@ -7,11 +7,11 @@ using PawShelter.SharedKernel.Models.Error;
 
 namespace PawShelter.Accounts.Infrastructure.Authorization;
 
-public class RefreshSessionManager(AccountDbContext accountDbContext) : IRefreshSessionManager
+public class RefreshSessionManager(AccountsWriteDbContext accountsWriteDbContext) : IRefreshSessionManager
 {
     public async Task<Result<RefreshSession, Error>> GetByRefreshToken(Guid refreshToken)
     {
-        var token =  await accountDbContext.RefreshSessions.
+        var token =  await accountsWriteDbContext.RefreshSessions.
             Include(s => s.User).
             FirstOrDefaultAsync(r => r.RefreshToken == refreshToken);
 
@@ -27,6 +27,6 @@ public class RefreshSessionManager(AccountDbContext accountDbContext) : IRefresh
     
     public void Delete(RefreshSession refreshSession)
     {
-        accountDbContext.Remove(refreshSession);
+        accountsWriteDbContext.Remove(refreshSession);
     }
 }

@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PawShelter.Species.Infrastructure.DbContexts;
@@ -11,12 +10,10 @@ using PawShelter.Species.Infrastructure.DbContexts;
 
 namespace PawShelter.Species.Infrastructure.Migrations
 {
-    [DbContext(typeof(WriteDbContext))]
-    [Migration("20241121200112_Initial_S")]
-    partial class Initial_S
+    [DbContext(typeof(ReadDbContext))]
+    partial class ReadDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,58 +23,60 @@ namespace PawShelter.Species.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PawShelter.Species.Domain.Aggregate.Species", b =>
+            modelBuilder.Entity("PawShelter.Species.Contracts.Dto.BreedDto", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("species_id");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("species");
-
-                    b.HasKey("Id")
-                        .HasName("pk_species");
-
-                    b.ToTable("species", "Species");
-                });
-
-            modelBuilder.Entity("PawShelter.Species.Domain.Entities.Breed", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("BreedId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("breed_id");
 
-                    b.Property<string>("Value")
+                    b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("breed");
 
-                    b.Property<Guid>("species_id")
+                    b.Property<Guid>("SpeciesId")
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
-                    b.HasKey("Id")
+                    b.HasKey("BreedId")
                         .HasName("pk_breeds");
 
-                    b.HasIndex("species_id")
+                    b.HasIndex("SpeciesId")
                         .HasDatabaseName("ix_breeds_species_id");
 
                     b.ToTable("breeds", "Species");
                 });
 
-            modelBuilder.Entity("PawShelter.Species.Domain.Entities.Breed", b =>
+            modelBuilder.Entity("PawShelter.Species.Contracts.Dto.SpeciesDto", b =>
                 {
-                    b.HasOne("PawShelter.Species.Domain.Aggregate.Species", null)
+                    b.Property<Guid>("SpeciesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("species_id");
+
+                    b.Property<string>("Species")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("species");
+
+                    b.HasKey("SpeciesId")
+                        .HasName("pk_species");
+
+                    b.ToTable("species", "Species");
+                });
+
+            modelBuilder.Entity("PawShelter.Species.Contracts.Dto.BreedDto", b =>
+                {
+                    b.HasOne("PawShelter.Species.Contracts.Dto.SpeciesDto", null)
                         .WithMany("Breeds")
-                        .HasForeignKey("species_id")
+                        .HasForeignKey("SpeciesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_breeds_species_species_id");
                 });
 
-            modelBuilder.Entity("PawShelter.Species.Domain.Aggregate.Species", b =>
+            modelBuilder.Entity("PawShelter.Species.Contracts.Dto.SpeciesDto", b =>
                 {
                     b.Navigation("Breeds");
                 });

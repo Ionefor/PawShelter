@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PawShelter.Volunteers.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_V : Migration
+    public partial class Initial_VW : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
