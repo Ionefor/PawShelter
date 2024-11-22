@@ -1,4 +1,5 @@
-﻿using PawShelter.SharedKernel;
+﻿using PawShelter.Core.Dto;
+using PawShelter.SharedKernel;
 using PawShelter.Volunteers.Contracts.Dto.Command;
 
 namespace PawShelter.Volunteers.Contracts.Dto.Models;

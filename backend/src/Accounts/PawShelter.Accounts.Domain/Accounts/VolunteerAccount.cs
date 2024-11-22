@@ -1,5 +1,4 @@
 ﻿using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Domain.ValueObjects;
 
 namespace PawShelter.Accounts.Domain.Accounts;
 

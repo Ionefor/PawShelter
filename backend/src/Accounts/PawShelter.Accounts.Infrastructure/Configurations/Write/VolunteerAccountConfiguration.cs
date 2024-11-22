@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PawShelter.Accounts.Domain.Accounts;
+using PawShelter.Core.Dto;
 using PawShelter.Core.Extensions;
 using PawShelter.SharedKernel.ValueObjects;
-using PawShelter.Volunteers.Contracts.Dto.Command;
 
 namespace PawShelter.Accounts.Infrastructure.Configurations.Write;
 

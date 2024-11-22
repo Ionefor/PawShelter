@@ -1,3 +1,3 @@
-﻿namespace PawShelter.Volunteers.Contracts.Dto.Command;
+﻿namespace PawShelter.Core.Dto;
 
 public record SocialNetworksDto(IEnumerable<SocialNetworkDto> SocialNetworks);

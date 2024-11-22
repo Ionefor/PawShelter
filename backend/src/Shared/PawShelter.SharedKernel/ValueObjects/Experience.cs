@@ -2,7 +2,7 @@
 using PawShelter.SharedKernel.Definitions;
 using PawShelter.SharedKernel.Models.Error;
 
-namespace PawShelter.Volunteers.Domain.ValueObjects;
+namespace PawShelter.SharedKernel.ValueObjects;
 
 public class Experience : ComparableValueObject
 {
